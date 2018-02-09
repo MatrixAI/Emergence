@@ -17,7 +17,7 @@ partition and share the CPU, manage memory and I/O devices in the OSes
 - **cgroup**: An Unix feature that allows restriction/constraints on resources.
   - `cgroup` command
 - **MMU** Memory location unit, stores pointers to physical memory in pages.
-- *TLB* Translation Lookaside Buffer, part of MMU, caches information to allow faster access to memory locations.
+- **TLB** Translation Lookaside Buffer, part of MMU, caches information to allow faster access to memory locations.
 
 
 ## Full Virtualisation
@@ -59,7 +59,12 @@ host page tables that the guest thinks it is using.
 KVM is a virtualization infrastructure for the Linux on x86 hardware
 containing virtualization extensions. (Needs more study)
 
-
+## Linux Container
+Different to a virutal machine, linux containers utilises namespaces and cgroups
+to create an isolated environment under your linux host, the underlying resources
+and kernel are provided by the host, and the system softwares and services are
+provided by the image. The Image is a slim version fo the target distribution, which
+is manipulated to reduce size and make it runnable in a container.
 
 ## Sources
 [How linux containers work](
