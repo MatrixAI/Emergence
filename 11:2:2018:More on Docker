@@ -1,13 +1,17 @@
-# Notes: More on docker
+# Notes: Containers and Docker
 tags: docker
 
 ## Terminologies
 - **Bind mounting** Copying a directory tree onto another destination. Altering
 of the files under one of the trees will reflect directly onto the other.
-- **Microservice architecture** is a method of developing software applications as a suite of independently deployable, small, modular services which each service runs a runique process and communicates through a well-defined, lightweight mechanism to serve a business goal. 
+- **Microservice architecture** is a method of developing software applications as a suite of independently deployable, small, modular services which each service runs a unique process and communicates through a well-defined, lightweight mechanism to serve a business goal.
+- **Bridge** A device that separate two or more network segments within one logical network (e.g. a single IP subnet). The job of the bridge is to examine the destination of the data packets one at a time, and decide whether or not to pass the packets to the other side of the Ethernet segment. The result is a faster, quieter network with less collisions.
+The bridging code decides whether to bridge data or drop it by looking at the MAC-address unique to each NIC.
+- **FreeBSD Jail** essentially a container in FreeBSD systems.
+- **Ovrlay network** is a computer network that is built on top of another network.
 
 ## Docker Swarm Architecture
-*Docker engine client* calls *Swarm Manager*'s API, which takes in the commands and create *service objects*. The *orchestrator* creates tasks for that satisfy the requirements of the service objects, then the *allocater* allocates IP addresses to tasks. The *dispatcher* then assigns tasks to worker nodes, and the *schedular* instructs a worker node to run a task.
+*Docker engine client* calls *Swarm Manager*'s API, which takes in the commands and create *service objects*. The *orchestrator* creates tasks for that satisfy the requirements of the service objects, then the *allocator* allocates IP addresses to tasks. The *dispatcher* then assigns tasks to worker nodes, and the *schedular* instructs a worker node to run a task.
 
 Each worker node has a container, it connects to dispatcher to check for assigned tasks, and the *executor* will execute tasks assigned to the worker node.
 
@@ -16,3 +20,58 @@ A service may remain to be `pending` if no node currently in the swarm can run i
 
 ### Replicated and global services
 There are two types of service deployments, *replicated* and *global*. Replicated service involves in specifying a number of identical tasks a client wish to run, a global service is a service that runs one task on every node. (Useful for monitoring agents, anti-virus scanner etc.)
+
+
+## Micro-services
+- Cloud Native applications
+  - Loosely coupled distributed application.
+  - Datastore: Each micro-service typically has its own datastore.
+  - Packaging: Each micro-service is typically packaged in a "container" image
+
+### Challenges
+- Service discovery
+- Operational overhead
+- Distributed system
+- Service dependencies
+  - Service fan-out
+  - dependency services running "hot"
+- Traffic/load each service can handle
+- Service Health/Fault tolerance
+- Auto-scale
+
+## Container Networking
+Requirements:
+  - IP address
+  - IP address management (IPAM) and network device creation
+  - External connectivity via Host (NAT or route advertisement).
+
+### Docker: The Container Network Model (CNM) Interfacing
+- Docker image is saved and loaded from `backup.tar`, which could be used later on to create a new docker image.
+- Docker container runs and commit its state into the image.
+
+- **Sandbox** contains the configuration of a Container's network stack. This includes management of the container's *interface*, *routing table* and *DNS settings*. An implementation of a sandbox could be a *Linux network namespace*, a *FreeBSD jail* or other similar concept.
+- **Endpoint** An endpoint joins a sandbox to a network. An implementation of an endpoint could be a *veth pair*, an *Open vSwitch Internal port* or similar.
+- **Network** is a group of endpoints that are able to communicate with each other directly. An implementation of a network could be *VXLAN Segment*, a *linux bridge*, *VLAN*, etc.
+
+### Container Network Model (CNM, aka libnetwork)
+- Intention: Implement and use any kind of network technology to *connect* and *discover* containers.
+- Partitioning, isolation, and traffic segmentation are achieved by dividing network addresses
+- CNM does not specify one preferred methodology for any network overlay scheme.
+
+Within a swarm node, containers communicates with the linux bridge `docker0` through veth pairs, and linux bridge then then pass on the information to the desired destination, whether to another container, or to the router (Then to the internet) via *Linux Kernel Routing*.
+
+### Docker Swarm && libnetwork - Built-in Overlay model
+
+
+##
+
+## Linux Switching
+- Frontend to manage linux bridge is `brctl`. Newer tool is the OpenvSwitch, with the main frontend `ovs-vsctl`.
+
+|Tap Interface|Veth Pair|
+|:--:|:--:|
+|Cannot be used to attach network namespaces to linux bridge or the openvswitch|USed to connect two network namespaces|
+
+## Sources
+- [What are microservices](https://smartbear.com/learn/api-design/what-are-microservices/)
+- [Linux Switching](http://www.opencloudblog.com/?p=66)
