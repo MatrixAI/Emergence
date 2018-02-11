@@ -1,4 +1,5 @@
 # Notes: Container and Virtualisation
+tags: container, virtualisation
 
 ## Terminologies
 - **Bare Metal** The hardware.
@@ -53,7 +54,8 @@ Virtual machines have their own MMU and a partition of a physical memory that
 they have full access to. However, it cannot directly access actual machine memory.
 The VMM is responsible for mapping guest physical memory to the actual machine memory.
 It uses *shadow page tables* to map the guest machine, which is a representation of the
-host page tables that the guest thinks it is using.
+host page tables that the guest thinks it is using (This depends on virtual machines
+implementation).
 
 ## KVM (Kernel-based Virtual Machine)
 KVM is a virtualization infrastructure for the Linux on x86 hardware

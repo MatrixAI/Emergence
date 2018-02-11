@@ -1,5 +1,6 @@
 # Notes: Docker
-Date: 8/2/2018
+tags: docker, containers, kubernetes
+
 ## Questions
 ### Docker
 1. What is docker?
@@ -62,7 +63,3 @@ Date: 8/2/2018
   - Services: front end and load balancer for pods, providing a floating IP for access to the pods that power the service, meaning that changes can happen at the pod-level while maintaining a stable interface.
   - Replication controllers: responsible for maintaining X replicas of the required pods.
   - Labels: key-value tags (e.g. 'Name') that you and the system use to identify pods, replication controllers and services.
-
-1. How to directly execute kernel commands?
-1. Context switching
-1. What OS threads are running

@@ -1,0 +1,18 @@
+# Notes: More on docker
+tags: docker
+
+## Terminologies
+- **Bind mounting** Copying a directory tree onto another destination. Altering
+of the files under one of the trees will reflect directly onto the other.
+- **Microservice architecture** is a method of developing software applications as a suite of independently deployable, small, modular services which each service runs a runique process and communicates through a well-defined, lightweight mechanism to serve a business goal. 
+
+## Docker Swarm Architecture
+*Docker engine client* calls *Swarm Manager*'s API, which takes in the commands and create *service objects*. The *orchestrator* creates tasks for that satisfy the requirements of the service objects, then the *allocater* allocates IP addresses to tasks. The *dispatcher* then assigns tasks to worker nodes, and the *schedular* instructs a worker node to run a task.
+
+Each worker node has a container, it connects to dispatcher to check for assigned tasks, and the *executor* will execute tasks assigned to the worker node.
+
+### Pending services
+A service may remain to be `pending` if no node currently in the swarm can run its tasks.
+
+### Replicated and global services
+There are two types of service deployments, *replicated* and *global*. Replicated service involves in specifying a number of identical tasks a client wish to run, a global service is a service that runs one task on every node. (Useful for monitoring agents, anti-virus scanner etc.)
