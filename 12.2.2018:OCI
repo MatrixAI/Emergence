@@ -1,0 +1,8 @@
+# Notes: Open Container Initiative (OCI)
+
+## Terminologies
+- `core` - core dump file: Certain signals may result termination of processes
+and produce a `core dump file`. It is a disk file containing the image of the processor's memory
+at the time of termination, which can be used in a debugger.
+
+### GETRLIMITS(2)
