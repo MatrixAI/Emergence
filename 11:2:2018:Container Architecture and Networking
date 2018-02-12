@@ -1,13 +1,12 @@
-# Notes: Containers and Docker
+# Notes: Container Architecture and Networking
 tags: docker
 
 ## Terminologies
 - **Bind mounting** Copying a directory tree onto another destination. Altering
 of the files under one of the trees will reflect directly onto the other.
 - **Microservice architecture** is a method of developing software applications as a suite of independently deployable, small, modular services which each service runs a unique process and communicates through a well-defined, lightweight mechanism to serve a business goal.
-- **Bridge** A device that separate two or more network segments within one logical network (e.g. a single IP subnet). The job of the bridge is to examine the destination of the data packets one at a time, and decide whether or not to pass the packets to the other side of the Ethernet segment. The result is a faster, quieter network with less collisions.
+- **Linux Bridge** A device that separate two or more network segments within one logical network (e.g. a single IP subnet). The job of the bridge is to examine the destination of the data packets one at a time, and decide whether or not to pass the packets to the other side of the Ethernet segment. The result is a faster, quieter network with less collisions.
 The bridging code decides whether to bridge data or drop it by looking at the MAC-address unique to each NIC.
-- **Veth Pair** A
 - **FreeBSD Jail** essentially a container in FreeBSD systems.
 - **Overlay network** is a computer network that is built on top of another network.
 

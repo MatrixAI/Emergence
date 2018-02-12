@@ -3,5 +3,6 @@
 - [VXLan](https://blogs.vmware.com/vsphere/2013/04/vxlan-series-different-components-part-1.html)
 
 ### Tomorrow:
-- Configure Containers
-- Set up veth pairs and bridges between Containers
+- Configure Containers.
+- Look at Docker's code to figure out how it does deals with linux kernel.
+- Set up veth pairs and bridges between Containers and host.
