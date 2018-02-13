@@ -6,3 +6,9 @@ and produce a `core dump file`. It is a disk file containing the image of the pr
 at the time of termination, which can be used in a debugger.
 
 ### GETRLIMITS(2)
+
+
+
+## Sources
+[OCI Runtime Spec](https://github.com/opencontainers/runtime-spec)
+[Libcontainer Package Guide](https://gowalker.org/github.com/opencontainers/runc/libcontainer)
