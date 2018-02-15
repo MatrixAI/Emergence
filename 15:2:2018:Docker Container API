@@ -1,0 +1,57 @@
+# Notes: Docker Container API
+tags: docker container
+
+# Create Container
+- `XDG_RUNTIME_DIR` is a environment variable set when you log in, tells any program
+1. Creates a container rooting at `XDG_RUNTIME_DIR/runc` if user isn't root, otherwise at `/run/runc`.
+
+Usage: create <container-id>
+Flags:
+  - `bundle, b`, `console-socket`, `pid-file`, `no-pivot`, `no-new-keyring`, `preserve-fds`
+  - `ramfs` is a filesystem storing Linux's disk caches.
+  - `ramdisk` is an older and less optimal version of ramfs.
+  - `tmpfs` is a derivative of `ramfs` which uses dynamically assigned memory and allows VMs to free its space, as well as using the swap space.
+  - `rootfs` is a special instance of `ramfs` (or `tmpfs` if enabled) used in `initram`.
+  - `no-pivot` should be used whenever the `rootfs` is on top of a `ramdisk`.
+
+## Creation process
+
+1. Create a libcontainer with configurations including `cgroupname`
+1. Condition checking and validation of arguments and configs
+1. View the stat of the specified `containerRoot` (e.g. `/runc/container_id` if allowed).
+1. If the containerRoot exists, then raise exception
+1. Otherwise, create `containerRoot` and change the PID and GID of the to the current process's IDs.
+1. Create a linuxContainter struct with various config and path attributes.
+1. Create a cgroup manager
+  - `Apply`, `GetPids`, `GetAllPids`, `GetStats`, `Freeze`, `Destroy`, `getPaths`
+1. Create a Intel RDT manager if intelrdt is enabled.
+1. Set container state to `stoppedState` (container state is an interface consisting functions: `transition`, `destroy`, `status`)
+1. Return container.
+
+## CgroupManager Interface
+**Apply**
+Applies cgroup config to the process with the specified pid
+
+**GetPids**
+Returns the PIDs inside the cgroup set
+
+**GetAllPids**
+Returns the PIDs inside the cgroup set & all sub-cgroups
+
+**GetStats**
+Returns statistics for the cgroup set
+
+**Freeze**
+Toggles the freezer cgroup according with the specified state
+
+**Destroy**
+Destroy the cgroup set
+
+**GetPaths**
+Returns cgroup paths to save in a state and to be able to restore the object later.
+
+**Set**
+Set the cgroup as configured.
+
+## Rootless Containers
+Containers that are created by unprivileged user.

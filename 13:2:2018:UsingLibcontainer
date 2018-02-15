@@ -30,4 +30,10 @@ https://gowalker.org/github.com/opencontainers/runc/libcontainer/configs#Config
 ### Source
 [Linux Kernel Archive: Shared Subtrees](https://www.kernel.org/doc/Documentation/filesystems/sharedsubtree.txt)
 
-##
+## Control Group
+- `cgroup`: associates a set of tasks with a set of parameters for one or more subsystems.
+- `subsystem` is a module that treat groups of tasks in particular ways. Typically a *resource controller*. (e.g. cpusets)
+- `hierarchy` is a set of cgroups arranged in a tree, such taht every task in the system is in exactly one of the cgroups, and a set of subsystems.
+
+### Source
+[Kernel Doc: Cgroup](https://www.kernel.org/doc/Documentation/cgroup-v1/cgroups.txt)
