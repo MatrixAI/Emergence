@@ -6,3 +6,4 @@
 - Copy-on-write
 - Linux Capabilities
   [LWN Article](https://lwn.net/Articles/486306/)
+- Raft Consensus Algorithm (Probably much later on)

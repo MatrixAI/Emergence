@@ -1,4 +1,4 @@
-# Notes: Docker Container API
+# Notes: Runc
 tags: docker container
 
 # Create Container
@@ -20,7 +20,7 @@ Flags:
 1. Condition checking and validation of arguments and configs
 1. View the stat of the specified `containerRoot` (e.g. `/runc/container_id` if allowed).
 1. If the containerRoot exists, then raise exception
-1. Otherwise, create `containerRoot` and change the PID and GID of the to the current process's IDs.
+1. Otherwise, create `containerRoot` and change the UID and GID of `containerRoot` to the current process's UIDs and GID.
 1. Create a linuxContainter struct with various config and path attributes.
 1. Create a cgroup manager
   - `Apply`, `GetPids`, `GetAllPids`, `GetStats`, `Freeze`, `Destroy`, `getPaths`
