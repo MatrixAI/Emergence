@@ -46,13 +46,22 @@ It uses the library `cli` by `urfave` to handle arguments and events.
     - calls `linuxContainer.start(process, status == stopped)`
   - linuxContainer.start(process, isInit)
     - Calls newParentProcess() and obtain the init process
-    -
+    - Calls initProcess.start()
+
   - newParentProcess()
     - Create a new socket pair called `init` (consists of `init-p` and `init-c`)
     - Create a commandTemplate.
+      1. Create a command with initPath and arguments.
+      1. 
     - If **not** an init process, calls return a `newSetnsProcess`. This process
       encodes the data in netlink processable format.
     - Returns a initProcess
+
+  - BootstrapData()
+    - Encode data into netlink readable format.
+
+  - initProcess.start()
+    - start a command
 
 - factory_linux.go
   - New()
