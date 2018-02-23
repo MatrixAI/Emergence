@@ -128,9 +128,11 @@ When a `runc create` command is received:
     container *linuxcontainer
     fds []string
     process *Process
-    bootstrapData io.Reader
+    bootstrapData io.Reader // Contains information with namespaces
     sharePidns bool
     ```
+  1. Start the process in a non-blocking way.
+    1. set up file descriptors
   1. Apply cgroup setting to the process: Find mount points, `mkdirall` for all cgroup subsystems we
     wish to apply, then write the process's pid into `cgroup.procs`
   1. Apply intelRdt setting to the process
@@ -152,4 +154,8 @@ When a `runc create` command is received:
       TxQueueLen int // Transmit queue length
     ```
   1. Send config to init process
-  1.
+
+
+## Questions
+- How exactly does initProcess.start() work? When does CLONE(NS_FLAGS) apply?
+- 

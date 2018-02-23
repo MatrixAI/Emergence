@@ -51,17 +51,23 @@ It uses the library `cli` by `urfave` to handle arguments and events.
   - newParentProcess()
     - Create a new socket pair called `init` (consists of `init-p` and `init-c`)
     - Create a commandTemplate.
-      1. Create a command with initPath and arguments.
-      1. 
     - If **not** an init process, calls return a `newSetnsProcess`. This process
       encodes the data in netlink processable format.
     - Returns a initProcess
 
   - BootstrapData()
-    - Encode data into netlink readable format.
+    - Encode namespace, uid/gid mapping data into netlink readable format.
 
   - initProcess.start()
-    - start a command
+    - start the process in a non-blocking way
+    - Apply cgroup (which triggers in a series of `mkdirAll()` and writing into `cgroup.procs` for respective cgroups)
+    - Apply intel RDT
+    - Copy bootstap data into parentPipe
+    - execute `initProcess.execSetns()`
+
+  - initProcess.execSetns()
+    - Wait for the process cmd to complete
+    -
 
 - factory_linux.go
   - New()
