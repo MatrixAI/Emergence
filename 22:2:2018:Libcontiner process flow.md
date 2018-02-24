@@ -11,6 +11,7 @@ When a `runc create` command is received:
   shared resources.
   1. Create all directories needed for the given `root`
   1. Create a `LinuxFactory` object for the container, which consists of:
+
     ``` go
     Root string
     InitPath string
@@ -22,10 +23,12 @@ When a `runc create` command is received:
     NewCgroupsManager func returning cgroups.Manager
     NewIntelRdtManager func returning intelrdt.Manager
     ```
+
   1. Validate container configuration
   1. Create directories needed for root/container_id
   1. Change root/container_id ownership to current uid and gid
   1. Make a `LinuxContainer` object:
+
     ``` go
     id string
     root string
@@ -44,7 +47,9 @@ When a `runc create` command is received:
     state containerState
     created time.Time
     ```
+
   1. Create a `runner` object:
+
     ``` go
     enableSubreaper bool
     shouldDestory bool
@@ -58,8 +63,10 @@ When a `runc create` command is received:
     notifySocket *notifySocket
     criuOpts *libcontainer.CriuOpts
     ```
+
   1. Use the runner object created to run the process in the config
   1. Create a `libcontainer.Process` object from the config:
+
     ``` go
     Args []string
     Env []string
@@ -78,16 +85,20 @@ When a `runc create` command is received:
     ConsoleSocket *os.File
     ops processOperations
     ```
+
   1. Assign enviornment variables LISTEN_FD and LISTEN_PID.
   1. Create a Signal Handler
+
     ```
     signals chan os.signal
     notifySocket *notifySocket
     ```
+
   1. If `Terminal=True` in the config file, create a TTY program and connect it with a console sockPair.
   1. Create a `exec.fifo` file at container's root with 0000 permission, owned by rootuid and rootgid.
   1. Create a init socket pair
   1. Create a commandTemplate - `Cmd` object:
+
     ``` go
     Path string // path of the command to run
     Args []string
@@ -110,14 +121,18 @@ When a `runc create` command is received:
     errch chan error //one send per goroutine
     waitDone chan struct{}
     ```
+
     `os.Process` type:
-    ```
+
+    ``` go
     Pid int
     handle uintptr // handle is accessed atomically on Windows
     isdone uint32 // process has been successfully waited on, non zero if true.
     sigMu sync.RWMutex // avoid race between wait and signal
     ```
+
   1. Creates a `InitProcess`:
+
     ``` go
     cmd *exec.Cmd
     parentPipe *os.File
@@ -131,6 +146,7 @@ When a `runc create` command is received:
     bootstrapData io.Reader // Contains information with namespaces
     sharePidns bool
     ```
+
   1. Start the process in a non-blocking way.
     1. set up file descriptors
   1. Apply cgroup setting to the process: Find mount points, `mkdirall` for all cgroup subsystems we
@@ -141,6 +157,7 @@ When a `runc create` command is received:
   1. Duplicate file descriptor names before the container process can move them.
   1. set external descriptors
   1. Create network interfaces (Network struct looks like this:
+
     ``` go
       Type string // commonly veth and loopback
       Name string
@@ -153,6 +170,7 @@ When a `runc create` command is received:
       Mtu int // maximum transmission unit
       TxQueueLen int // Transmit queue length
     ```
+
   1. Send config to init process
 
 ## Create a container (From `strace`)
