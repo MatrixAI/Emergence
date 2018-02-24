@@ -1,9 +1,0 @@
-- [Linux Network Namespaces](https://blog.scottlowe.org/2013/09/04/introducing-linux-network-namespaces/)
-- [The Kubernetes Effect](https://news.ycombinator.com/item?id=16331757)
-- [VXLan](https://blogs.vmware.com/vsphere/2013/04/vxlan-series-different-components-part-1.html)
-
-### Topic Queue
-- Copy-on-write
-- Linux Capabilities
-  [LWN Article](https://lwn.net/Articles/486306/)
-- Raft Consensus Algorithm (Probably much later on)

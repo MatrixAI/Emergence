@@ -190,7 +190,6 @@ When a `runc create` command is received:
 1. Exit parent processes, clean up useless file descriptors
 
 
-
 ## Questions
 - How exactly does initProcess.start() work? When does CLONE(NS_FLAGS) apply?
 - How does netlink comes into use?
