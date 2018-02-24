@@ -155,7 +155,24 @@ When a `runc create` command is received:
     ```
   1. Send config to init process
 
+## Create a container (From `strace`)
+1. Load commandline arguments
+1. Load config.json
+1. fstate all cgroup files.
+1. read `/proc/self/cgroup`
+1. `mkdirat /sys/fs/cgroup/devices/user.slice/c1` , repeat this for other cgroup categories.
+1. create two socketpairs: `PF_LOCAL SOCK_STREAM`
+1. `unshare` with various namespace flags
+1. For the *unshared* process:
+  1. Set uid and gid to 0 (for the UTS namespace)
+  1. Set signals handlers
+  1. mount various files using `mount`, `mkdirat` and `mknodat` (for special files)
+  1. remount container's filesystem (reason unknown)
+  1. Set capabilities using `prctl`
+1. Exit parent processes, clean up useless file descriptors
+
+
 
 ## Questions
 - How exactly does initProcess.start() work? When does CLONE(NS_FLAGS) apply?
-- 
+- How does netlink comes into use?
