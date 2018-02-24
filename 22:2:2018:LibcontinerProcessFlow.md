@@ -8,7 +8,7 @@ When a `runc create` command is received:
   1. Create `libcontainerConfig` using spec and context.
   1. Use native cgroupFS to manage cgroup
   1. Use intel RDT resource control filesystem to create and manage Intel Xeon platform
-  shared resources.
+  shared resources.Â
   1. Create all directories needed for the given `root`
   1. Create a `LinuxFactory` object for the container, which consists of:
 
