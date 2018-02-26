@@ -1,3 +1,5 @@
+# Filesystems and Mounts
+
 ## UnionFS
 
 **UnionFS** is a file system that operates by creating layers.
@@ -105,3 +107,6 @@ mount --bind /mnt /tmp
 ```
 
 Note: `mount --bind foo foo` can be used to make the directory `foo` a mount point.
+
+## Sources
+[Mount and propagation](https://www.kernel.org/doc/Documentation/filesystems/sharedsubtree.txt)
