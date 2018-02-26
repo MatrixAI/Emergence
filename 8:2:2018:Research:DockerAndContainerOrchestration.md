@@ -10,9 +10,9 @@ tags: docker, containers, kubernetes
 1. Why are docker containers light weight?
   - Docker containers running on a single machine share the machine's OS kernel. They start instantly and use less compute and RAM. Images are constructed from filesystem layers and share common files. This minimises disk usage and image downloads are much faster.
 1. How does docker achieves this?
-  - Docker Engine is a client-server appplication with these major components:
+  - Docker Engine is a client-server application with these major components:
     - A server (docker daemon) which is a type of long-running program called a daemon process (the dockerd command)
-    - A REST API which specifies interfaces taht programs can use to talk to the daemon and instruct it what to do.
+    - A REST API which specifies interfaces that programs can use to talk to the daemon and instruct it what to do.
     - A command line interface client.
 1. What is REST API?
   - Representational State Transfer-compliant web services allow requesting systems to access and manipulate textual representations of web resources using a uniform and predefined set of stateless operations.
