@@ -13,11 +13,22 @@
 
 [Libcontainer Process Flow (**Currently finished `CREATE`**)](/22:2:2018:LibcontinerProcessFlow.md)
 
+# Summary
+
+[Linux Memory Management](/Linux_memory_management.md)
+
+[Cgroup Summary (Current up to memory accounting)](/summary_cgroup,md)
+
+# Today's Topics
+- 
+- cgroup
+- Namespaces
+- AMIs on AWS
+
 # Topic Queue
 - Copy-on-write
 - Linux capabilities
 - Create a container using syscalls
--
 - Raft Consensus Algorithm (Probably much later on)
 
 
