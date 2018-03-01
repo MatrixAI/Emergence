@@ -20,15 +20,14 @@
 [Cgroup Summary (Current up to memory accounting)](/summary_cgroup,md)
 
 # Today's Topics
-- 
-- cgroup
-- Namespaces
-- AMIs on AWS
+- Container networking
+- Create a container
 
 # Topic Queue
+- AMIs on AWS
+- Namespaces
 - Copy-on-write
 - Linux capabilities
-- Create a container using syscalls
 - Raft Consensus Algorithm (Probably much later on)
 
 
