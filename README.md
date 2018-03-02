@@ -28,6 +28,7 @@
 - Namespaces
 - Copy-on-write
 - Linux capabilities
+- `ebtables` firewall for linux bridges at link layer
 - Raft Consensus Algorithm (Probably much later on)
 
 
