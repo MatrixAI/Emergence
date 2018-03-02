@@ -154,3 +154,4 @@ ip netns exec ns2 ip link set dev mv2 up
 
 ## Source
 [Exploring LXC Networking](http://containerops.org/2013/11/19/lxc-networking/)
+[Linux Networking](http://networkstatic.net/configuring-macvlan-ipvlan-linux-networking/)
