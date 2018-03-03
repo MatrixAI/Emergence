@@ -154,6 +154,12 @@ sudo ip netns exec ns2 ip link set dev mv2 up
 # host, but can ping each other from within themselves!
 ```
 
+## TUN/TAP
+TUN/TAP are virtual network kernel devices.
+TUN (network tunnel) simulates a network layer device and it operates with layer 3 packets like IP packets. TAP (network tap) simulates a link layer device and it operates with layer 2 packets like Ethernet frames. TUN is used with routing, while TAP is used for creating a network bridge.
+
+Packets sent by an OS via a TUN/TAP device are delivered to a user-space program which attaches itself to the device. A user-space program may also pass packets into a TUN/TAP device. In this case the TUN/TAP device delivers (or "injects") these packets to the OS network stack thus emulating their reception from an external source
+
 # IP Masquerade
 IP Masquerade (IPMASQ or MASQ) alllows one or more computers in a netowrk without assigned IP addresses to communicate with the internet using the Linux server's assigned IP address. The IPMASQ server acts as a gateway, and the other devices are invisible behind it, so to other machines on the internet the outgoing traffic appears to be comming from the IPMASQ server and not the internal PCs.
 
