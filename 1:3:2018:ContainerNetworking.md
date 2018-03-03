@@ -135,23 +135,29 @@ sudo ip netns add cont1
 sudo ip netns add cont2
 
 # Move the new interface mv1/mv2 to the new
-sudo ip link add mv1 link eth0 macvlan mode bridge
-sudo ip link add mv2 link eth0 macvlan mode bridge
+sudo ip link add mv1 link eth0 type macvlan mode bridge
+sudo ip link add mv2 link eth0 type macvlan mode bridge
 
 # Move the new interface mv1/mv2 to the new namespace
 sudo ip link set mv1 netns cont1
 sudo ip link set mv2 netns cont2
 
 # Set ip addresses
-ip netns exec ns1 ip addr add 10.0.
+sudo ip netns exec cont1 ip addr add 10.0.3.15/24 dev mv1
+sudo ip netns exec cont2 ip addr add 10.0.3.16/24 dev mv2
 
 # Bring the two interfaces up
-ip netns exec ns1 ip link set dev mv1 up
-ip netns exec ns2 ip link set dev mv2 up
+sudo ip netns exec ns1 ip link set dev mv1 up
+sudo ip netns exec ns2 ip link set dev mv2 up
 
-
+# Now we have 2 net namespaces running that cannot be pinged from the
+# host, but can ping each other from within themselves!
 ```
+
+# IP Masquerade
+IP Masquerade (IPMASQ or MASQ) alllows one or more computers in a netowrk without assigned IP addresses to communicate with the internet using the Linux server's assigned IP address. The IPMASQ server acts as a gateway, and the other devices are invisible behind it, so to other machines on the internet the outgoing traffic appears to be comming from the IPMASQ server and not the internal PCs.
 
 ## Source
 [Exploring LXC Networking](http://containerops.org/2013/11/19/lxc-networking/)
+
 [Linux Networking](http://networkstatic.net/configuring-macvlan-ipvlan-linux-networking/)
