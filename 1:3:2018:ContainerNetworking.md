@@ -1,3 +1,9 @@
+# Subnetting
+The technique of dividing an IP address into host and network part.
+
+# Linux Network Namespace
+Linux network namespace partition the use of the network - devices, addresses, ports, routes, firewall rules, etc. into separate boxes.
+
 # Terminologies
 - Failover is switching to a redundant or standby computer server, system, hardware component or network upon the failure or abnormal termination of the previously active application, server, system ,hardware component, or network.
 - BIRD Routing daemon: BIRD establish multiple routing tables, and uses BGP, RIP and OSPF routing protocols, as well as statically defined routes.
@@ -162,6 +168,60 @@ Packets sent by an OS via a TUN/TAP device are delivered to a user-space program
 
 # IP Masquerade
 IP Masquerade (IPMASQ or MASQ) alllows one or more computers in a netowrk without assigned IP addresses to communicate with the internet using the Linux server's assigned IP address. The IPMASQ server acts as a gateway, and the other devices are invisible behind it, so to other machines on the internet the outgoing traffic appears to be comming from the IPMASQ server and not the internal PCs.
+
+# IPTABLES
+## Policies
+Firewall policies creates a foundation for building rules.
+Security-minded administrators usually elect to drop all packets as a policy and only allow specific packets on a case-by-case basis.
+
+```bash
+# Block all incoming and outgoing packets on a network gateway
+iptables -P INPUT DROP
+iptables -P OUTPUT DROP
+```
+
+It is **recommended** that any forwarded packets - network traffic that is to be routed from the firewall to its destination node - be denied as well, to restrict internal clients from inadvertent exposure to the internet.
+
+```bash
+iptables -P FORWARD DROP
+```
+
+saving iptables: `/some/where/ iptables save`
+(On Ubuntu rules seems to be stored at `/usr/share/ufw/iptables`)
+
+#
+
+## Common iptables filtering
+Opening certain ports for communication:
+
+```
+iptables -A INPUT -p tcp -m tcp --sport 80 -j ACCEPT iptables -A OUTPUT -p tcp -m tcp --dport 80 -j ACCEPT
+```
+
+This allows regular web browsering over http. (Not https)
+
+Allowing ssh connection:
+
+```
+iptables -A INPUT -p tcp --dport 22 -j ACCEPT
+iptables -A OUTPUT -p udp --sport 22 -j ACCEPT
+```
+
+# IP Forwarding
+Enables one workstation to sit on two LANs and act as a gateway forwarding IP packets from one LAN to another.
+
+# Port forwarding
+Allows remote computers (e.g. a public machine on the internet) to connect to a specific computer within a private LAN.
+
+# NAT
+Network Address Translation. Provides a one-to-one relationship to IP address in a network to IP addresses in another network, hence allow nodes in network A to access resources on network B.
+
+However since NAT is a one-to-one relationship, it implies that the address space required from one network has to be equal or less than what the other network may provide.
+
+# PAT
+Port address translation (aka NAT overloading) attempts to use the original source port number of the internal host to form an unique, registered IP address and port number combination.
+
+For example, if node A and B from the internal network wants to access the external network, the router that runs PAT will map node A's ip address to its IP address (registered in the external world) with a random/unique port. So A would end up being 123.45.67.89:10000 and B could be 123.45.67.89:10001.
 
 ## Source
 [Exploring LXC Networking](http://containerops.org/2013/11/19/lxc-networking/)
