@@ -20,15 +20,15 @@
 [Cgroup Summary (Current up to memory accounting)](/summary_cgroup,md)
 
 # Current Topic
-[ ] Understand bridges
-[ ] Ways to create a subnet
-[ ] VPN (distributed and centralised)
-[ ] Creating routers with NAT, DHCP implemented
-[ ] Understand macvlan
-[ ] Docker Swarm
-[ ] overlay network (weave project)
+- [x] Understand bridges
+- [ ] Ways to create a subnet
+- [ ] VPN (distributed and centralised)
+- [ ] Creating routers with NAT, DHCP implemented
+- [ ] Understand macvlan
+- [ ] Docker Swarm
+- [ ] overlay network (weave project)
 
-[ ] Create prototypes using network namespaces
+- [ ] Create prototypes using network namespaces
 
 # Topic Queue
 - AMIs on AWS

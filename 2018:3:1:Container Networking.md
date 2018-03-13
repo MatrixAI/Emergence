@@ -1,3 +1,6 @@
+# Gateway
+A network gateway joins two networks so the devices on one network can communicate with the devices on another network.
+
 # Subnetting
 The technique of dividing an IP address into host and network part.
 
@@ -167,7 +170,7 @@ TUN (network tunnel) simulates a network layer device and it operates with layer
 Packets sent by an OS via a TUN/TAP device are delivered to a user-space program which attaches itself to the device. A user-space program may also pass packets into a TUN/TAP device. In this case the TUN/TAP device delivers (or "injects") these packets to the OS network stack thus emulating their reception from an external source
 
 # IP Masquerade
-IP Masquerade (IPMASQ or MASQ) alllows one or more computers in a netowrk without assigned IP addresses to communicate with the internet using the Linux server's assigned IP address. The IPMASQ server acts as a gateway, and the other devices are invisible behind it, so to other machines on the internet the outgoing traffic appears to be comming from the IPMASQ server and not the internal PCs.
+IP Masquerade (IPMASQ or MASQ) allows one or more computers in a network without assigned IP addresses to communicate with the internet using the Linux server's assigned IP address. The IPMASQ server acts as a gateway, and the other devices are invisible behind it, so to other machines on the internet the outgoing traffic appears to be coming from the IPMASQ server and not the internal PCs.
 
 # IPTABLES
 ## Policies
@@ -198,7 +201,7 @@ Opening certain ports for communication:
 iptables -A INPUT -p tcp -m tcp --sport 80 -j ACCEPT iptables -A OUTPUT -p tcp -m tcp --dport 80 -j ACCEPT
 ```
 
-This allows regular web browsering over http. (Not https)
+This allows regular web browsing over http. (Not https)
 
 Allowing ssh connection:
 
@@ -218,10 +221,26 @@ Network Address Translation. Provides a one-to-one relationship to IP address in
 
 However since NAT is a one-to-one relationship, it implies that the address space required from one network has to be equal or less than what the other network may provide.
 
+Example NAT table:
+
+| Inside local    | Inside global   |
+| :-------------  | :-------------- |
+| 192.168.0.6/24  | 123.122.45.2/24 |
+| 192.168.0.12/24 | 123.122.45.3/24 |
+
+The Inside local is the private IP address, the inside global is what the inside local IP address is *masqueraded* into.
+
 # PAT
 Port address translation (aka NAT overloading) attempts to use the original source port number of the internal host to form an unique, registered IP address and port number combination.
 
 For example, if node A and B from the internal network wants to access the external network, the router that runs PAT will map node A's ip address to its IP address (registered in the external world) with a random/unique port. So A would end up being 123.45.67.89:10000 and B could be 123.45.67.89:10001.
+
+Example PAT table:
+
+| Local IP        | Global IP        | Outside Global  |
+| :-------------  | :--------------- | :-------------- |
+| 192.168.0.6/24::5123  | 123.122.45.23/24 | 144.253.23.23/24::80 |
+| 192.168.0.6/24::8899  | 123.122.45.23/24 | 167.123.92.2/24::21 |
 
 ## Source
 [Exploring LXC Networking](http://containerops.org/2013/11/19/lxc-networking/)

@@ -91,7 +91,7 @@ mount -t cgroup -o all cgroup /sys/fs/cgroup
 
 The memory controller `mem_cgroup` for each cgroup has a counter called `res_counter`. The `res_counter` tracks the current memory usage and limit of the group of processes associated with the controller.
 
-Each page has a pointer to `page_cgroup`, which in turn knows the cgroup it belongs to. When a page accounting is triggerred, it sets up the necessary data structures and check if the cgroup that is being charged is over its limit. If it is, then **reclaim** (See later paragraph) is invoked on the cgroup. If everything goes well, a page meta-data-structure called `page_cgroup` is updated. `page_cgroup` has its own LRU on cgroup.
+Each page has a pointer to `page_cgroup`, which in turn knows the cgroup it belongs to. When a page accounting is triggered, it sets up the necessary data structures and check if the cgroup that is being charged is over its limit. If it is, then **reclaim** (See later paragraph) is invoked on the cgroup. If everything goes well, a page meta-data-structure called `page_cgroup` is updated. `page_cgroup` has its own LRU on cgroup.
 
 ```c
 struct page_cgroup {
