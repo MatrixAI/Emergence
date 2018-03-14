@@ -1,17 +1,18 @@
 # Past Topics
-[Container Orchestration](/8:2:2018:Research:DockerAndContainerOrchestration.md)
 
-[Virtualisation](/9:2:2018:Research:ContainersAndVirtualisation.md)
+[Container Orchestration](/2018:2:8:Research:DockerAndContainerOrchestration.md)
 
-[Docker Architecture and Networking](/11:2:2018:ContainerArchitectureAndNetworking.md)
+[Virtualisation](/2018:2:9:Research:ContainersAndVirtualisation.md)
 
-[Container and Cgroup](/12:2:2018:LXC.md)
+[Docker Architecture and Networking](/2018:2:11:ContainerArchitectureAndNetworking.md)
 
-[Mounting Terminologies and tools](/13:2:2018:UsingLibcontainer.md)
+[Container and Cgroup](/2018:2:12:LXC.md)
 
-[Runc function calls during `CREATE`](/19:2:2018:Libcontainer.md)
+[Mounting Terminologies and tools](/2018:2:13:UsingLibcontainer.md)
 
-[Libcontainer Process Flow (**Currently finished `CREATE`**)](/22:2:2018:LibcontinerProcessFlow.md)
+[Runc function calls during `CREATE`](/2019:2:19:Libcontainer.md)
+
+[Libcontainer Process Flow (**Currently finished `CREATE`**)](/2018:2:22:LibcontinerProcessFlow.md)
 
 # Summary
 
@@ -21,7 +22,7 @@
 
 # Current Topic
 - [x] Understand bridges
-- [ ] Ways to create a subnet
+- [x] Ways to create a subnet
 - [ ] VPN (distributed and centralised)
 - [ ] Creating routers with NAT, DHCP implemented
 - [ ] Understand macvlan
