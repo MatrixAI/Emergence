@@ -4,6 +4,24 @@
 
 When a computer joins a network, the dhcp client software sends a DHCP broadcast in a connectionless manner (using UDP).
 
+There are 3 ways of allocating IP addresses:
+### Dynamic allocation
+A network admin reserves a range of IP addresses for DHCP. Each DHCP client can request IP address from the DHCP server using a lease with **controlled time period**. The server can then reclaim the expired leases and reallocate the address to new clients if the lease is not renewed. The allocation mechanism guarentees not to reallocate the address within the requested time and attempts to return the same network address each time the client requests an address.
+
+This is the only method that allows automatic reuse of an address that is no longer needed by the client.
+
+The client may:
+- Extend its lease with subsequent requests.
+- Ask for a permanent assignment by asking for a infinite lease.
+- Issue a message to release the address back to the server when the client no longer needs the address.
+
+### Manual allocation (Static allocation)
+Allows DHCP to be used to eliminate the error-prone process of manually configuring hosts with IP addresses in environments where it is desireable to manage IP address assignment outside of the DHCP mechanisms.
+
+### Automatic allocation
+The DHCP server permanently assigns an IP address to a requesting client from the range defined by the administrator. This is automatically done through the DHCP server, which is different to the manual allocation method.
+
+
 ## DHCP Operations
 ### Discovery
 DHCP client sends a `DHCPDISCOVER` message on the network using the **broadcast** address. It can also request it last known IP address. If the client remains connected to the same network, the server may grant the request, otherwise, if the server is set up as **authoritative**, then it would deny the request. A non-authoritative server would simply ignore the request causing the client to timeout and ask for a new IP address.
