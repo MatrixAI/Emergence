@@ -169,6 +169,8 @@ TUN (network tunnel) simulates a network layer device and it operates with layer
 
 Packets sent by an OS via a TUN/TAP device are delivered to a user-space program which attaches itself to the device. A user-space program may also pass packets into a TUN/TAP device. In this case the TUN/TAP device delivers (or "injects") these packets to the OS network stack thus emulating their reception from an external source
 
+[TUN/TAP from C](http://backreference.org/2010/03/26/tuntap-interface-tutorial/)
+
 # IP Masquerade
 IP Masquerade (IPMASQ or MASQ) allows one or more computers in a network without assigned IP addresses to communicate with the internet using the Linux server's assigned IP address. The IPMASQ server acts as a gateway, and the other devices are invisible behind it, so to other machines on the internet the outgoing traffic appears to be coming from the IPMASQ server and not the internal PCs.
 
