@@ -53,7 +53,7 @@ makeLib _ flags =
 This didn't work very well for me, I'll come back to this at a later time.
 
 ## FFI API Design Principles
-### At a Lower Level
+### Low-level Design
 - Naming conventions
 - Marshalling vanilla C values (e.g. `int`, `float` and `char*` for null terminated string) into (`Int`, `Float` and `String`).
 - Converting `int` into `Bool` from some naming convention.
@@ -63,8 +63,14 @@ This didn't work very well for me, I'll come back to this at a later time.
 
 The [blog post](http://blog.ezyang.com/2010/06/principles-of-ffi-api-design/) that I'm reading suggests to marshal flat structs only (structs that contain no pointers) and let everything else be for efficiency. Understanding how inefficient it is may require me to understand how the marshalling process works from C to Haskell/Haskell to C. But for now I will take the author's word for it.
 
-### At a Higher Level
-
+### High-level Design
+- **Pure functions**. Functions that are referentially transnparent can be transformed into pure functions easily. A set of internal state transformation functions might not be amendable to a pure treatment, but perhaps a function that orchestrates them together leaks no shared state.
+- **Monads**. It is a good design decision to give your users a more restrictive monads that can perform operations relevant to your library. This can be done simple like the following:
+  ```Haskell
+  newtype MyMonad a = MyMonad { unMyMonad :: ReaderT Env IO a }
+    deriving (MonadReader Env, Monad, Functor)
+  ```
+  
 
 ## Sources
 [c2h2 and FFI tutorial](http://blog.ezyang.com/2010/06/the-haskell-preprocessor-hierarchy/)
