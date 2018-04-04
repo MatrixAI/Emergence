@@ -1,8 +1,19 @@
 # OCI Image Format
-## Manifest
-At a high level the image manifest should contain metadata about the contents, dependencies of the image.
-This includes the
 
+The `mediaType` tag is described in  [RFC6838](https://tools.ietf.org/html/rfc6838) TODO
+
+## Manifest
+The image manifest is a document that provides a configuration and a set of layers for a single container image for a specific architecture and OS.
+
+- `schemaVersion` int
+- `mediaType` string
+- `config` descriptor - used to verify a config object using digest
+  - The `mediaType` of this descriptor should contain
+-
+### Descriptor
+OCI descriptor represents the image components, which are arranged in Merkle Directed Acyclic Graph (Essentially a tree where the leaf nodes are addressed by their content hash, and parent nodes are addressed by the hash of their children).
+
+It has the following properties: `mediaType`, `digest`, `size`, `urls`, and `annotations`. The `digest` is a digest produced by a collision-resistant hash function. Before consuming content targeted by a descriptor from untrusted sources, the digest string. The digest should be verified before calculating the target content of the descriptor.
 
 ### Filesystem changeset
 A container filesystem consists of layers of and layers of changes.
@@ -16,7 +27,7 @@ File types include:
 - regular files
 - directories
 - sockets
-- sumbolic links
+- symbolic links
 - block devices
 - character devices
 - FIFOs
@@ -75,9 +86,16 @@ An opaque whiteout:
 Implementations SHOULD generate layers using *explicit whiteout files*, but MUST accept both.s
 
 #### Applying Changesets
-Special consideration for whiteout files are needed, in the absence of any whiteout files in a layer changeset, the archive is extracted like a regular tar archive
+Special consideration for whiteout files are needed, in the absence of any whiteout files in a layer changeset, the archive is extracted like a regular tar archives
 
 For **changeset over existing files**, if the existing paths and the entry are both directories, then the attributes of the existing path MUST be replaced by those of the changset.s
 
 - Removing the file path `unlink` on linux systems
 - Recreating the file path, based on the contents and attributes of the changeset entry.
+
+##
+
+- changes of image ID
+- overlayFS2 (modern ufs)
+- moby project
+- docker container storage pages
