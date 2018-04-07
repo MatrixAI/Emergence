@@ -93,9 +93,13 @@ For **changeset over existing files**, if the existing paths and the entry are b
 - Removing the file path `unlink` on linux systems
 - Recreating the file path, based on the contents and attributes of the changeset entry.
 
-##
 
-- changes of image ID
-- overlayFS2 (modern ufs)
-- moby project
-- docker container storage pages
+## Image Layout
+OCI image layout is directory structure for OCI content-addressable blobs and location-addressable references. This layout MAY be used in a variety of different transport mechanisms: archive formats (e.g. tar, zip), shared filesystem environment (e.g. nfs), or networked file fetching (e.g. http, ftp, rsync)
+
+Given the image layout, a tool can create an OCI runtime specification bundle by:
+- following the refs to find a manifest, possibly via an image index
+- Applying the filesystem layers in the specified order
+- Converting the image configuration into an OCI runtime specification. (`config.json`)
+
+The image layout is composed of three parts: `blob`, `oci-layout` and `index.json`
