@@ -1,6 +1,7 @@
 # OCI Image Format
 
-The `mediaType` tag is described in  [RFC6838](https://tools.ietf.org/html/rfc6838) TODO
+The `mediaType` tag is described in  [RFC6838](https://tools.ietf.org/html/rfc6838)
+Unlike the image index, which contains information about a set of images that can span a variety of architectures and operating systems, an image manifest provides a configuration and set of layers for a single container image for a specific architecture and operating system.
 
 ## Manifest
 The image manifest is a document that provides a configuration and a set of layers for a single container image for a specific architecture and OS.
@@ -93,13 +94,10 @@ For **changeset over existing files**, if the existing paths and the entry are b
 - Removing the file path `unlink` on linux systems
 - Recreating the file path, based on the contents and attributes of the changeset entry.
 
-
 ## Image Layout
-OCI image layout is directory structure for OCI content-addressable blobs and location-addressable references. This layout MAY be used in a variety of different transport mechanisms: archive formats (e.g. tar, zip), shared filesystem environment (e.g. nfs), or networked file fetching (e.g. http, ftp, rsync)
+OCI image layout is directory structure for OCI content-addressable blobs and location-addressable references.
 
-Given the image layout, a tool can create an OCI runtime specification bundle by:
-- following the refs to find a manifest, possibly via an image index
-- Applying the filesystem layers in the specified order
-- Converting the image configuration into an OCI runtime specification. (`config.json`)
-
-The image layout is composed of three parts: `blob`, `oci-layout` and `index.json`
+The layout contains:
+- `blobs` directory - content-addressable blobs
+- `oci-layout` json file
+- [`index.json`](https://github.com/opencontainers/image-spec/blob/master/image-index.md) - references and descriptors of image-layout. In general contains an array of manifests and image indexes.
