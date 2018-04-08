@@ -88,7 +88,7 @@ Implementations SHOULD generate layers using *explicit whiteout files*, but MUST
 #### Applying Changesets
 Special consideration for whiteout files are needed, in the absence of any whiteout files in a layer changeset, the archive is extracted like a regular tar archives
 
-For **changeset over existing files**, if the existing paths and the entry are both directories, then the attributes of the existing path MUST be replaced by those of the changset.s
+For **changeset over existing files**, if the existing paths and the entry are both directories, then the attributes of the existing path MUST be replaced by those of the changset.
 
 - Removing the file path `unlink` on linux systems
 - Recreating the file path, based on the contents and attributes of the changeset entry.
