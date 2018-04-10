@@ -1,6 +1,3 @@
-# AUFS
-Short for Advanced
-
 # OverlayFS
 OverlayFS allows one, usually read-write directory tree to be overlaid to another read-only directory tree. All modifications go to the upper, writable layer.
 
