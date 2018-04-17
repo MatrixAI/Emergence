@@ -1,0 +1,58 @@
+# docker history
+
+
+#(nop) : no operation
+
+Docker used V1 Spec for `docker inspect`, the description of v1 is in [link](https://github.com/moby/moby/blob/master/image/spec/v1.md).
+However the V1 Spec is deprecated and both docker and moby are moving to a version 2 spec now, which is inline with the OCI image specification.
+
+The V1 Spec outlines a manifest list which contains multiple containers configurations that are suitable for different platforms.
+The layers in the container is
+
+
+
+In V1, the container id is a randomly generated string that is meant to be unique but not content addressable.
+
+content address of an executable image `docker history`
+
+
+Artifact server
+  nix Artifact
+  docker artifact
+
+
+- Content addressibility in Architect to reference container images
+-
+
+The image id is a 12 character truncation of a sha256 hash of the image id stored in the `manifest.json` file.
+We can find the manifest via `docker inspect <image id>` This hash is not the same as as shown in docker pull.
+
+[Github Issues on `docker pull` digest vs `manifest` digest](https://github.com/deitch/docker_registry2/issues/4)
+
+
+[Deterministic tar](https://reproducible-builds.org/docs/archives/)
+
+The digest is calculated and verified using the following algorithm:
+
+```
+let ID(C) = Descriptor.digest
+let C = <bytes>
+let D = '<alg>:' + Encode(H(C))
+let verified = ID(C) == D
+```
+
+The calculated hash is then compared with a pre-computed hash from a trusted source, in Matrix's case it will be the peer to peer *feed*
+
+`docker export` exports a container's filesystem as a tar archive (excluding the volumes). It flattens the container.
+`docker save` saves one or more images to a tar archive (streamed to STDOUT by default), preserving all layer information.
+
+
+- We will be using RUNC to utilise the necessary components for implementing the container.
+- We will also need to read the OCI runtime spec to understand how to run the container.
+
+
+- The artifact needs to be fetched from somewhere, to have a reliable artifact, we use the CI/CD system to make an available
+- Investifate container registry vs ipfs.
+
+[OCI Runtime in Rust](https://github.com/oracle/railcar)
+[OCI Runtime in Rust](https://blogs.oracle.com/developers/building-a-container-runtime-in-rust)
