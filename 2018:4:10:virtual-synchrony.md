@@ -33,4 +33,4 @@ Protocols:
 - State machine replication - Assumes that replicated process is a deterministic finite automaton, and that atomic braodcast of every event is possible. Usually implemented by replicated log consisting of multiple subsequent round of the *Paxos algorithm*.
 - Virtual synchrony - used when a group of processes coorporate to replicate in-memory data or to coordinate actions.
 
-# Paxos Algorithm
+# Fault tolerance
