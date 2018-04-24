@@ -1,11 +1,7 @@
 # Virtual Synchrony
-virtual synchrony is a interprocess message passing (ordered, reliable multicast) technique that allows messages to be sent to a group of processes, where all processes within a group see the messages in the same order. it is achieved via **state machine replication**.
+virtual synchrony is a interprocess message passing (ordered, reliable multicast) technique that allows messages to be sent to a group of processes, where all processes within a group see the messages in the same order. This is achieved via **state machine replication**. The key idea is to create a form of distributed state machine associated with the replicated data item. Called a *process group*. These state machines share copies of the data, and updates are delivered as events that occur in the same order at all copies (I'd imagine using totally ordered broadcast). If a process fails or crashes, this is reported to the other processes in the group. If a process joins, this is similarly reported, and a state transfer is used to initialise the joining member.
 
-## Fault tolerance
 If one replica crashes, others remain and can continue to provide responses. Members of the replica group can also be programmed to subdivide the workload. This permits a group of N members to run as much as N times faster than a single member.
-
-## Implementation details
-The key idea is to create a form of distributed state machine associated with the replicated data item. Called a *process group*. These state machines share copies of the data, and updates are delivered as events that occur in the same order at all copies (I'd imagine using totally ordered broadcast). If a process fails or crashes, this is reported to the other processes in the group. If a process joins, this is similarly reported, and a state transfer is used to initialize the joining member.
 
 # Replica
 - **Active replication** - processing the same request at every replica. This typically forwards all messages to a central coordinator (leader), and the coordinator sequentially chooses an unique sequence number for each message, then sends the sequence number along with the message to all replicas. Operations are carried out by the order of the sequence number.
@@ -33,4 +29,8 @@ Protocols:
 - State machine replication - Assumes that replicated process is a deterministic finite automaton, and that atomic braodcast of every event is possible. Usually implemented by replicated log consisting of multiple subsequent round of the *Paxos algorithm*.
 - Virtual synchrony - used when a group of processes coorporate to replicate in-memory data or to coordinate actions.
 
-# Fault tolerance
+# Paxos Algorithm
+Basically Local-write primary backup + quorum system.
+The client sends a request to a *proposer*, the *proposer* sends a request to a set of acceptors (the quorum system), if the enough acceptors accept the request (by the definition in the quorum system), then the request is sent to the *learner* which read/write and send back the result to the proposer, then back to the client. Upon being accepted, the proposer becomes the *leader*.
+
+Note: A lot of things are not mentioned in this summary, there is a lot more to consider when actually implementing the protocol (such as assigning IDs to requests and highest proposer gets the lead etc.)

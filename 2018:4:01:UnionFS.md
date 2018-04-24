@@ -1,3 +1,52 @@
+# AUFS
+AUFS layers multiple directories on a single Linux host and presents them as a single directory. These unification process is referred to as a *union mount*.
+
+AUFS uses the copy-on-write strategy to maximise storage efficiency and minimise overhead.
+
+In docker, the information about images and container layers is stored in subdirectories of `/var/lib/docker/aufs`
+- `diff/` the contents of each layer, each stored in a separate subdirectory.
+- `layers/` metadata about how many image layers are stacked. This directory contains one file for each image or container layer on the Docker host. Each file contains the IDs of all the layers below it in the stack (its parents)
+- `mnt/` Mount points, one per image or container layer, which are used to assemble and mount the unified system for a container. For images, which are read-only, these directories are always empty.
+
+## Reading files
+- If the file does not exist in the container layer, the storage driver search for the file in the image layers, starting with the layer just below the container layer, and read from the layer where it is found.
+- The file only exists in the container layer, it is read from there.
+- The file exists in both: File is read from the container layer, files in the container layer obscure files with the same name in the image layer.
+
+## Modifying files or directories
+- If the file does not exist in the `upperdir`, the `aufs` driver performs a `copy_up` to copy the file from the image laeyr to the writable layer. The contaienr then writes the changes to the new copy. However, AUFS works at the file level rather than the block level. This means all `copy_up` copies the entire file. This can have a noticable impact on the performance.
+- Deletion of files and directories:
+  - If a file is deleted within a container, a whiteout file is created in the container layer.
+  - If a directory is deleted within a container, a opaque file is created in the container layer.
+- Renaming directories: Calling `rename(2)` for a directory is not fully supported on AUFS, it returns `EXDEV` (cross device link not permitted).
+
+## Pros and Cons
+- AUS is less performant than `overlay2`, but it allows efficient sharing of a container image between multiple running containers, enable fast container start times and minimal use of disk space.
+- The underlying mechanics of how AUFS shares files between image layers and containers uses the page cache very efficiently.
+- AUFS write performance is significantly slower.
+
+# BTRFS
+BTRFS uses a subdirectory containing one directory per image or container layer, with the unified filesystem built from a layer plus all its parent layers. Subvolumes are natively copy-on-write and have space allocated to them on-demand from an underlying storage pool. They can also be nested and snapshotted.
+
+Only the base layer is stored as a true subvolume. All other layers are stored as snapshots. On disk, snapshots look and feel just like subvolumes, but in reality they are much smaller as they are managed in block-level. For maximum efficiency, when a container needs more space, it is allocated in *chunks* of roughly 1GB in size.
+
+Docker's btrfs storage driver stores every image layer and container in its own btrfs subvolume or snapshot. The base layer of an image is stored as a subvolume whereas a child image layers and containers are stored as snapshots.
+
+## Reading files
+- metadata in the snapshot points to the actual data blocks in the storage pool. Therefore, read performed against a snapshot are essentially the same as reads performed against a subvolume.
+
+## Writing files
+- Writing new files: invokes an allocate-on-demand operation to allocate new data block to the container's snapshot. Operates at native Btrfs speeds.
+- Modifying existing files: Copy-on-write operation, the data is read from the layer where it currently exists, and only the modified blocks are written into the container's writable layer. This incurs very little overhead.
+- Deleting files or directories: btrfs masks the existance of the file in the lower layer. If a container creates a file and then deletes it, this operation is performed in the Btrfs filesystem itslef and the space is reclaimed.
+
+## Pros and Cons
+- Page cache sharing is not supported, host container copies the files into the host's memory.
+- Small writes
+- Sequential writes: reduces the performace by up to 50%
+- Fragmentation: many small random writes can compound this issue due to copy-on-writes.
+
+
 # OverlayFS
 OverlayFS allows one, usually read-write directory tree to be overlaid to another read-only directory tree. All modifications go to the upper, writable layer.
 
