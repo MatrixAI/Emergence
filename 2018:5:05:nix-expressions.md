@@ -140,7 +140,12 @@ The `derivation` is simply a set, with some attributes. Therefore you can pass t
 The derivation function receives a set as its first argument, It MUST contain the following attribtues:
 
 - `name`: name of the derivation
-- `system`
+- `system`: name of the system which the derivation can be built
+- `builder`: the binary program to build the derivation
 
+`builtins.currentSystem` tells us the current system as seen by Nix.
 
+Nix does not build the derivation unless you tell it to do so, evaluating `derivation` simply creates a `.drv` file.
 
+# TODO:
+continue reading http://lethalman.blogspot.com.au/2014/07/nix-pill-6-our-first-derivation.html
