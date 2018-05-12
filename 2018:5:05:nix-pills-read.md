@@ -306,6 +306,8 @@ a00d5f71k0vp5a6klkls0mvr1f7sx6ch
 
 # Final Store derivation path
 
+In `NixOS/nix/src/libstore/derivations.cc`
+
 ```c++
 Hash hashDerivationModulus(Store &store, Derivation drv)
 {
@@ -327,19 +329,56 @@ Hash hashDerivationModulus(Store &store, Derivation drv)
 			h = hashDerivationModulo(store, drv2);
 			drvHashes[i.first] = h;
 		}
-		inputs2[printHash(h)] = i.second;
+		inputs2[h.to_string(Base16, false)] = i.second;
 	}
 	drv.inputDrvs = inputs2;
-	
+
 	return hashString(htSHA256, drv.unparse());
 }
 ```
 
-This is a recursive function that basically deals computing store derivation paths.
+- The hash of a derivation is calculated recursively by first processing all its input hashes.
+- If the given derivation is a fixed output derivation, we return the hash of the string "fixed:out:<algo>:<hash>:<path>", where algo is `sha256` and so on, hash is the hash of the algorithm, and path is (what i imagine) the path to the fixed output derivation, such as an url.
+- The global variable `drvHashes` have keys = `Hash` objects which are verified to exist in Nix store. And the hashes used in the store derivation must come from `drvHashes`.
+- The `inputDrvs` field in the derivation consists of Base16 hashes of the underlying derivation's textual ATerm.
 
-First we check if the given derivation is a fixed output derivation, if it is, we return the hash of the string "fixed:out:<algo>:<hash>:<path>", where algo is `sha256` and so on, hash is the hash of the algorithm, and path is (what i imagine) the path to the fixed output derivation, such as an url.
 
-Otherwise, we initialize a new `DerivationInputs` instance, which is a list of `DerivtionInput` instances. `drv.inputDrvs` is a `Map<Path, StringSet>` instance, where Path is the path to this input derivation, and StringSet is a set of output ids that the input derivation outputs to. We loop through every `inputDrv` in the given derivation, for each input Path, if we can find a hash in the global `drvHashes` map, then we use its hash, otherwise, we compute the hash by recursively calling this function on the input derivation.
+Here's some stuff that I summed up from `nix/primops.cc`
+- Constructing the Derivation object `drv`:
+	1. push command line arguments into `drv.args`
+	2. Input paths with suffix `.drv` are passed into `drv.inputDrvs`, otherwise `drv.inputSrcs`.
+	3. `drv.inputDrvs`'s keys are paths, values are outputNames.
+	4. `drv.inputSrcs` is a list of path in strings.
+	5. If `outputHash` exists in the derivaiton, handle fixed output derivation.
+		- Multiple outputs are not supported in fixed output derivation.
+	6. Construct "masked" store derivation (with no output path).
+		- run `hashDerivationModulo` on `drv`
+	7. Replace all output paths with `makeOutputPath(path)`, where:
+		```c++
+		makeStorePath(type, hash, name) {
+			s = type:hash.base16():storeDir:name;
+			return storeDir/compressHash(hashString(SHA256, s), 20).to_string(Base32)-name;
+		}
+
+		makeOutputPath(id, hash, name) {
+				return makeStorePath("output:" + id, hash, name + (id == "out"? "" : "-" + id));
+		}
+		```
+	8. perform `writeDerivation()` on the resulting derivation.
+		- `computeStorePathForText(suffix, content, references)`
+		are used, where `suffix = <name>.drv`, `content = drv.unparse()`, `references` is a list of inputSrcs and inputDrvs path.
+		```c++
+		Path computeStorePathForText(name, s, ref) {
+			s = hashString(htSHA256, s);
+			type = "text";
+			for (i : references) {
+				type += ":";
+				type += i;
+			}
+			return makeStorePath(type, hash, name)
+		}
+		```
+
 
 # Nix Path
 the `$NIX_PATH` variable is similar to `$PATH`. it can be used within Nix expressions to search for tools with `<tool>`. For example, `<nixpkgs>`.
