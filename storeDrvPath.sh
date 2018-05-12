@@ -1,5 +1,5 @@
 drv="/nix/store/y4h73bmrc9ii5bxg6i7ck6hsf5gqv8ck-foo.drv"
-name="foo.sh"
+name="foo.drv"
 
 function makePath() {
 	type=$1
