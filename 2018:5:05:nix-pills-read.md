@@ -306,7 +306,40 @@ a00d5f71k0vp5a6klkls0mvr1f7sx6ch
 
 # Final Store derivation path
 
-// TODO
+```c++
+Hash hashDerivationModulus(Store &store, Derivation drv)
+{
+	/*Return a fixed hash for fixed-output derivtions*/
+	if (drv.isFixedOutput()) {
+		DerivationOutputs::const_iterator i = drv.outputs.begin();
+		return hashString(htSHA256, "fixed:out:"
+			+ i->second.hashALgo + ":"
+			+ i->second.hash + ":"
+			+ i->second.path);
+	}
+	/*For other derivations, replace the input paths with recursive calls to this function.*/
+	DerivationInputs inputs2;
+	for (auto &i: drv.inputDrvs) {
+		Hash h = drvHashes[i.first];
+		if (!h) {
+			assert(store.isValidPath(i.first));
+			Derivation drv2 = readDerivation(i.first);
+			h = hashDerivationModulo(store, drv2);
+			drvHashes[i.first] = h;
+		}
+		inputs2[printHash(h)] = i.second;
+	}
+	drv.inputDrvs = inputs2;
+	
+	return hashString(htSHA256, drv.unparse());
+}
+```
+
+This is a recursive function that basically deals computing store derivation paths.
+
+First we check if the given derivation is a fixed output derivation, if it is, we return the hash of the string "fixed:out:<algo>:<hash>:<path>", where algo is `sha256` and so on, hash is the hash of the algorithm, and path is (what i imagine) the path to the fixed output derivation, such as an url.
+
+Otherwise, we initialize a new `DerivationInputs` instance, which is a list of `DerivtionInput` instances. `drv.inputDrvs` is a `Map<Path, StringSet>` instance, where Path is the path to this input derivation, and StringSet is a set of output ids that the input derivation outputs to. We loop through every `inputDrv` in the given derivation, for each input Path, if we can find a hash in the global `drvHashes` map, then we use its hash, otherwise, we compute the hash by recursively calling this function on the input derivation.
 
 # Nix Path
 the `$NIX_PATH` variable is similar to `$PATH`. it can be used within Nix expressions to search for tools with `<tool>`. For example, `<nixpkgs>`.

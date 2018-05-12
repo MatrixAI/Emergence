@@ -7,8 +7,6 @@ function makePath() {
 	name=$3
 	nix_store="/nix/store"
 
-	echo "$type:sha256:$descr:$nix_store:$name" > foo.str
-
 	echo $(nix-hash --type sha256 --truncate --base32 --flat foo.str)
 }
 
