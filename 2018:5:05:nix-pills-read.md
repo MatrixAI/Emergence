@@ -338,7 +338,7 @@ Hash hashDerivationModulus(Store &store, Derivation drv)
 ```
 
 - The hash of a derivation is calculated recursively by first processing all its input hashes.
-- If the given derivation is a fixed output derivation, we return the hash of the string "fixed:out:<algo>:<hash>:<path>", where algo is `sha256` and so on, hash is the hash of the algorithm, and path is (what i imagine) the path to the fixed output derivation, such as an url.
+- If the given derivation is a fixed output derivation, we return the hash of the string `fixed:out:<algo>:<hash>:<path>`, where `algo` is `sha256` and so on, `hash` is the digest using the algorithm, and path is (what i imagine) the path to the fixed output derivation, such as an url.
 - The global variable `drvHashes` have keys = `Hash` objects which are verified to exist in Nix store. And the hashes used in the store derivation must come from `drvHashes`.
 - The `inputDrvs` field in the derivation consists of Base16 hashes of the underlying derivation's textual ATerm.
 
