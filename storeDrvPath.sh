@@ -12,6 +12,6 @@ function makePath() {
 }
 
 h=$(nix-hash --type sha256  $drv)
-type="text:/nix/store/xv2iccirbrvklck36f1g7vldn5v58vck-myfile"
+type="text"
 
 makePath $type $h $name
