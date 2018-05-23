@@ -56,6 +56,5 @@ Needs investigation
 This is something that I question myself a lot of the times when thinking about content addressing.
 There is a global registry with all the addresses to files,
 
-
 # Top Priority
 1. Haskell binding for libcontainer
