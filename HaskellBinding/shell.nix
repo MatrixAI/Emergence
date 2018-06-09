@@ -4,13 +4,13 @@
   with pkgs;
   haskell.lib.buildStackProject {
     name = "container-demo";
-    buildInputs = [go];
+    buildInputs = [go libseccomp];
     shellHook = ''
       echo 'Building container demo'
       set -v
       alias stack="\stack --nix"
       set +v
       echo 'Setting GOPATH'
-      export GOPATH='./hs-libcontainer/src/go'
+      export GOPATH=$(pwd)/hs-libcontainer/src/go
     '';
   }
