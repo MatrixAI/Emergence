@@ -31,3 +31,8 @@ Readings:
 - [cgo goDoc](https://godoc.org/github.com/chai2010/cgo)
 - [go to haskell](https://sakshamsharma.com/2018/02/haskell-golang-ffi/#golang-to-c)
 - [go to C](https://medium.com/learning-the-go-programming-language/calling-go-functions-from-other-languages-4c7d8bcc69bf)
+
+Next step:
+- figure out how to parse go struct into c struct
+	- [Using unsafe pointer casting?](https://stackoverflow.com/questions/39794721/how-to-convert-go-struct-to-c-struct)
+	- using functions to marshal/unmarshal?
