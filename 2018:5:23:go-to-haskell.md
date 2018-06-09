@@ -21,6 +21,19 @@ We will set up a Go development environment using `Go tool`.
 - Specifies the location of the workspace
 
 ## Building the project (Runc)
-```
+1. Add `export GOPATH=$(pwd)/hs-libcontainer/src/go
+2. Create `src`, `pkg`, `bin` at the root of `$GOPATH`
+3. `mkdir -p github.com/opencontainers/runc`
+4. clone runc at `github.com/opencontainers/runc`
 
-```
+
+# 2018/6/9
+- A place for runc has been set up, it is messy and probably needs some restructure later.
+- `make` fails under nix-shell if seccomp is enabled (when `BUILDTAGS := seccomp` in the makefile). I have disabled it for now by setting `BUILDTAGS := ""`.
+- runc/libcontainer/configs has some structs that would be a good starting point to bind into c.
+
+
+
+
+
+
