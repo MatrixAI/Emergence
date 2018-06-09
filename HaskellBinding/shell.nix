@@ -4,7 +4,7 @@
   with pkgs;
   haskell.lib.buildStackProject {
     name = "container-demo";
-    buildInputs = [];
+    buildInputs = [go];
     shellHook = ''
       echo 'Building container demo'
       set -v
