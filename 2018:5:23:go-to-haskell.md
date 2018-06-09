@@ -1,8 +1,3 @@
-gotools contains compiling options for compiling go code to a c shared library.
-
-[Go to Haskell](https://medium.com/learning-the-go-programming-language/calling-go-functions-from-other-languages-4c7d8bcc69bf)
-
-
 # Setting up a Go project
 We will set up a Go development environment using `Go tool`.
 
@@ -26,14 +21,13 @@ We will set up a Go development environment using `Go tool`.
 3. `mkdir -p github.com/opencontainers/runc`
 4. clone runc at `github.com/opencontainers/runc`
 
-
 # 2018/6/9
 - A place for runc has been set up, it is messy and probably needs some restructure later.
 - `make` fails under nix-shell if seccomp is enabled (when `BUILDTAGS := seccomp` in the makefile). I have disabled it for now by setting `BUILDTAGS := ""`.
 - runc/libcontainer/configs has some structs that would be a good starting point to bind into c.
 
-
-
-
-
-
+Readings:
+- [cgo syntax](https://golang.org/cmd/cgo/)
+- [cgo goDoc](https://godoc.org/github.com/chai2010/cgo)
+- [go to haskell](https://sakshamsharma.com/2018/02/haskell-golang-ffi/#golang-to-c)
+- [go to C](https://medium.com/learning-the-go-programming-language/calling-go-functions-from-other-languages-4c7d8bcc69bf)
