@@ -31,3 +31,12 @@ Readings:
 - [cgo goDoc](https://godoc.org/github.com/chai2010/cgo)
 - [go to haskell](https://sakshamsharma.com/2018/02/haskell-golang-ffi/#golang-to-c)
 - [go to C](https://medium.com/learning-the-go-programming-language/calling-go-functions-from-other-languages-4c7d8bcc69bf)
+- [c-shared examples](https://github.com/vladimirvivien/go-cshared-examples)
+- http://blog.ralch.com/tutorial/golang-sharing-libraries/
+- https://stackoverflow.com/questions/23919677/marshalling-c-objects-that-cannot-be-accessed-from-go
+- https://stackoverflow.com/questions/25564490/is-it-possible-to-write-c-functions-that-modify-structs-of-types-defined-in-go-c?noredirect=1&lq=1
+- serialisation
+- Golang autogenerate FFI wrapper (c-for-go)
+- SWIG
+
+```
