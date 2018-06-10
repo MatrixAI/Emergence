@@ -11,6 +11,6 @@
       alias stack="\stack --nix"
       set +v
       echo 'Setting GOPATH'
-      export GOPATH=$(pwd)/hs-libcontainer/src/go
+      export GOPATH=$(pwd)/hs-libcontainer/src/godeps
     '';
   }
