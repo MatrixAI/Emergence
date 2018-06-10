@@ -39,4 +39,7 @@ Readings:
 - Golang autogenerate FFI wrapper (c-for-go)
 - SWIG
 
-```
+Next step:
+- figure out how to parse go struct into c struct
+	- [Using unsafe pointer casting?](https://stackoverflow.com/questions/39794721/how-to-convert-go-struct-to-c-struct)
+	- using functions to marshal/unmarshal?
