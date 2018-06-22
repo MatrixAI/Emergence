@@ -11,6 +11,5 @@
       alias stack="\stack --nix"
       set +v
       export GOPATH=$(pwd)/hs-libcontainer/src/godeps
-      go get github.com/davecgh/go-spew
     '';
   }
