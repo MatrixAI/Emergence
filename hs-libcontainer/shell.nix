@@ -13,6 +13,5 @@
       export GOPATH=$(pwd)/src/godeps
       go get github.com/opencontainers/runc
       go get github.com/davecgh/go-spew/spew
-      go get github.com/golang/protobuf/protoc-gen-go
     '';
   }
