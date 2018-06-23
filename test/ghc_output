@@ -1,0 +1,49 @@
+Glasgow Haskell Compiler, Version 8.0.2, stage 2 booted by GHC version 7.10.3
+Using binary package database: /nix/store/27k61s37i4100x2148h6w4n8gbny8lx9-ghc-8.0.2/lib/ghc-8.0.2/package.conf.d/package.cache
+loading package database /nix/store/27k61s37i4100x2148h6w4n8gbny8lx9-ghc-8.0.2/lib/ghc-8.0.2/package.conf.d
+wired-in package ghc-prim mapped to ghc-prim-0.5.0.0
+wired-in package integer-gmp mapped to integer-gmp-1.0.0.1
+wired-in package base mapped to base-4.9.1.0
+wired-in package rts mapped to rts
+wired-in package template-haskell mapped to template-haskell-2.11.1.0
+wired-in package ghc mapped to ghc-8.0.2
+wired-in package dph-seq not found.
+wired-in package dph-par not found.
+Hsc static flags: 
+loading package database /nix/store/27k61s37i4100x2148h6w4n8gbny8lx9-ghc-8.0.2/lib/ghc-8.0.2/package.conf.d
+wired-in package ghc-prim mapped to ghc-prim-0.5.0.0
+wired-in package integer-gmp mapped to integer-gmp-1.0.0.1
+wired-in package base mapped to base-4.9.1.0
+wired-in package rts mapped to rts-1.0
+wired-in package template-haskell mapped to template-haskell-2.11.1.0
+wired-in package ghc mapped to ghc-8.0.2
+wired-in package dph-seq not found.
+wired-in package dph-par not found.
+*** Chasing dependencies:
+Chasing modules from: *Foo.hs
+!!! Chasing dependencies: finished in 1.00 milliseconds, allocated 0.842 megabytes
+Stable obj: [Foo]
+Stable BCO: []
+Ready for upsweep
+  [NONREC
+      ModSummary {
+         ms_hs_date = 2018-06-23 06:02:09.267200852 UTC
+         ms_mod = Foo,
+         ms_textual_imps = [(Nothing, Prelude), (Nothing, Foreign.C.Types),
+                            (Nothing, Foreign.Storable), (Nothing, Foreign.Ptr)]
+         ms_srcimps = []
+      }]
+*** Deleting temp files:
+Deleting: 
+compile: input file Foo.hs
+*** Checking old interface for Foo:
+[1 of 1] Skipping  Foo              ( Foo.hs, Foo.o )
+Upsweep completely successful.
+*** Deleting temp files:
+Deleting: 
+link(batch): upsweep (partially) failed OR
+   Main.main not exported; not linking.
+*** Deleting temp files:
+Deleting: 
+*** Deleting temp dirs:
+Deleting: 
