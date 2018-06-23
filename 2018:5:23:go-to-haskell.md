@@ -43,3 +43,68 @@ Next step:
 - figure out how to parse go struct into c struct
 	- [Using unsafe pointer casting?](https://stackoverflow.com/questions/39794721/how-to-convert-go-struct-to-c-struct)
 	- using functions to marshal/unmarshal?
+
+# Code example of structs in haskell
+```
+import Foreign.Ptr (Ptr)
+import Foreign.Storable (Storable(..))
+import Foreign.C.String (castCharToCChar)
+import Foreign.C.Types (CInt, CChar)
+import Foreign.Marshal.Utils (new)
+
+-- +
+-- *
+
+-- tuple
+-- either
+
+-- all haskell datatypes are sums of products
+
+data MyStructType = MyStructType
+ {
+   myint :: CInt,
+   mychar :: CChar
+ } deriving (Show, Read, Eq)
+
+type MyStruct = Ptr MyStructType
+
+instance Storable MyStructType where
+ sizeOf _ = 8
+ alignment = sizeOf
+ peek ptr = do
+   i <- peekByteOff ptr 0
+   c <- peekByteOff ptr 4
+   return $ MyStructType i c
+ poke p (MyStructType i c) = do
+   pokeByteOff p 0 i
+   pokeByteOff p 4 c
+
+{-
+
+struct MyStructType {
+ int32_t myint;
+ unsigned char mychar;
+};
+
+
+-}
+
+mystruct :: IO (Ptr MyStructType)
+mystruct = new $ MyStructType 1 (castCharToCChar 'a')
+
+mystruct2 :: IO MyStructType
+mystruct2 = do
+ p <- mystruct
+ s <- peek p
+ return s
+
+
+printit :: IO ()
+printit = mystruct2 >>= print
+
+-- result :: IO ()
+-- result = do
+--   p <- mystruct
+--   s <- peek p
+--   print s
+```
