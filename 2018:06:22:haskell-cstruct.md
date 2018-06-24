@@ -16,7 +16,7 @@ First we need to ensure that our *cstruct* is a Storable datatype, which means w
 - Use `Foregin.C.String.castCharToCChar` to cast a haskell char to `CChar`.
 
 
-```
+```haskell
 import Foreign.Ptr (Ptr)
 import Foreign.Storable (Storable(..))
 import Foreign.C.String (castCharToCChar)
