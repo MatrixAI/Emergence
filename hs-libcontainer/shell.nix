@@ -4,7 +4,7 @@
   with pkgs;
   haskell.lib.buildStackProject {
     name = "container-demo";
-    buildInputs = [go libseccomp];
+    buildInputs = [go haskellPackages.c2hs];
     shellHook = ''
       echo 'Building container demo'
       set -v
