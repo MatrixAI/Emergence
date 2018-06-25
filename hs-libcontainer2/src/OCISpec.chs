@@ -8,8 +8,7 @@ module OCISpec (
 
 import Foreign.Storable (Storable(..))
 import Foreign.C.String (CString)
-import Foreign.Ptr (Ptr, nullPtr)
-import Control.Monad (liftM)
+import Foreign.Ptr (Ptr)
 
 data LinuxIntelRdt = LinuxIntelRdt {
   l3CacheSchema :: CString
@@ -31,6 +30,5 @@ data Test = Test {
 instance Storable Test where
   sizeOf _ = {#sizeof Test #}
   alignment _ = {#alignof Test #}
-  peek ptr = Test <$> (\ptr -> do {peekByteOff ptr 0 :: IO (Ptr'LinuxIntelRdt)}) ptr
-  poke ptr (Test lir) = do
-    {#set Test.linuxIntelRdt #} ptr lir
+  peek ptr = Test <$> (peekByteOff ptr 0 :: IO Ptr'LinuxIntelRdt)
+  poke ptr (Test lir) = {#set Test.linuxIntelRdt #} ptr lir
