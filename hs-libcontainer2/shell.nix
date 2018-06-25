@@ -4,7 +4,7 @@
   with pkgs;
   haskell.lib.buildStackProject {
     name = "hs-libcontainer";
-    buildInputs = [haskellPackages.c2hs];
+    buildInputs = [haskellPackages.c2hs haskellPackages.bindings-glib glib];
     shellHook = ''
       echo 'Entering GraphQL Demo Environment'
       set -v
