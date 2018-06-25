@@ -20,8 +20,7 @@ instance Storable LinuxIntelRdt where
   alignment _ = {#alignof LinuxIntelRdt #}
   -- peek :: Ptr LinuxIntelRdt -> IO (LinuxIntelRdt)
   peek ptr = LinuxIntelRdt <$> ({#get LinuxIntelRdt->l3CacheSchema #} ptr)
-  poke ptr (LinuxIntelRdt lcs) = do
-    {#set LinuxIntelRdt.l3CacheSchema #} ptr lcs
+  poke ptr (LinuxIntelRdt lcs) = {#set LinuxIntelRdt.l3CacheSchema #} ptr lcs
 
 data Test = Test {
   linuxIntelRdt :: Ptr'LinuxIntelRdt
