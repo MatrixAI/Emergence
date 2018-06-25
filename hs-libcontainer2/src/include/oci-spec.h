@@ -1,5 +1,6 @@
 // Source: https://github.com/opencontainers/runtime-spec/blob/master/specs-go/config.go
 
+// #include <gmodule.h> // TODO: import this
 #include <stdbool.h>
 
 // typedef char* String;
