@@ -3,8 +3,7 @@
 #include "oci-spec.h"
 
 module OCISpec (
-  LinuxIntelRdt(..),
-  l3CacheSchema
+  LinuxIntelRdt(..)
 ) where
 
 import Foreign.Storable (Storable(..))
@@ -25,12 +24,14 @@ instance Storable LinuxIntelRdt where
     {#set LinuxIntelRdt.l3CacheSchema #} ptr lcs
 
 data Test = Test {
-  linuxIntelRdt :: Ptr LinuxIntelRdt
+  linuxIntelRdt :: Ptr'LinuxIntelRdt
 } deriving (Show, Eq)
+
+{#pointer *LinuxIntelRdt as Ptr'LinuxIntelRdt -> LinuxIntelRdt #}
 
 instance Storable Test where
   sizeOf _ = {#sizeof Test #}
   alignment _ = {#alignof Test #}
-  peek ptr = Test <$> ({#get Test->linuxIntelRdt #} ptr)
+  peek ptr = Test <$> (\ptr -> do {peekByteOff ptr 0 :: IO (Ptr'LinuxIntelRdt)}) ptr
   poke ptr (Test lir) = do
     {#set Test.linuxIntelRdt #} ptr lir
