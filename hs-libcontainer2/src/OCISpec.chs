@@ -6,7 +6,7 @@ module OCISpec (
   LinuxIntelRdt(..)
 ) where
 
-import Foreign.Storable (Storable)
+import Foreign.Storable (Storable(..))
 import Foreign.C.String (CString)
 import Foreign.Ptr (Ptr)
 
