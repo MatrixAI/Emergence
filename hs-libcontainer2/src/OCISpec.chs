@@ -33,5 +33,4 @@ instance Storable Test where
   sizeOf _ = {#sizeof Test #}
   alignment _ = {#alignof Test #}
   peek ptr = Test <$> (\ptr -> do {peekByteOff ptr 0 :: IO (Ptr'LinuxIntelRdt)}) ptr
-  poke ptr (Test lir) = do
-    {#set Test.linuxIntelRdt #} ptr lir
+  poke ptr (Test lir) = {#set Test.linuxIntelRdt #} ptr lir
