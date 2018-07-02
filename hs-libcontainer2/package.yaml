@@ -33,12 +33,17 @@ executables:
   hs-libcontainer-exe:
     main:                Main.hs
     source-dirs:         app
+    dependencies: 
+    - hs-libcontainer
+    extra-lib-dirs:
+      src/godeps/src/github.com/matrixai/cgo-libcontainer
+    extra-libraries:
+      container
     ghc-options:
     - -threaded
+    - -dynamic
     - -rtsopts
     - -with-rtsopts=-N
-    dependencies:
-    - hs-libcontainer
 
 tests:
   hs-libcontainer-test:

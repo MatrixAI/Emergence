@@ -2,7 +2,7 @@
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: c5688fd5961a031929bcaf19751d18371e35dd7a2b6d10ba47e089778773b39c
+-- hash: 0abb58e4aa3f4189856c610bf0bec39b142266389e1557812034e5d35bdb62bf
 
 name:           hs-libcontainer
 version:        0.1.0.0
@@ -27,6 +27,7 @@ source-repository head
 library
   exposed-modules:
       OCISpec
+      Test
   other-modules:
       Paths_hs_libcontainer
   hs-source-dirs:
@@ -47,7 +48,11 @@ executable hs-libcontainer-exe
       Paths_hs_libcontainer
   hs-source-dirs:
       app
-  ghc-options: -threaded -rtsopts -with-rtsopts=-N
+  ghc-options: -threaded -dynamic -rtsopts -with-rtsopts=-N
+  extra-lib-dirs:
+      src/godeps/src/github.com/matrixai/cgo-libcontainer
+  extra-libraries:
+      container
   build-depends:
       base >=4.7 && <5
     , hs-libcontainer
