@@ -4,12 +4,23 @@
   with pkgs;
   haskell.lib.buildStackProject {
     name = "hs-libcontainer";
-    buildInputs = [haskellPackages.c2hs haskellPackages.bindings-glib glib];
+    buildInputs = [automake
+		   autoconf
+		   libcap
+		   yajl
+		   libseccomp
+		   libselinux
+		   python3
+		   libtool
+		   haskellPackages.c2hs
+		   go];
     shellHook = ''
-      echo 'Entering GraphQL Demo Environment'
+      echo 'Entering hs-libcontainer Environment'
       set -v
 
       alias stack='\stack --nix'
+      export GOPATH=$(pwd)/src/godeps
+      go get github.com/opencontainers/runc
 
       set +v
     '';
