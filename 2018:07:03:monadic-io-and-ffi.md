@@ -118,6 +118,98 @@ foreign import ccall putChar :: Char -> IO ()
 ```
 
 Haskell FFI allows omittion of IO from the return type.
+
 ```haskell
 foreign import ccall sin :: Float -> Float
 ```
+
+- The keyword `ccall` indicates the calling convention to use.
+- If the foreign procedure does not have the same name as the Haskell counterpart. Do this:
+  `foreign import ccall "PutChar" putChar :: Char -> IO ()`
+- There is a strictly limited range of Haskell types that can be used in arguments and results, namely atomic types such as `Int`, `Float`, `Double` and so on.
+- FFI must provide a collection of new atomic types including `Ptr t`, for uninterpreted machine addresses, while type `t` is a "phantom type", which allows Haskell programmers to enforce the distinction between `ptr Foo` and `Ptr Baz`
+
+An **indirect call** to an external procedure means one is supplied with the address of the procedure and one wants to call it, i.e. the address of the procedure is used to perform the function call.
+
+To make an indirect call from Haskell, use the `dynamic` keyword:
+
+```haskell
+foreign import ccall "dynamic"
+	foo :: FunPtr (Int -> IO Int) -> Int -> IO Int
+```
+
+The first argument **must** be `FunPtr t`, the address of the external function.
+
+There is a way to export dynamic Haskell value:
+
+```haskell
+foreign import ccall "wrapper"
+	mkCB :: (Int -> IO Int) -> IO (FunPtr (int -> IO Int))
+
+-- must be freed using
+freeHaskellFunctionPtr :: Addr -> IO ()
+```
+
+which returns a C function pointer that can be somehow passed to the C program and gets subsequently called on.
+
+
+To marshal structured data types, the Haskell community has reached a consensus: "We define a *language extension* that is as small as possible, and build *separate tools* to generate marshalling code."
+
+The `foreign import` and `foreign export` declarations constitute the language extension. 
+
+There are two main issues in FFI memory management:
+
+**Foreign objects**: If a procedure (which allocates resources and returns a handle) is imported into a Haskell program, how do we know when to finalise (release) the handle returned by the procedure?
+
+
+We can wrap a Ptr in `ForeignPtr` to ensure that the garbage collector calls the finalisation action upon an object when it is no longer accessible.
+
+```haskell
+newForeignPtr :: Ptr a -> IO () -> IO (ForeignPtr a) 
+
+-- To unwrap a foreign pointer
+withForeignPtr :: ForeignPtr a -> (Ptr a -> IO b) -> IO b
+```
+
+To unwrap a foreign pointer, we can't simply do `ForeignPtr a -> IO Ptr a` because then the foreign pointer itself might be unreferenced after the unwrapping call and its finaliser might therefore be called before we are done with Ptr.
+
+Example
+
+```haskell
+foreign import ccall "and_bmp"
+	and_bmp_help :: Ptr Bitmap -> Ptr Bitmap -> IO (Ptr Bitmap)
+
+foreign import ccall free_bmp :: Ptr Bitmap -> IO ()
+
+and_bmp :: ForeignPtr Bitmap -> ForeignPtr Bitmap -> IO (ForeignPtr Bitmap)
+and_bmp b1 b2 = withForeignPtr b1 (\p1 ->
+		withForeignPtr b2 (\p2 ->
+		do { r <- and_bmp_help p1 p2
+		     newForeignObj r (free_bmp r)
+		} 
+```
+
+
+**Stable pointers**
+
+We cannot simply return a pointer into the Haskell heap because:
+- The Haskell garbage collector would not know when the object is no longer required. If the C program holds the only pointer to the object, the collector is likely to treat the object as garbage.
+- The haskell collector may move objects around. So the address is not stable
+
+The straightforward, if brutal solution to both of these problems is to provide a way to convert a Haskell value into a stable pointer:
+
+```haskell
+newStablePtr	:: a -> IO (StablePtr a)
+deRefStablePtr	:: StablePtr a -> IO a
+freeStablePtr	:: StablePtr a -> IO ()
+```
+
+`newStablePtr` takes an Haskell value and turns it into a stable pointer. 
+- It is unaffected by garbage collector. Can be passed to C as a parameter, from the C side, `StablePtr` looks like an `int`. The C program can subsequently pass the stable pointer to a Haskell function, which can get at the original value using `deRefStablePtr`
+- calling `newStablePtr` registers the Haskell value as a garbage-collection root, by installing a pointer to `v` in the *Stable Pointer Table (SPT)*. It will remain in SPT unless `freeStablePtr` is called.
+
+
+
+
+
+
