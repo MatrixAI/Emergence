@@ -1,6 +1,6 @@
 /* Created by "go tool cgo" - DO NOT EDIT. */
 
-/* package github.com/matrixai/cgo-libcontainer */
+/* package command-line-arguments */
 
 /* Start of preamble from import "C" comments.  */
 
