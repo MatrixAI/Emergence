@@ -13,6 +13,6 @@ func ConvFooz(f *C.struct_Fooz) *data.Fooz {
 
 
 func ConvBarz(b *data.Barz) *C.struct_Barz {
-	return nil // TODO
+	return &C.struct_Barz { C.int(b.N) }
 }
 
