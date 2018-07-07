@@ -15,7 +15,7 @@ cd $GOPATH/src/MatrixAI/struct-ffi-prac
 
 cd src/godep/
 make
-cp libtest.so ../../
+ln -sf libtest.so ../../
 cd ../../
 
 stack build
