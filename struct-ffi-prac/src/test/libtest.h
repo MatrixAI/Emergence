@@ -17,7 +17,7 @@ typedef struct { const char *p; ptrdiff_t n; } _GoString_;
 /* Start of preamble from import "C" comments.  */
 
 
-#line 3 "/home/moku/matrix-ai/go-playground/src/github.com/matrixai/test/main.go"
+#line 3 "/home/moku/matrix-ai/go-playground/src/github.com/matrixai/struct-ffi-prac/src/test/main.go"
  #include <data.h>
 
 #line 1 "cgo-generated-wrapper"
@@ -69,13 +69,7 @@ extern "C" {
 #endif
 
 
-/* Return type for foo */
-struct foo_return {
-	struct Barz* r0;
-	GoInterface r1;
-};
-
-extern struct foo_return foo(struct Fooz* p0);
+extern void foo(struct InputStruct* p0, struct ReturnStruct* p1);
 
 #ifdef __cplusplus
 }
