@@ -1,3 +1,6 @@
+// This file doesn't get used by the FFI practice
+// But it shows the marhsalling of C structs to Go structs and vice versa.
+
 package main
 
 // #include <data.h>
