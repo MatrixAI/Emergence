@@ -2,7 +2,7 @@
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 0abb58e4aa3f4189856c610bf0bec39b142266389e1557812034e5d35bdb62bf
+-- hash: da7bc9ca0809a33267d6351faee80d2ecc1b8e99f82ab4db0cb6f7913653d19b
 
 name:           hs-libcontainer
 version:        0.1.0.0
@@ -36,8 +36,6 @@ library
       src/include
   install-includes:
       oci-spec.h
-  c-sources:
-      src/cbits/oci-spec.c
   build-depends:
       base >=4.7 && <5
   default-language: Haskell2010

@@ -1,4 +1,4 @@
 experiments/*
 .DS_Store
-*/godeps/*
 *godeps*
+!*godeps/src/github.com/matrixai/*

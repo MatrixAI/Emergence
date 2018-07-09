@@ -73,3 +73,19 @@ Notation: `API-name(<arg1>, <arg2>...): <return-value>`
 ## Implementation
 
 Runc actually makes a lot of assumptions on the filesystem, because it is a one-time program (i.e. not a daemon), it saves the container information at `/run/runc` if the container is created by root user, and a custom location otherwise. There are also other dependencies such as socket location, bundle path, config path, rootfs path, not mentioning one of the underlying technology: cgroups relies on a virtual fs as its API. Runc already has the config file parser set up, is it really worth it to go through the hassle of serialising the entire config file for the sake of not interacting with the filesystem?
+
+# Design Ideas
+
+Using Command Design Pattern:
+
+```go
+type Command interface {
+  Validate(Context) error
+  Execute(Context) interface{}
+}
+
+type Context struct {
+  args []string
+  options map[string]string
+}
+```
