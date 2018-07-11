@@ -1,9 +1,12 @@
-// util.go contains helper functions for the container runtime
 package command
 
 import (
 	"fmt"
-	"github.com/matrixai/github.com/matrixai/go-artifact-runtime/context"
+	"github.com/opencontainers/runc/libcontainer"
+	"github.com/opencontainers/runc/libcontainer/system"
+	"github.com/opencontainers/runtime-spec/specs-go"
+	"strconv"
+	"strings"
 )
 
 const (
@@ -12,21 +15,52 @@ const (
 	maxArgs
 )
 
+// checkArgs checks the argument size
 func checkArgs(ctx *Context, expected int, typeCheck int) error {
-	var err error = nil
 	switch typeCheck {
 	case exactArgs:
 		if len(ctx.Args) != expected {
-			err := fmt.Errorf("This command requires exactly %d argument(s)", expected)
+			return fmt.Errorf("This command requires exactly %d argument(s)", expected)
 		}
 	case minArgs:
 		if len(ctx.Args) < expected {
-			err := fmt.Errorf("This command requires at least %d argument(s)", expected)
+			return fmt.Errorf("This command requires at least %d argument(s)", expected)
 		}
 	case maxArgs:
 		if len(ctx.Args) > expected {
-			err := fmt.Errorf("This command can have at most %d argument(s)", expected)
+			return fmt.Errorf("This command can have at most %d argument(s)", expected)
 		}
 	}
-	return err
+	return nil
+}
+
+// parseBoolOrAuto returns (nil, nil) if s is empty or "auto"
+func parseBoolOrAuto(s string) (*bool, error) {
+	if s == "" || strings.ToLower(s) == "auto" {
+		return nil, nil
+	}
+	b, err := strconv.ParseBool(s)
+	return &b, err
+}
+
+func isRootless(ctx *Context) (bool, error) {
+	if ctx != nil {
+		if val, ok := ctx.Options["rootless"]; ok {
+			b, err := parseBoolOrAuto(val)
+			if err != nil {
+				return false, err
+			}
+			if b != nil {
+				return *b, nil
+			}
+		}
+	}
+	return system.GetParentNSeuid() != 0 || system.RunningInUserNS(), nil
+}
+
+func createContainer(ctx *Context, id string, spec *specs.Spec) (libcontainer.Container, error) {
+	rootless, err := isRootless(ctx)
+	if err != nil {
+		return nil, err
+	}
 }

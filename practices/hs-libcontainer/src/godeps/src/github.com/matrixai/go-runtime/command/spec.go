@@ -10,7 +10,7 @@ import (
 
 // setupSpec performs initial setup based on given context
 // @param bundle path to the bundle
-func setupSpec(bundle string) (*specs.Spec, error) {
+func setupSpec(bundle string, configName string) (*specs.Spec, error) {
 	if bundle != "" {
 		if err := os.Chdir(bundle); err != nil {
 			return nil, err
