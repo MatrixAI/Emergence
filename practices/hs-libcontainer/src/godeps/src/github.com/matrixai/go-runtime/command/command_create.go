@@ -1,28 +1,27 @@
 package command
 
-type createContext struct {
-	containerID string
-	bundlePath  string
-	configName  string
-}
+import (
+	"fmt"
+)
 
 type createCommand struct{}
 
 func (cmd *createCommand) Execute(ctx *Context) (interface{}, error) {
+	createCtx, ok := (*ctx).(*ContextCreate)
 	if err := checkArgs(ctx, 1, exactArgs); err != nil {
 		return nil, err
 	}
-
-	var cc = &createContext{
-		ctx.Args["container-id"],
-		ctx.Options["bundle"],
-		ctx.Options["config"],
+	bundle := createCtx.Bundle
+	if bundle == nil {
+		return nil, fmt.Errorf("missing bundle path")
 	}
-
-	spec, err := setupSpec(cc.bundlePath, cc.configName)
+	config := createCtx.Config()
+	if config == "" {
+		return nil, fmt.Errorf("config filename is empty")
+	}
+	spec, err := setupSpec(*bundle, config)
 	if err != nil {
 		return nil, err
 	}
-
 	return nil, nil
 }
