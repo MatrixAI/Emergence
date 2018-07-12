@@ -1,0 +1,249 @@
+{
+	"comment": "",
+	"ignore": "test",
+	"package": [
+		{
+			"checksumSHA1": "IGtuR58l2zmYRcNf8sPDlCSgovE=",
+			"origin": "github.com/opencontainers/runc/vendor/github.com/containerd/console",
+			"path": "github.com/containerd/console",
+			"revision": "21ac0862f2c695f7ecb55346401932a9ad8cc8d6",
+			"revisionTime": "2018-07-10T14:09:40Z"
+		},
+		{
+			"checksumSHA1": "/zxxFPYjUB7Wowz33r5AhTDvoz0=",
+			"origin": "github.com/opencontainers/runc/vendor/github.com/coreos/go-systemd/dbus",
+			"path": "github.com/coreos/go-systemd/dbus",
+			"revision": "21ac0862f2c695f7ecb55346401932a9ad8cc8d6",
+			"revisionTime": "2018-07-10T14:09:40Z"
+		},
+		{
+			"checksumSHA1": "e8qgBHxXbij3RVspqrkeBzMZ564=",
+			"origin": "github.com/opencontainers/runc/vendor/github.com/coreos/go-systemd/util",
+			"path": "github.com/coreos/go-systemd/util",
+			"revision": "21ac0862f2c695f7ecb55346401932a9ad8cc8d6",
+			"revisionTime": "2018-07-10T14:09:40Z"
+		},
+		{
+			"checksumSHA1": "O8c/VKtW34XPJNNlyeb/im8vWSI=",
+			"origin": "github.com/opencontainers/runc/vendor/github.com/coreos/pkg/dlopen",
+			"path": "github.com/coreos/pkg/dlopen",
+			"revision": "21ac0862f2c695f7ecb55346401932a9ad8cc8d6",
+			"revisionTime": "2018-07-10T14:09:40Z"
+		},
+		{
+			"checksumSHA1": "4Cq4wS4l0O8WlugamGEPvooJPAk=",
+			"origin": "github.com/opencontainers/runc/vendor/github.com/cyphar/filepath-securejoin",
+			"path": "github.com/cyphar/filepath-securejoin",
+			"revision": "21ac0862f2c695f7ecb55346401932a9ad8cc8d6",
+			"revisionTime": "2018-07-10T14:09:40Z"
+		},
+		{
+			"checksumSHA1": "92IcD5dqOhKQlYiMwlWsIV5t5SA=",
+			"origin": "github.com/opencontainers/runc/vendor/github.com/docker/go-units",
+			"path": "github.com/docker/go-units",
+			"revision": "21ac0862f2c695f7ecb55346401932a9ad8cc8d6",
+			"revisionTime": "2018-07-10T14:09:40Z"
+		},
+		{
+			"checksumSHA1": "bFplS7sPkJNtlKKCIszFQkAsmGI=",
+			"origin": "github.com/opencontainers/runc/vendor/github.com/godbus/dbus",
+			"path": "github.com/godbus/dbus",
+			"revision": "21ac0862f2c695f7ecb55346401932a9ad8cc8d6",
+			"revisionTime": "2018-07-10T14:09:40Z"
+		},
+		{
+			"checksumSHA1": "qP9regrwmdsMhR5lKywiwCVp+5g=",
+			"origin": "github.com/opencontainers/runc/vendor/github.com/golang/protobuf/proto",
+			"path": "github.com/golang/protobuf/proto",
+			"revision": "21ac0862f2c695f7ecb55346401932a9ad8cc8d6",
+			"revisionTime": "2018-07-10T14:09:40Z"
+		},
+		{
+			"checksumSHA1": "EKGlMEHq/nwBXQGi9JN/y+H7YMU=",
+			"origin": "github.com/opencontainers/runc/vendor/github.com/mrunalp/fileutils",
+			"path": "github.com/mrunalp/fileutils",
+			"revision": "21ac0862f2c695f7ecb55346401932a9ad8cc8d6",
+			"revisionTime": "2018-07-10T14:09:40Z"
+		},
+		{
+			"checksumSHA1": "3yBEi++pj+leG32EWYeWXQEyHDQ=",
+			"path": "github.com/opencontainers/runc/libcontainer",
+			"revision": "21ac0862f2c695f7ecb55346401932a9ad8cc8d6",
+			"revisionTime": "2018-07-10T14:09:40Z"
+		},
+		{
+			"checksumSHA1": "gVVY8k2G3ws+V1czsfxfuRs8log=",
+			"path": "github.com/opencontainers/runc/libcontainer/apparmor",
+			"revision": "21ac0862f2c695f7ecb55346401932a9ad8cc8d6",
+			"revisionTime": "2018-07-10T14:09:40Z"
+		},
+		{
+			"checksumSHA1": "eA9qNw7Tkpi1GLojT/Vxa99aL00=",
+			"path": "github.com/opencontainers/runc/libcontainer/cgroups",
+			"revision": "21ac0862f2c695f7ecb55346401932a9ad8cc8d6",
+			"revisionTime": "2018-07-10T14:09:40Z"
+		},
+		{
+			"checksumSHA1": "YgPihDRi3OxI0qv7CxTxrqZuvfU=",
+			"path": "github.com/opencontainers/runc/libcontainer/cgroups/fs",
+			"revision": "21ac0862f2c695f7ecb55346401932a9ad8cc8d6",
+			"revisionTime": "2018-07-10T14:09:40Z"
+		},
+		{
+			"checksumSHA1": "RVQixM4pF56oCNymhNY67I5eS0Y=",
+			"path": "github.com/opencontainers/runc/libcontainer/cgroups/systemd",
+			"revision": "21ac0862f2c695f7ecb55346401932a9ad8cc8d6",
+			"revisionTime": "2018-07-10T14:09:40Z"
+		},
+		{
+			"checksumSHA1": "PUv5rdj6oEGJoBij/9Elx8VO6bs=",
+			"path": "github.com/opencontainers/runc/libcontainer/configs",
+			"revision": "21ac0862f2c695f7ecb55346401932a9ad8cc8d6",
+			"revisionTime": "2018-07-10T14:09:40Z"
+		},
+		{
+			"checksumSHA1": "YJq+f9izqizSzG/OuVFUOfloNEk=",
+			"path": "github.com/opencontainers/runc/libcontainer/configs/validate",
+			"revision": "21ac0862f2c695f7ecb55346401932a9ad8cc8d6",
+			"revisionTime": "2018-07-10T14:09:40Z"
+		},
+		{
+			"checksumSHA1": "I1iwXoDUJeDXviilCtkvDpEF/So=",
+			"path": "github.com/opencontainers/runc/libcontainer/criurpc",
+			"revision": "21ac0862f2c695f7ecb55346401932a9ad8cc8d6",
+			"revisionTime": "2018-07-10T14:09:40Z"
+		},
+		{
+			"checksumSHA1": "bAWJX1XUDMd4GqPLSrCkUcdiTbg=",
+			"path": "github.com/opencontainers/runc/libcontainer/intelrdt",
+			"revision": "21ac0862f2c695f7ecb55346401932a9ad8cc8d6",
+			"revisionTime": "2018-07-10T14:09:40Z"
+		},
+		{
+			"checksumSHA1": "QXuHZwxlqhoq/oHRJFbTi6+AWLY=",
+			"path": "github.com/opencontainers/runc/libcontainer/keys",
+			"revision": "21ac0862f2c695f7ecb55346401932a9ad8cc8d6",
+			"revisionTime": "2018-07-10T14:09:40Z"
+		},
+		{
+			"checksumSHA1": "MJiogPDUU2nFr1fzQU6T+Ry1W8o=",
+			"path": "github.com/opencontainers/runc/libcontainer/mount",
+			"revision": "21ac0862f2c695f7ecb55346401932a9ad8cc8d6",
+			"revisionTime": "2018-07-10T14:09:40Z"
+		},
+		{
+			"checksumSHA1": "I1Qw/btE1twMqKHpYNsC98cteak=",
+			"path": "github.com/opencontainers/runc/libcontainer/seccomp",
+			"revision": "21ac0862f2c695f7ecb55346401932a9ad8cc8d6",
+			"revisionTime": "2018-07-10T14:09:40Z"
+		},
+		{
+			"checksumSHA1": "EcHfYyEcz1Wm6Zb9DCqUooY4hWg=",
+			"path": "github.com/opencontainers/runc/libcontainer/specconv",
+			"revision": "21ac0862f2c695f7ecb55346401932a9ad8cc8d6",
+			"revisionTime": "2018-07-10T14:09:40Z"
+		},
+		{
+			"checksumSHA1": "yp/kYBgVqKtxlnpq4CmyxLFMAE4=",
+			"path": "github.com/opencontainers/runc/libcontainer/stacktrace",
+			"revision": "21ac0862f2c695f7ecb55346401932a9ad8cc8d6",
+			"revisionTime": "2018-07-10T14:09:40Z"
+		},
+		{
+			"checksumSHA1": "cjg/UcueM1/2/ExZ3N7010sa+hI=",
+			"path": "github.com/opencontainers/runc/libcontainer/system",
+			"revision": "21ac0862f2c695f7ecb55346401932a9ad8cc8d6",
+			"revisionTime": "2018-07-10T14:09:40Z"
+		},
+		{
+			"checksumSHA1": "XtLpcP6ca9SQG218re7E7UcOj3Y=",
+			"path": "github.com/opencontainers/runc/libcontainer/user",
+			"revision": "21ac0862f2c695f7ecb55346401932a9ad8cc8d6",
+			"revisionTime": "2018-07-10T14:09:40Z"
+		},
+		{
+			"checksumSHA1": "Sb296YW4V+esieanrx4Nzt2L5lU=",
+			"path": "github.com/opencontainers/runc/libcontainer/utils",
+			"revision": "21ac0862f2c695f7ecb55346401932a9ad8cc8d6",
+			"revisionTime": "2018-07-10T14:09:40Z"
+		},
+		{
+			"checksumSHA1": "AMYc2X2O/IL6EGrq6lTl5vEhLiY=",
+			"origin": "github.com/opencontainers/runc/vendor/github.com/opencontainers/runtime-spec/specs-go",
+			"path": "github.com/opencontainers/runtime-spec/specs-go",
+			"revision": "21ac0862f2c695f7ecb55346401932a9ad8cc8d6",
+			"revisionTime": "2018-07-10T14:09:40Z"
+		},
+		{
+			"checksumSHA1": "j9efF9bPmCCag+LzqwjyB8a44B8=",
+			"origin": "github.com/opencontainers/runc/vendor/github.com/opencontainers/selinux/go-selinux",
+			"path": "github.com/opencontainers/selinux/go-selinux",
+			"revision": "21ac0862f2c695f7ecb55346401932a9ad8cc8d6",
+			"revisionTime": "2018-07-10T14:09:40Z"
+		},
+		{
+			"checksumSHA1": "QbeVoKIoaJWZDH8V/588i8/Pjjs=",
+			"origin": "github.com/opencontainers/runc/vendor/github.com/opencontainers/selinux/go-selinux/label",
+			"path": "github.com/opencontainers/selinux/go-selinux/label",
+			"revision": "21ac0862f2c695f7ecb55346401932a9ad8cc8d6",
+			"revisionTime": "2018-07-10T14:09:40Z"
+		},
+		{
+			"checksumSHA1": "PdQm3s8DoVJ17Vk8n7o5iPa7PK0=",
+			"origin": "github.com/opencontainers/runc/vendor/github.com/pkg/errors",
+			"path": "github.com/pkg/errors",
+			"revision": "21ac0862f2c695f7ecb55346401932a9ad8cc8d6",
+			"revisionTime": "2018-07-10T14:09:40Z"
+		},
+		{
+			"checksumSHA1": "6Z/chtTVA74eUZTlG5VRDy59K1M=",
+			"origin": "github.com/opencontainers/runc/vendor/github.com/seccomp/libseccomp-golang",
+			"path": "github.com/seccomp/libseccomp-golang",
+			"revision": "21ac0862f2c695f7ecb55346401932a9ad8cc8d6",
+			"revisionTime": "2018-07-10T14:09:40Z"
+		},
+		{
+			"checksumSHA1": "ucJJgcKvllX4aFY+nTk0j/lF+rw=",
+			"origin": "github.com/opencontainers/runc/vendor/github.com/sirupsen/logrus",
+			"path": "github.com/sirupsen/logrus",
+			"revision": "21ac0862f2c695f7ecb55346401932a9ad8cc8d6",
+			"revisionTime": "2018-07-10T14:09:40Z"
+		},
+		{
+			"checksumSHA1": "PgEklGW56c5RLHqQhORxt6jS3fY=",
+			"origin": "github.com/opencontainers/runc/vendor/github.com/syndtr/gocapability/capability",
+			"path": "github.com/syndtr/gocapability/capability",
+			"revision": "21ac0862f2c695f7ecb55346401932a9ad8cc8d6",
+			"revisionTime": "2018-07-10T14:09:40Z"
+		},
+		{
+			"checksumSHA1": "cIkE6EIE7A0IzdhR/Yes8Nzyqtk=",
+			"origin": "github.com/opencontainers/runc/vendor/github.com/vishvananda/netlink",
+			"path": "github.com/vishvananda/netlink",
+			"revision": "21ac0862f2c695f7ecb55346401932a9ad8cc8d6",
+			"revisionTime": "2018-07-10T14:09:40Z"
+		},
+		{
+			"checksumSHA1": "r/vcO8YkOWNHKX5HKCukaU4Xzlg=",
+			"origin": "github.com/opencontainers/runc/vendor/github.com/vishvananda/netlink/nl",
+			"path": "github.com/vishvananda/netlink/nl",
+			"revision": "21ac0862f2c695f7ecb55346401932a9ad8cc8d6",
+			"revisionTime": "2018-07-10T14:09:40Z"
+		},
+		{
+			"checksumSHA1": "7Lg2o/bJVdJw6/TEeh9yzuDhw94=",
+			"origin": "github.com/opencontainers/runc/vendor/golang.org/x/sys/unix",
+			"path": "golang.org/x/sys/unix",
+			"revision": "21ac0862f2c695f7ecb55346401932a9ad8cc8d6",
+			"revisionTime": "2018-07-10T14:09:40Z"
+		},
+		{
+			"checksumSHA1": "gVfCD++7aVcdKF2spv6XkEM/wYw=",
+			"origin": "github.com/opencontainers/runc/vendor/golang.org/x/sys/windows",
+			"path": "golang.org/x/sys/windows",
+			"revision": "21ac0862f2c695f7ecb55346401932a9ad8cc8d6",
+			"revisionTime": "2018-07-10T14:09:40Z"
+		}
+	],
+	"rootPath": "github.com/matrixai/go-runtime"
+}

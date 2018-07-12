@@ -1,3 +1,5 @@
+package context
+
 // ContextCreate holds the information needed for the "create" command
 type ContextCreate struct {
 	BaseContext

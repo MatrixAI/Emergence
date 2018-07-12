@@ -1,3 +1,16 @@
 .stack-work/
 graphql-demo.cabal
-*~
+
+
+# go tools for development purposes
+alecthomas
+davecgh
+fatih
+kardianos
+nsf
+rogpeppe
+sourcegraph
+sqs
+tpng
+zmb3
+

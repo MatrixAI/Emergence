@@ -4,9 +4,9 @@ import (
 	"fmt"
 )
 
-type createCommand struct{}
+type CreateCommand struct{}
 
-func (cmd *createCommand) Execute(ctx *Context) (interface{}, error) {
+func (cmd *CreateCommand) Execute(ctx *Context) (interface{}, error) {
 	createCtx, ok := (*ctx).(*ContextCreate)
 	if err := checkArgs(ctx, 1, exactArgs); err != nil {
 		return nil, err

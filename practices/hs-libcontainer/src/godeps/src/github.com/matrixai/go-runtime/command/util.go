@@ -33,16 +33,20 @@ func isRootless(ctx *Context) (bool, error) {
 }
 
 func createContainer(ctx *Context, spec *specs.Spec) (libcontainer.Container, error) {
+	createCtx, ok := (*ctx).(*ContextCreate)
+	if !ok {
+		return nil, fmt.Errorf("casting to ContextCreate failed")
+	}
 	rootless, err := isRootless(ctx)
 	if err != nil {
 		return nil, err
 	}
 	config, err := specconv.CreateLibcontainerConfig(
 		&specconv.CreateOpts{
-			CgroupName:       ,
-			UseSystemdCgroup: ctx.GetBoolOpt("systemd-cgroup"),
-			NoPivotRoot:      ctx.GetBoolOpt("no-pivot"),
-			NoNewKeyring:     ctx.GetBoolOpt("no-new-keyring"),
+			CgroupName:       createCtx.ContainerID,
+			UseSystemdCgroup: createCtx.SystemdCgroup(),
+			NoPivotRoot:      createCtx.NoPivot,
+			NoNewKeyring:     createCtx.NoNewKeyring,
 			Spec:             spec,
 			Rootless:         rootless,
 		})

@@ -4,15 +4,7 @@
   with pkgs;
   haskell.lib.buildStackProject {
     name = "hs-libcontainer";
-    buildInputs = [automake
-		   autoconf
-		   libcap
-		   yajl
-		   libseccomp
-		   libselinux
-		   python3
-		   libtool
-		   haskellPackages.c2hs
+    buildInputs = [haskellPackages.c2hs
 		   go];
     shellHook = ''
       echo 'Entering hs-libcontainer Environment'
@@ -20,8 +12,7 @@
 
       alias stack='\stack --nix'
       export GOPATH=$(pwd)/src/godeps
-      go get github.com/opencontainers/runc
-
-      set +v
+     
+       set +v
     '';
   }

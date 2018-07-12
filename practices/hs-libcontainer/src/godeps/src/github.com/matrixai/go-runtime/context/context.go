@@ -25,6 +25,22 @@ func (*BaseContext) Criu() string        { return "criu" }
 func (*BaseContext) SystemdCgroup() bool { return false }
 func (*BaseContext) Rootless() *bool     { return nil }
 
+// Type is an enum representing command type
+type Type int
+
+const (
+	// CREATE Creates the container environment
+	CREATE Type = iota
+	// START Start the processes within a container
+	START
+	// KILL Send a signal to a running container
+	KILL
+	// DELETE Deletes a container
+	DELETE
+	// STATE the state of the container
+	STATE
+)
+
 // New is a factory method used for ceating Contextes for Commands
 func Factory(cType Type) (Context, error) {
 	switch cType {
