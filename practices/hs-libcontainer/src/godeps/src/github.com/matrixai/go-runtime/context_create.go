@@ -1,11 +1,11 @@
-package context
+package main
 
 // CtxCreate holds the information needed for the "create" command
 type CtxCreate struct {
 	BaseContext
 	// ContainerID container identifier, must be specified
-	// nil for unspecified
-	ContainerID *string
+	// "" for unspecified
+	ContainerID string
 	// Bundle path to the bundle, must be specified
 	// nil for unspecified
 	Bundle *string

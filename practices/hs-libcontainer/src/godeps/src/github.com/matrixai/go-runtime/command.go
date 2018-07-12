@@ -1,14 +1,13 @@
-package command
+package main
 
 import (
 	"fmt"
-	"github.com/matrixai/go-runtime/context"
 )
 
 // Command interface specifies the necessary operations
 // needed for each API call.
 type Command interface {
-	Execute(*context.Context) (interface{}, error)
+	Execute(*Context) (interface{}, error)
 }
 
 // Type is an enum representing command type
@@ -28,7 +27,7 @@ const (
 )
 
 // Factory creates a Command based on ctype.
-func Factory(ctype Type) (cmd Command, err error) {
+func NewCommand(ctype Type) (cmd Command, err error) {
 	switch ctype {
 	case CREATE:
 		fmt.Println()
