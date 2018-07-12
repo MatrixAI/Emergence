@@ -2,12 +2,13 @@ package command
 
 import (
 	"fmt"
+	"github.com/matrixai/go-runtime/context"
 )
 
 // Command interface specifies the necessary operations
 // needed for each API call.
 type Command interface {
-	Execute(*Context) (interface{}, error)
+	Execute(*context.Context) (interface{}, error)
 }
 
 // Type is an enum representing command type
@@ -31,7 +32,7 @@ func Factory(ctype Type) (cmd Command, err error) {
 	switch ctype {
 	case CREATE:
 		fmt.Println()
-		cmd = &createCommand{}
+		cmd = &CreateCommand{}
 	// TODO: more commands to add
 	default:
 		err = fmt.Errorf("unknown command type")

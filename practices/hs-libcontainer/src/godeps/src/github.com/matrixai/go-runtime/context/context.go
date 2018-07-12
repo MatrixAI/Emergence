@@ -19,11 +19,20 @@ type Context interface {
 // BaseContext defines the default attributes for the Context interface
 type BaseContext struct{}
 
-func (*BaseContext) Config() string      { return "config.json" }
-func (*BaseContext) Root() string        { return "/run/user/1002/runc" }
-func (*BaseContext) Criu() string        { return "criu" }
+// Config returns defalt value for config filenames
+func (*BaseContext) Config() string { return "config.json" }
+
+// Root returns default value for container states
+func (*BaseContext) Root() string { return "/run/user/1002/runc" }
+
+// Criu returns default value for criu binary
+func (*BaseContext) Criu() string { return "criu" }
+
+// SystemdCgroup returns default value for systemdcgroup
 func (*BaseContext) SystemdCgroup() bool { return false }
-func (*BaseContext) Rootless() *bool     { return nil }
+
+// Rootless returns default value for rootless container
+func (*BaseContext) Rootless() *bool { return nil }
 
 // Type is an enum representing command type
 type Type int
@@ -42,10 +51,10 @@ const (
 )
 
 // New is a factory method used for ceating Contextes for Commands
-func Factory(cType Type) (Context, error) {
+func New(cType Type) (Context, error) {
 	switch cType {
 	case CREATE:
-		return &ContextCreate{
+		return &CtxCreate{
 			Bundle:        nil,
 			ConsoleSocket: nil,
 			PidFile:       nil,

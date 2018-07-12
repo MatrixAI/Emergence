@@ -1,6 +1,8 @@
 .stack-work/
 graphql-demo.cabal
 
+bin
+pkg
 
 # go tools for development purposes
 alecthomas

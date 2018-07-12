@@ -1,7 +1,7 @@
 package context
 
-// ContextCreate holds the information needed for the "create" command
-type ContextCreate struct {
+// CtxCreate holds the information needed for the "create" command
+type CtxCreate struct {
 	BaseContext
 	// ContainerID container identifier, must be specified
 	// nil for unspecified
