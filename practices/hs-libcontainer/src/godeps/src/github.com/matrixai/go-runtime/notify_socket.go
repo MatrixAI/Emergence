@@ -1,7 +1,6 @@
 package main
 
 import (
-	"bytes"
 	"fmt"
 	"github.com/opencontainers/runtime-spec/specs-go"
 	"net"
@@ -14,11 +13,11 @@ type notifySocket struct {
 	socketPath string
 }
 
-func newNotifySocket(ctx *Context, host string, id string) *notifySocket {
+func newNotifySocket(statePath string, host string, id string) *notifySocket {
 	if host == "" {
 		return nil
 	}
-	root := filepath.Join((*ctx).Root(), id)
+	root := filepath.Join(statePath, id)
 	path := filepath.Join(root, "notify.sock")
 
 	notifySocket := &notifySocket{

@@ -8,6 +8,19 @@ import (
 	"path/filepath"
 )
 
+func setupSpec(bundlePath string) (*specs.Spec, error) {
+	if bundlePath != "" {
+		if err := os.Chdir(bundlePath); err != nil {
+			return nil, err
+		}
+	}
+	spec, err := loadSpec(configName)
+	if err != nil {
+		return nil, err
+	}
+	return spec, nil
+}
+
 // loadSpec loads the specification from the provided path.
 func loadSpec(cPath string) (spec *specs.Spec, err error) {
 	cf, err := os.Open(cPath)
