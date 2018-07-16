@@ -1,8 +1,10 @@
+// +build linux
 package main
 
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/opencontainers/runc/libcontainer/configs"
 	"github.com/opencontainers/runtime-spec/specs-go"
 	"os"
 	"path/filepath"
@@ -48,4 +50,16 @@ func validateProcessSpec(spec *specs.Process) error {
 		return fmt.Errorf("args must not be empty")
 	}
 	return nil
+}
+
+func createLibContainerRlimit(rlimit specs.POSIXRlimit) (configs.Rlimit, error) {
+	rl, err := strToRlimit(rlimit.Type)
+	if err != nil {
+		return configs.Rlimit{}, err
+	}
+	return configs.Rlimit{
+		Type: rl,
+		Hard: rlimit.Hard,
+		Soft: rlimit.Soft,
+	}, nil
 }

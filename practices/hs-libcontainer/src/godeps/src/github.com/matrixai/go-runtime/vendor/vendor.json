@@ -10,6 +10,12 @@
 			"revisionTime": "2018-07-10T14:09:40Z"
 		},
 		{
+			"checksumSHA1": "zg16zjZTQ9R89+UOLmEZxHgxDtM=",
+			"path": "github.com/coreos/go-systemd/activation",
+			"revision": "88bfeed483d372fa1298dd859662e4b9a13d68cb",
+			"revisionTime": "2018-07-05T09:34:42Z"
+		},
+		{
 			"checksumSHA1": "/zxxFPYjUB7Wowz33r5AhTDvoz0=",
 			"origin": "github.com/opencontainers/runc/vendor/github.com/coreos/go-systemd/dbus",
 			"path": "github.com/coreos/go-systemd/dbus",

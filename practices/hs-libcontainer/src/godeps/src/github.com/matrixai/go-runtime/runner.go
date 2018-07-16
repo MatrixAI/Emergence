@@ -1,9 +1,12 @@
 package main
 
 import (
+	"fmt"
 	"github.com/opencontainers/runc/libcontainer"
 	"github.com/opencontainers/runtime-spec/specs-go"
+	"golang.org/x/sys/unix"
 	"os"
+	"strconv"
 )
 
 type CtAct uint8
@@ -119,4 +122,16 @@ func (r *runner) destroy() {
 func (r *runner) terminate(p *libcontainer.Process) {
 	_ = p.Signal(unix.SIGKILL)
 	_, _ = p.Wait()
+}
+
+func (r *runner) checkTerminal(config *specs.Process) error {
+	detach := r.detach || (r.action == CT_ACT_CREATE)
+	// Check command-line for sanity.
+	if detach && config.Terminal && r.consoleSocket == "" {
+		return fmt.Errorf("cannot allocate tty if runc will detach without setting console socket")
+	}
+	if (!detach || !config.Terminal) && r.consoleSocket != "" {
+		return fmt.Errorf("cannot use console socket if runc will not detach or allocate tty")
+	}
+	return nil
 }

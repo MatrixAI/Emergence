@@ -24,11 +24,11 @@ func (cmd *CreateCommand) Execute() (interface{}, error) {
 	if err != nil {
 		return nil, err
 	}
-	err = cmd.startContainer(spec)
+	status, err := cmd.startContainer(spec)
 	if err != nil {
 		return nil, err
 	}
-	return nil, nil
+	return status, nil
 }
 
 func (cmd *CreateCommand) createContainer(spec *specs.Spec) (libcontainer.Container, error) {
@@ -55,18 +55,18 @@ func (cmd *CreateCommand) createContainer(spec *specs.Spec) (libcontainer.Contai
 	return factory.Create(cmd.id, config)
 }
 
-func (cmd *CreateCommand) startContainer(spec *specs.Spec) error {
+func (cmd *CreateCommand) startContainer(spec *specs.Spec) (int, error) {
 	notifySocket := newNotifySocket(cmd.statePath, cmd.notifySocket, cmd.id)
 	if notifySocket != nil {
 		notifySocket.setupSpec(spec)
 	}
 	container, err := cmd.createContainer(spec)
 	if err != nil {
-		return err
+		return -1, err
 	}
 	if notifySocket != nil {
 		if err := notifySocket.setupSocket(); err != nil {
-			return err
+			return -1, err
 		}
 	}
 
@@ -78,7 +78,7 @@ func (cmd *CreateCommand) startContainer(spec *specs.Spec) error {
 		listenFDs = activation.Files(false)
 	}
 	r := &runner{
-		enableSubreaper: true,
+		enableSubreaper: true, // Set current process as subreaper
 		shouldDestroy:   true,
 		container:       container,
 		listenFDs:       listenFDs,
