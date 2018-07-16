@@ -24,10 +24,8 @@ dependencies:
 
 library:
   source-dirs: src
-  c-sources:
-    - src/cbits/oci-spec.c
-  include-dirs: src/include
-  install-includes: oci-spec.h
+  include-dirs: src/godeps/src/github.com/matrixai/go-runtime
+  install-includes: command.h
 
 executables:
   hs-libcontainer-exe:
@@ -36,7 +34,7 @@ executables:
     dependencies: 
     - hs-libcontainer
     extra-lib-dirs:
-      src/godeps/src/github.com/matrixai/cgo-libcontainer
+      src/godeps/src/github.com/matrixai/go-runtime
     extra-libraries:
       container
     ghc-options:

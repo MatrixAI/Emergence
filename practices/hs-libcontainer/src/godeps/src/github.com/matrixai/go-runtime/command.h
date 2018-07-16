@@ -1,8 +1,8 @@
+#include <stdbool.h>
+
 typedef struct BaseCommand BaseCommand;
 typedef struct RunnableCommand RunnableCommand;
 typedef struct CreateCommand CreateCommand;
-
-typedef enum {false, true} bool;
 
 struct BaseCommand {
   char* statePath;

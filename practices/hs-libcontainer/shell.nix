@@ -12,7 +12,7 @@
 
       alias stack='\stack --nix'
       export GOPATH=$(pwd)/src/godeps
-      
+      export LD_LIBRARY_PATH=$(pwd):$LD_LIBRARY_PATH 
       set +v
     '';
   }
