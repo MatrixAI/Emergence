@@ -1,32 +1,33 @@
 module Main where
 
-import Commands (BaseCommand, RunnableCommand, CreateCommand)
+import Commands (BaseCommand(..), RunnableCommand(..), CreateCommand(..))
+import Foreign.Ptr (Ptr)
+import Foreign.C.String (newCAString)
+import Foreign.Marshal.Utils (new)
+import Lib (create)
 
 defaultBase :: IO (Ptr BaseCommand)
 defaultBase = do
-  statePath <- newCAString "/run/user/1002/runc"
+  statePath <- newCAString "/run/runc"
   criu <- newCAString "criu"
-  return $ Ptr $ BaseCommand statePath criu False 0
+  new $ BaseCommand statePath criu False 0
 
 defaultRunnable :: IO (Ptr RunnableCommand)
 defaultRunnable = do
   base <- defaultBase
-  containerID <- newCAString ""
+  containerID <- newCAString "cont01"
   notifySocket <- newCAString ""
-  return $ RunnableCommand base containerID False False notifySocket 0
+  new $ RunnableCommand base containerID False False notifySocket
 
---
--- mystruct :: IO (Ptr LinuxIntelRdt)
--- mystruct = do
---   string <- newCAString "Hello"
---   new $ LinuxIntelRdt string
---
--- mystruct2 :: IO LinuxIntelRdt
--- mystruct2 = do
---   p <- mystruct
---   s <- peek p
---   return s
+defaultCreate :: IO (Ptr CreateCommand)
+defaultCreate = do
+  runnable <- defaultRunnable
+  bundle <- newCAString "/home/vivian/Projects/Emergence/practices/hs-libcontainer/test/mycontainer/"
+  consoleSocket <- newCAString ""
+  pidFile <- newCAString ""
+  new $ CreateCommand runnable bundle consoleSocket pidFile 0
 
 main :: IO ()
--- main = mystruct2 >>= print
-main = putStrLn "Hello"
+main =  do
+  status <- defaultCreate >>= create
+  print status

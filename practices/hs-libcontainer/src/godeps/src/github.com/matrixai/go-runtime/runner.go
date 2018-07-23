@@ -87,7 +87,7 @@ func (r *runner) run(config *specs.Process) (int, error) {
 		r.destroy()
 		return -1, err
 	}
-	if err := tty.waitConsole(); err != nil {
+	if err = tty.waitConsole(); err != nil {
 		r.terminate(process)
 		r.destroy()
 		return -1, err

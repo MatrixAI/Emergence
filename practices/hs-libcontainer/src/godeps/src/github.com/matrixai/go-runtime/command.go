@@ -26,7 +26,6 @@ type runnableCommand struct {
 	noPivot      bool
 	noNewKeyring bool
 	notifySocket string
-	listenFds    int
 }
 
 func (cmd *baseCommand) loadFactory() (libcontainer.Factory, error) {

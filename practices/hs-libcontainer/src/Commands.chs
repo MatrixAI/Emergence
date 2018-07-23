@@ -2,11 +2,11 @@
 
 module Commands(
   -- * BaseCommand contains data shared among all commands
-  BaseCommand,
+  BaseCommand(..),
   -- * RunnableCommand contains data used for create, run and restore.
-  RunnableCommand,
+  RunnableCommand(..),
   -- * CreateCommand contains data used for creation of containers
-  CreateCommand
+  CreateCommand(..)
   ) where
 
 #include "command.h"
@@ -22,7 +22,7 @@ data BaseCommand = BaseCommand {
   criu :: CString,
   systemdCgroup :: Bool,
   rootless :: CInt -- 0: auto, 1: true, 2: false
-}
+} deriving (Show)
 
 -- Ensure that the get hooks treat *BaseCommand as Ptr BaseCommand
 -- rather than Ptr ().
@@ -49,9 +49,8 @@ data RunnableCommand = RunnableCommand {
   containerID :: CString,
   noPivot :: Bool,
   noNewKeyring :: Bool,
-  notifySocket :: CString,
-  listenFds :: CInt
-}
+  notifySocket :: CString
+} deriving (Show)
 
 -- Ensure that the get hooks treat *RunnableCommand as Ptr RunnableCommand
 -- rather than Ptr ().
@@ -66,20 +65,17 @@ instance Storable RunnableCommand where
     noPivot <- {# get RunnableCommand->noPivot #} ptr
     noNewKeyring <- {# get RunnableCommand->noNewKeyring #} ptr
     notifySocket <- {# get RunnableCommand->notifySocket #} ptr
-    listenFds <- {# get RunnableCommand->listenFds #} ptr
     return (RunnableCommand base
                             containerID
                             noPivot
                             noNewKeyring
-                            notifySocket
-                            listenFds)
-  poke ptr (RunnableCommand base containerID noPivot noNewKeyring notifySocket listenFds) = do
+                            notifySocket)
+  poke ptr (RunnableCommand base containerID noPivot noNewKeyring notifySocket) = do
     {# set RunnableCommand.base #} ptr base
     {# set RunnableCommand.id #} ptr containerID
     {# set RunnableCommand.noPivot #} ptr noPivot
     {# set RunnableCommand.noNewKeyring #} ptr noNewKeyring
     {# set RunnableCommand.notifySocket #} ptr notifySocket
-    {# set RunnableCommand.listenFds #} ptr listenFds
 
 
 data CreateCommand = CreateCommand {
@@ -88,7 +84,7 @@ data CreateCommand = CreateCommand {
   consoleSocket :: CString,
   pidFile :: CString,
   preserveFds :: CInt
-}
+} deriving (Show)
 
 instance Storable CreateCommand where
   sizeOf _ = {# sizeof CreateCommand #}

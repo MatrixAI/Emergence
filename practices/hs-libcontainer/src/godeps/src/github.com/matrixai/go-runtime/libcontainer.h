@@ -57,13 +57,7 @@ extern "C" {
 #endif
 
 
-/* Return type for create */
-struct create_return {
-	GoInt r0;
-	GoInterface r1;
-};
-
-extern struct create_return create(struct CreateCommand* p0);
+extern GoInt create(struct CreateCommand* p0);
 
 #ifdef __cplusplus
 }

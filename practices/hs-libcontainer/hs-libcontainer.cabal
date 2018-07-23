@@ -2,7 +2,7 @@
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 69f39e0a344823d5e35e8e2d1328fb7714ed181733466d07798cf9960838c24b
+-- hash: 91522e2c384cc397decaa1a4c49d05c48fc18d9309ecb73a155790958ecba42e
 
 name:           hs-libcontainer
 version:        0.1.0.0
@@ -27,6 +27,7 @@ source-repository head
 library
   exposed-modules:
       Commands
+      Lib
   other-modules:
       Paths_hs_libcontainer
   hs-source-dirs:
