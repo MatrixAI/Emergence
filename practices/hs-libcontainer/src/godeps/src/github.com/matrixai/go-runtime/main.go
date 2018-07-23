@@ -15,10 +15,15 @@ func GoBool(c C.bool) bool {
 
 func unmarshalBaseCommand(c *C.struct_BaseCommand) *BaseCommand {
 	var rootless *bool
-	if c.rootless == nil {
+	switch c.rootless {
+	case 0: // auto
 		rootless = nil
-	} else {
-		*rootless = GoBool(*c.rootless)
+	case 1: // rootless
+		b := true
+		rootless = &b
+	case 2: // not rootless
+		b := false
+		rootless = &b
 	}
 
 	return &BaseCommand{

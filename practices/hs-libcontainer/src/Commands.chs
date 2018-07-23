@@ -9,14 +9,17 @@ import Foreign.C.String (CString)
 import Foreign.C.Types (CInt, CBool)
 import Foreign.Ptr (Ptr)
 
-type Bool = CInt
 
 data BaseCommand = BaseCommand {
   statePath :: CString,
   criu :: CString,
-  systemdCgroup :: CBool,
-  rootless :: Ptr CBool
+  systemdCgroup :: Bool,
+  rootless :: CInt
 }
+
+-- Ensure that the get hooks treat *BaseCommand as Ptr BaseCommand
+-- rather than Ptr ().
+{# pointer *BaseCommand as BaseCommandPtr -> BaseCommand #}
 
 instance Storable BaseCommand where
   sizeOf _ = {# sizeof BaseCommand #}
@@ -26,7 +29,7 @@ instance Storable BaseCommand where
     criu <- {# get BaseCommand->criu #} ptr
     systemdCgroup <- {# get BaseCommand->systemdCgroup #} ptr
     rootless <- {# get BaseCommand->rootless #} ptr
-    return BaseCommand statePath criu systemdCgroup rootless
+    return $ BaseCommand statePath criu systemdCgroup rootless
   poke ptr (BaseCommand statePath criu systemdCgroup rootless) = do
     {# set BaseCommand.statePath #} ptr statePath
     {# set BaseCommand.criu #} ptr criu
@@ -35,13 +38,17 @@ instance Storable BaseCommand where
 
 
 data RunnableCommand = RunnableCommand {
-  base :: Ptr BaseCommand,
+  base :: BaseCommandPtr,
   containerID :: CString,
-  noPivot :: CBool,
-  noNewKeyring :: CBool,
+  noPivot :: Bool,
+  noNewKeyring :: Bool,
   notifySocket :: CString,
   listenFds :: CInt
 }
+
+-- Ensure that the get hooks treat *RunnableCommand as Ptr RunnableCommand
+-- rather than Ptr ().
+{# pointer *RunnableCommand as RunnableCommandPtr -> RunnableCommand #}
 
 instance Storable RunnableCommand where
   sizeOf _ = {# sizeof RunnableCommand #}
@@ -53,7 +60,12 @@ instance Storable RunnableCommand where
     noNewKeyring <- {# get RunnableCommand->noNewKeyring #} ptr
     notifySocket <- {# get RunnableCommand->notifySocket #} ptr
     listenFds <- {# get RunnableCommand->listenFds #} ptr
-    return RunnableCommand containerID noPivot noNewKeyring notifySocket listenFds
+    return (RunnableCommand base
+                            containerID
+                            noPivot
+                            noNewKeyring
+                            notifySocket
+                            listenFds)
   poke ptr (RunnableCommand base containerID noPivot noNewKeyring notifySocket listenFds) = do
     {# set RunnableCommand.base #} ptr base
     {# set RunnableCommand.id #} ptr containerID
@@ -62,10 +74,28 @@ instance Storable RunnableCommand where
     {# set RunnableCommand.notifySocket #} ptr notifySocket
     {# set RunnableCommand.listenFds #} ptr listenFds
 
+
 data CreateCommand = CreateCommand {
-  runnable :: Ptr RunnableCommand,
+  runnable :: RunnableCommandPtr,
   bundle :: CString,
   consoleSocket :: CString,
   pidFile :: CString,
   preserveFds :: CInt
 }
+
+instance Storable CreateCommand where
+  sizeOf _ = {# sizeof CreateCommand #}
+  alignment _ = {# alignof CreateCommand #}
+  peek ptr = do
+    runnable <- {# get CreateCommand->runnable #} ptr
+    bundle <- {# get CreateCommand->bundle #} ptr
+    consoleSocket <- {# get CreateCommand->consoleSocket #} ptr
+    pidFile <- {# get CreateCommand->pidFile #} ptr
+    preserveFds <- {# get CreateCommand->preserveFds #} ptr
+    return $ CreateCommand runnable bundle consoleSocket pidFile preserveFds
+  poke ptr (CreateCommand runnable bundle consoleSocket pidFile preserveFds) = do
+    {# set CreateCommand.runnable #} ptr runnable
+    {# set CreateCommand.bundle #} ptr bundle
+    {# set CreateCommand.consoleSocket #} ptr consoleSocket
+    {# set CreateCommand.pidFile #} ptr pidFile
+    {# set CreateCommand.preserveFds #} ptr preserveFds

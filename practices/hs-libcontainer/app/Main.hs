@@ -1,10 +1,4 @@
 module Main where
-
-import OCISpec (LinuxIntelRdt(..), l3CacheSchema)
-import Foreign.Ptr (Ptr)
-import Foreign.C.String (newCAString)
-import Foreign.Marshal.Utils (new)
-import Foreign.Storable (Storable(..))
 --
 -- mystruct :: IO (Ptr LinuxIntelRdt)
 -- mystruct = do
