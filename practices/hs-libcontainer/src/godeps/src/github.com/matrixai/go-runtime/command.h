@@ -8,7 +8,7 @@ struct BaseCommand {
   char* statePath;
   char* criu;
   bool systemdCgroup;
-  int rootless; // 0: auto. 1: rootless. 2: not rootless.
+  int rootless; // 0: auto, 1: true, 2: false
 };
 
 struct RunnableCommand {

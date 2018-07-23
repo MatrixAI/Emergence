@@ -1,6 +1,13 @@
 {-# LANGUAGE ForeignFunctionInterface #-}
 
-module Commands where
+module Commands(
+  -- * BaseCommand contains data shared among all commands
+  BaseCommand,
+  -- * RunnableCommand contains data used for create, run and restore.
+  RunnableCommand,
+  -- * CreateCommand contains data used for creation of containers
+  CreateCommand
+  ) where
 
 #include "command.h"
 
@@ -14,7 +21,7 @@ data BaseCommand = BaseCommand {
   statePath :: CString,
   criu :: CString,
   systemdCgroup :: Bool,
-  rootless :: CInt
+  rootless :: CInt -- 0: auto, 1: true, 2: false
 }
 
 -- Ensure that the get hooks treat *BaseCommand as Ptr BaseCommand

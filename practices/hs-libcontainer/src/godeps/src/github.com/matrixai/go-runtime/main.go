@@ -6,7 +6,17 @@ import "C"
 
 var configName = "config.json"
 
-func GoBool(c C.bool) bool {
+//export create
+func create(cc *C.struct_CreateCommand) (int, error) {
+	cmd := unmarshalCreateCommand(cc)
+	s, err := cmd.Execute()
+	if status, ok := s.(int); ok {
+		return status, err
+	}
+	return -1, err
+}
+
+func goBool(c C.bool) bool {
 	if c {
 		return true
 	}
@@ -29,7 +39,7 @@ func unmarshalBaseCommand(c *C.struct_BaseCommand) *BaseCommand {
 	return &BaseCommand{
 		statePath:     C.GoString(c.statePath),
 		criu:          C.GoString(c.criu),
-		systemdCgroup: GoBool(c.systemdCgroup),
+		systemdCgroup: goBool(c.systemdCgroup),
 		rootless:      rootless,
 	}
 }
@@ -38,8 +48,8 @@ func unmarshalRunnableCommand(c *C.struct_RunnableCommand) *RunnableCommand {
 	return &RunnableCommand{
 		BaseCommand:  *unmarshalBaseCommand(c.base),
 		id:           C.GoString(c.id),
-		noPivot:      GoBool(c.noPivot),
-		noNewKeyring: GoBool(c.noPivot),
+		noPivot:      goBool(c.noPivot),
+		noNewKeyring: goBool(c.noPivot),
 		listenFds:    int(c.listenFds),
 	}
 }
@@ -52,16 +62,6 @@ func unmarshalCreateCommand(c *C.struct_CreateCommand) *CreateCommand {
 		pidFile:         C.GoString(c.pidFile),
 		preserveFds:     int(c.preserveFds),
 	}
-}
-
-//export create
-func create(cc *C.struct_CreateCommand) (int, error) {
-	cmd := unmarshalCreateCommand(cc)
-	s, err := cmd.Execute()
-	if status, ok := s.(int); ok {
-		return status, err
-	}
-	return -1, err
 }
 
 func main() {}
