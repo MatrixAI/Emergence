@@ -9,21 +9,19 @@ import (
 	"path/filepath"
 )
 
-// Command interface specifies the necessary operations
-// needed for each API call.
-type Command interface {
+type command interface {
 	Execute() (interface{}, error)
 }
 
-type BaseCommand struct {
+type baseCommand struct {
 	statePath     string
 	criu          string
 	systemdCgroup bool
 	rootless      *bool
 }
 
-type RunnableCommand struct {
-	BaseCommand
+type runnableCommand struct {
+	baseCommand
 	id           string
 	noPivot      bool
 	noNewKeyring bool
@@ -31,7 +29,7 @@ type RunnableCommand struct {
 	listenFds    int
 }
 
-func (cmd *BaseCommand) loadFactory() (libcontainer.Factory, error) {
+func (cmd *baseCommand) loadFactory() (libcontainer.Factory, error) {
 	statePathAbs, err := filepath.Abs(cmd.statePath)
 	if err != nil {
 		return nil, err

@@ -16,3 +16,5 @@ sqs
 tpng
 zmb3
 
+# Products
+*.so

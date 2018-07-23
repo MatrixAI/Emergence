@@ -9,8 +9,8 @@ import (
 )
 
 // CreateCommand handles the creation of containers
-type CreateCommand struct {
-	RunnableCommand
+type createCommand struct {
+	runnableCommand
 
 	bundle        string
 	consoleSocket string
@@ -19,7 +19,7 @@ type CreateCommand struct {
 }
 
 // Execute sets up the environment for the container.
-func (cmd *CreateCommand) Execute() (interface{}, error) {
+func (cmd *createCommand) Execute() (interface{}, error) {
 	spec, err := setupSpec(cmd.bundle)
 	if err != nil {
 		return nil, err
@@ -31,7 +31,7 @@ func (cmd *CreateCommand) Execute() (interface{}, error) {
 	return status, nil
 }
 
-func (cmd *CreateCommand) createContainer(spec *specs.Spec) (libcontainer.Container, error) {
+func (cmd *createCommand) createContainer(spec *specs.Spec) (libcontainer.Container, error) {
 	rootless, err := isRootless(cmd.rootless)
 	if err != nil {
 		return nil, err
@@ -55,7 +55,7 @@ func (cmd *CreateCommand) createContainer(spec *specs.Spec) (libcontainer.Contai
 	return factory.Create(cmd.id, config)
 }
 
-func (cmd *CreateCommand) startContainer(spec *specs.Spec) (int, error) {
+func (cmd *createCommand) startContainer(spec *specs.Spec) (int, error) {
 	notifySocket := newNotifySocket(cmd.statePath, cmd.notifySocket, cmd.id)
 	if notifySocket != nil {
 		notifySocket.setupSpec(spec)

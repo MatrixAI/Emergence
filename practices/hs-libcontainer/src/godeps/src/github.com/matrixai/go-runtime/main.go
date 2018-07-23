@@ -23,7 +23,7 @@ func goBool(c C.bool) bool {
 	return false
 }
 
-func unmarshalBaseCommand(c *C.struct_BaseCommand) *BaseCommand {
+func unmarshalBaseCommand(c *C.struct_BaseCommand) *baseCommand {
 	var rootless *bool
 	switch c.rootless {
 	case 0: // auto
@@ -36,7 +36,7 @@ func unmarshalBaseCommand(c *C.struct_BaseCommand) *BaseCommand {
 		rootless = &b
 	}
 
-	return &BaseCommand{
+	return &baseCommand{
 		statePath:     C.GoString(c.statePath),
 		criu:          C.GoString(c.criu),
 		systemdCgroup: goBool(c.systemdCgroup),
@@ -44,9 +44,9 @@ func unmarshalBaseCommand(c *C.struct_BaseCommand) *BaseCommand {
 	}
 }
 
-func unmarshalRunnableCommand(c *C.struct_RunnableCommand) *RunnableCommand {
-	return &RunnableCommand{
-		BaseCommand:  *unmarshalBaseCommand(c.base),
+func unmarshalRunnableCommand(c *C.struct_RunnableCommand) *runnableCommand {
+	return &runnableCommand{
+		baseCommand:  *unmarshalBaseCommand(c.base),
 		id:           C.GoString(c.id),
 		noPivot:      goBool(c.noPivot),
 		noNewKeyring: goBool(c.noPivot),
@@ -54,9 +54,9 @@ func unmarshalRunnableCommand(c *C.struct_RunnableCommand) *RunnableCommand {
 	}
 }
 
-func unmarshalCreateCommand(c *C.struct_CreateCommand) *CreateCommand {
-	return &CreateCommand{
-		RunnableCommand: *unmarshalRunnableCommand(c.runnable),
+func unmarshalCreateCommand(c *C.struct_CreateCommand) *createCommand {
+	return &createCommand{
+		runnableCommand: *unmarshalRunnableCommand(c.runnable),
 		bundle:          C.GoString(c.bundle),
 		consoleSocket:   C.GoString(c.consoleSocket),
 		pidFile:         C.GoString(c.pidFile),
