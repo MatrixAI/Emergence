@@ -114,11 +114,13 @@ func (r *runner) run(config *specs.Process) (int, error) {
 	r.destroy()
 	return status, err
 }
+
 func (r *runner) destroy() {
 	if r.shouldDestroy {
 		destroy(r.container)
 	}
 }
+
 func (r *runner) terminate(p *libcontainer.Process) {
 	_ = p.Signal(unix.SIGKILL)
 	_, _ = p.Wait()

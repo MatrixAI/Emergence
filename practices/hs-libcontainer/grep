@@ -1,0 +1,5 @@
+([]string) (len=1 cap=4) {
+ (string) (len=2) "sh"
+}
+(*libcontainer.genericError)(0xc4200b7650)(container_linux.go:336: starting container process caused "process_linux.go:301: copying bootstrap data to pipe caused \"write init-p: broken pipe\"")
+-1

@@ -65,6 +65,10 @@
 			"revisionTime": "2018-07-10T14:09:40Z"
 		},
 		{
+			"path": "github.com/matrixai/go-runtime",
+			"revision": ""
+		},
+		{
 			"checksumSHA1": "EKGlMEHq/nwBXQGi9JN/y+H7YMU=",
 			"origin": "github.com/opencontainers/runc/vendor/github.com/mrunalp/fileutils",
 			"path": "github.com/mrunalp/fileutils",
@@ -136,6 +140,12 @@
 			"path": "github.com/opencontainers/runc/libcontainer/mount",
 			"revision": "21ac0862f2c695f7ecb55346401932a9ad8cc8d6",
 			"revisionTime": "2018-07-10T14:09:40Z"
+		},
+		{
+			"checksumSHA1": "5p0YhO25gaLG+GUdTzqgvcRHjkE=",
+			"path": "github.com/opencontainers/runc/libcontainer/nsenter",
+			"revision": "bc1467269fce13e9780345cfa25f9ca530601aba",
+			"revisionTime": "2018-07-18T06:22:36Z"
 		},
 		{
 			"checksumSHA1": "I1Qw/btE1twMqKHpYNsC98cteak=",
@@ -249,6 +259,10 @@
 			"path": "golang.org/x/sys/windows",
 			"revision": "21ac0862f2c695f7ecb55346401932a9ad8cc8d6",
 			"revisionTime": "2018-07-10T14:09:40Z"
+		},
+		{
+			"path": "list",
+			"revision": ""
 		}
 	],
 	"rootPath": "github.com/matrixai/go-runtime"

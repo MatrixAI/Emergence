@@ -12,7 +12,8 @@
 
       alias stack='\stack --nix'
       export GOPATH=$(pwd)/src/godeps
-      export LD_LIBRARY_PATH=$(pwd):$LD_LIBRARY_PATH 
+      export LD_LIBRARY_PATH=$(pwd):$LD_LIBRARY_PATH
+      export PATH="$(stack path --local-install-root)/bin:$PATH" 
       set +v
     '';
   }

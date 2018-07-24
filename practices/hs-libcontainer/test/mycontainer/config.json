@@ -81,8 +81,7 @@
 				"noexec",
 				"newinstance",
 				"ptmxmode=0666",
-				"mode=0620",
-				"gid=5"
+				"mode=0620"
 			]
 		},
 		{
@@ -109,43 +108,35 @@
 		},
 		{
 			"destination": "/sys",
-			"type": "sysfs",
-			"source": "sysfs",
+			"type": "none",
+			"source": "/sys",
 			"options": [
+				"rbind",
 				"nosuid",
 				"noexec",
 				"nodev",
-				"ro"
-			]
-		},
-		{
-			"destination": "/sys/fs/cgroup",
-			"type": "cgroup",
-			"source": "cgroup",
-			"options": [
-				"nosuid",
-				"noexec",
-				"nodev",
-				"relatime",
 				"ro"
 			]
 		}
 	],
 	"linux": {
-		"resources": {
-			"devices": [
-				{
-					"allow": false,
-					"access": "rwm"
-				}
-			]
-		},
+		"uidMappings": [
+			{
+				"hostID": 1002,
+				"containerID": 0,
+				"size": 1
+			}
+		],
+		"gidMappings": [
+			{
+				"hostID": 1000,
+				"containerID": 0,
+				"size": 1
+			}
+		],
 		"namespaces": [
 			{
 				"type": "pid"
-			},
-			{
-				"type": "network"
 			},
 			{
 				"type": "ipc"
@@ -155,6 +146,9 @@
 			},
 			{
 				"type": "mount"
+			},
+			{
+				"type": "user"
 			}
 		],
 		"maskedPaths": [

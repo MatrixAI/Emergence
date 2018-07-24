@@ -59,16 +59,13 @@ func unmarshalRunnableCommand(c *C.struct_RunnableCommand) *runnableCommand {
 }
 
 func unmarshalCreateCommand(c *C.struct_CreateCommand) *createCommand {
-	spew.Dump(c)
-	result := &createCommand{
+	return &createCommand{
 		runnableCommand: *unmarshalRunnableCommand(c.runnable),
 		bundle:          C.GoString(c.bundle),
 		consoleSocket:   C.GoString(c.consoleSocket),
 		pidFile:         C.GoString(c.pidFile),
 		preserveFds:     int(c.preserveFds),
 	}
-	spew.Dump(result)
-	return result
 }
 
 func main() {}

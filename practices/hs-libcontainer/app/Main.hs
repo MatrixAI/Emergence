@@ -8,9 +8,9 @@ import Lib (create)
 
 defaultBase :: IO (Ptr BaseCommand)
 defaultBase = do
-  statePath <- newCAString "/run/runc"
+  statePath <- newCAString "run/runc"
   criu <- newCAString "criu"
-  new $ BaseCommand statePath criu False 0
+  new $ BaseCommand statePath criu True 2
 
 defaultRunnable :: IO (Ptr RunnableCommand)
 defaultRunnable = do

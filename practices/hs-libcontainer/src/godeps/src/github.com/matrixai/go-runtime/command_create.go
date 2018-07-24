@@ -6,6 +6,7 @@ import (
 	"github.com/opencontainers/runc/libcontainer/specconv"
 	"github.com/opencontainers/runtime-spec/specs-go"
 	"os"
+	"path/filepath"
 )
 
 // CreateCommand handles the creation of containers
@@ -20,6 +21,13 @@ type createCommand struct {
 
 // Execute sets up the environment for the container.
 func (cmd *createCommand) Execute() (interface{}, error) {
+	// convert pid-file to an absolute path so we can write to
+	// the right file after chdir to bundle
+	pidFile, err := filepath.Abs(cmd.pidFile)
+	if err != nil {
+		return nil, err
+	}
+	cmd.pidFile = pidFile
 	spec, err := setupSpec(cmd.bundle)
 	if err != nil {
 		return nil, err
@@ -69,7 +77,6 @@ func (cmd *createCommand) startContainer(spec *specs.Spec) (int, error) {
 			return -1, err
 		}
 	}
-
 	// Support on-demand socket activation by passing
 	// file descriptors into the container init process
 	// TODO: Change this into something that doesn't use env var
