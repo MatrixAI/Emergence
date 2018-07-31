@@ -65,8 +65,8 @@ After the container is created with all information contained. It is time for th
 11. And finally, `runc init` will close the pipe and listen on `fifo_fd`, which will be opened by `runc start cont01` to signal the start operation. Which will trigger another Exec, finally executing the entrypoint of the container.
 
 
+Here's the callgraph generated using `go-callvis -nointer -focus libcontainer -limit github.com/opencontainers/runc/libcontainer github.com/opencontainers/runc`
 
+The blue colored vertices are libcontainer functions.
 
-Here's the runc call graph, probably too complicated to understand but anyway:
-
-![runc callgraph](runc-callgraph.svg)
+![libcontainer callgraph](libcontainer-callgraph-nointer.svg)
