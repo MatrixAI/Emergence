@@ -22,7 +22,7 @@ defaultRunnable = do
 defaultCreate :: IO (Ptr CreateCommand)
 defaultCreate = do
   runnable <- defaultRunnable
-  bundle <- newCAString "/home/vivian/Projects/Emergence/practices/hs-libcontainer/test/mycontainer/"
+  bundle <- newCAString "/home/moku/matrix-ai/Emergence/practices/hs-libcontainer/test/mycontainer"
   consoleSocket <- newCAString ""
   pidFile <- newCAString ""
   new $ CreateCommand runnable bundle consoleSocket pidFile 0

@@ -5,7 +5,8 @@
   haskell.lib.buildStackProject {
     name = "hs-libcontainer";
     buildInputs = [haskellPackages.c2hs
-		   go];
+		   go
+		   libseccomp];
     shellHook = ''
       echo 'Entering hs-libcontainer Environment'
       set -v

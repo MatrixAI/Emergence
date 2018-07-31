@@ -5,7 +5,7 @@
 /* Start of preamble from import "C" comments.  */
 
 
-#line 4 "/home/vivian/Projects/Emergence/practices/hs-libcontainer/src/godeps/src/github.com/matrixai/go-runtime/main.go"
+#line 4 "/home/moku/matrix-ai/Emergence/practices/hs-libcontainer/src/godeps/src/github.com/matrixai/go-runtime/main.go"
  #include <command.h>
 
 #line 1 "cgo-generated-wrapper"
