@@ -6,7 +6,8 @@
     name = "hs-libcontainer";
     buildInputs = [haskellPackages.c2hs
 		   go
-		   libseccomp];
+		   libseccomp
+		   graphviz];
     shellHook = ''
       echo 'Entering hs-libcontainer Environment'
       set -v
