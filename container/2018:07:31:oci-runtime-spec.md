@@ -72,9 +72,62 @@ Runtimes must support the following operations:
 - [ ] Resources associated with the container, but not created by this container, MUST NOT be deleted. Once a container is deleted its ID MAY be used by a subsequent container.
 
 ## Configuration
-TODO
+The configuration file contains metadata necessary to implement standard operations against the container. Detailed description (for all OSes) of each field can be found [here](https://github.com/opencontainers/runtime-spec/blob/master/config.md).
+
+- [ ] `root` (object, OPTIONAL) specifies container's root fs.
+  - [ ] `path` (string, REQUIRED) specifies path to the root fs for the container.
+    - `path` can be absolute or relative to the bundle path.
+    - The value SHOULD be the conventional `rootfs`
+  - [ ] `readonly` (bool, OPTIONAL) if true then the root fs MUST be read-only inside the container, defaults to false.
+- [ ] `mounts` (array of objects, OPTIONAL) specifies additional mounts beyond `root`.
+  - [ ] The runtime MUST mount entries in listed order.
+  - [ ] For linux, the parameters are as documented in `mount(2)`.
+  - [ ] `destination` (string, REQUIRED) path inside container. MUST be absolute path.
+  - [ ] `source` (string, OPTIONAL) a device name, can be a directory name or a dummy. Path values are either absolute or relative to the bundle.
+  - [ ] `options` (array of strings, OPTIONAL) mount options of the filesystem to be used.
+    - supported optionsa are listed in `mount(8)`.
+  - For POSIX platforms the `mount` structure has the following fields
+    - [ ] `type` (string, OPTIONAL) the type of the fs to be mounted.
+      - [ ] Linux: fs types supported by kernel as listed in `/proc/filesystems`
+- [ ] `process` (object, OPTIONAL) specifies the container process. This property is REQUIRED when `start` is called.
+  - [ ] `terminal` (bool, OPTIONAL) specifies whether a terminal is attached to the process, defaults to false.
+  - [ ] `consoleSize` (object, OPTIONAL) specifies the console size in characters of the terminal.
+    - This value MUST be ignored if `terminal` is set to `false`
+    - [ ] `height` (uint, REQUIRED)
+    - [ ] `width` (uint, REQUIRED)
+  - [ ] `cwd` (string, REQUIRED) the working directory set for the executable. MUST be absolute path.
+  - [ ] `env` (array of strings, OPTIONAL) with the same semantics as [IEEE Std 1003.1-2008 `environ`](http://pubs.opengroup.org/onlinepubs/9699919799/basedefs/V1_chap08.html#tag_08_01)
+  - [ ] `args` (array of strings, REQUIRED) with similar semantics to [IEEE Std 1003.1-2008 `execvp`'s argv'](http://pubs.opengroup.org/onlinepubs/9699919799/functions/exec.html)
+    - The required entry is used with the same semantics as `execvp`'s *file*.
+  - POSIX process:
+    - [ ] `rlimits` (array of objects, OPTIONAL) allows setting resource limits for the process.
+      - [ ]`type` (string, REQUIRED)
+        - Linux: valid values are defined in `getrlimit(2)`.
+        -  [ ] The runtime MUST generate an error for any values which cannot be mapped to a relevant kernel interface.
+      For the following properties, `rlim` refers to the status returned by the `getrlimit(3)` call.
+      - [ ] `soft` (uint64, REQUIRED) the value of the limit enforced for the corresponding resource. `rlim.rlim_cur` MUST match this value.
+      - [ ] `hard` (uint64, REQUIRED) the ceiling for the soft limit that could be set by an unprivileged process. `rlim.rlim_max` MUST match this value.
+        - Only a privileged process (one with `CAP_SYS_RESOURCE`) can raise a hard limit.
+  - Linux processes:
+    - [ ] `apparmorProfile` (string, OPTIONAL) name of the AppArmor profile for the process.
+    - [ ] `capabilities` (object, OPTIONAL) as defined in `capabilities(7)`.
+      - [ ] Any value which cannot be mapped to a relevant kernel interface MUST cause an error.
+      - [ ] `effective` (array of strings, OPTIONAL)
+      - [ ] `bounding` (array of strings, OPTIONAL) 
+      - [ ] `inheritable` (array of strings, OPTIONAL)
+      - [ ] `permitted` (array of strings, OPTIONAL)
+      - [ ] `ambient` (array of strings, OPTIONAL)
+    - [ ] `noNewPrivileges` (bool, OPTIONAL)
+    - [ ] `oomScoreAdj` (int, OPTIONAL)
+      - [ ] If `oomScoreAdj` is set, the runtime MUST set `oom_score_adj` to the given value.
+      - [ ] Otherwise , runtime MUST NOT change the value of `oom_score_adj`.
+    - [ ] `selinuxLabel` (string, OPTIONAL) specifies the SELinux Label for the process.
+
+
+
 
 ## Linux Specific Configuration
+Linux machines have specific configuration parameters available to them, which uses various kernel features like namespaces, cgroups, capabilities, LSM and filesystem jail to fulfill the spec. These specifications can be found [here](https://github.com/opencontainers/runtime-spec/blob/master/config-linux.md).
 
 ### File Descriptors
 - [ ] The runtime MAY pass additional file descriptors to the application to support features such as [socket activation](http://0pointer.de/blog/projects/socket-activated-containers.html). This in Runc is done through environment variables.
