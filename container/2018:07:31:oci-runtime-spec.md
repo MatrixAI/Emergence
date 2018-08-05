@@ -1,4 +1,4 @@
-# OCI Runtime Spec in relation to Matrix's Artifact Spec
+# OCI Runtime Spec
 
 OCI specification for stand container defines:
 1. Configuration file formats
@@ -135,6 +135,8 @@ The configuration file contains metadata necessary to implement standard operati
 - [ ] `hostname` (string, OPTIONAL) specifies the container's hostname as seen by processes running inside the container.
 
 ### Linux Specific Configuration
+[Source](https://github.com/opencontainers/runtime-spec/blob/master/config-linux.md#memory)
+
 The following are under the `linux` (object, OPTIONAL) property.
 
 - [ ] The following filesystems SHOULD be made available in each container's filesystem:
@@ -182,10 +184,75 @@ The following are under the `linux` (object, OPTIONAL) property.
   - [ ] Runtimes MAY attach the container process to additional cgroup controllers beyond those necessary to fullfill the `resources` settings.
   - [ ] `devices` (array of objects, OPTIONAL) configures the device whitelist
     - [ ] runtime MUST apply entries in the listed order.
-    - [ ] `alllow` (boolean, REQUIRED) whether the entry is allowed or denied.
-    - [ ] `type` (string, OPTIONAL) type of device `a` (all), `c` (char), `b` (block). Unset means `a`.
+    - [ ] `alllow` (boolean, REQUIRED)
+    - [ ] `type` (string, OPTIONAL)
     - [ ] `major, minor` (int64, OPTIONAL)
-    - [ ] `access` (string, OPTIONAL) cgroup permissions for device. A composition of `r` (read), `w` (write), `m` (mknod)
+    - [ ] `access` (string, OPTIONAL)
+  - [ ] `memory` (object, OPTIONAL) cgroup subsystem `memory`
+    - [ ] `limit` (int64, OPTIONAL)
+    - [ ] `reservation` (int64, OPTIONAL)
+    - [ ] `swap` (int64, OPTIONAL)
+    - [ ] `kernel` (int64, OPTIONAL)
+    - [ ] `kernelTCP` (int64, OPTIONAL)
+    - [ ] `swappiness` (uint64, OPTIONAL)
+    - [ ] `disableOOMKiller` (bool, OPTIONAL)
+  - [ ] `cpu` (object, OPTIONAL) configure `cpu` and `cpusets` subsystems.
+    - [ ] `shares` (uint64, OPTIONAL)
+    - [ ] `quota` (int64, OPTIOANL)
+    - [ ] `period` (uint64, OPTIONAL)
+    - [ ] `realtimeRuntime` (int64, OPTIONAL)
+    - [ ] `realtimePeriod` (uint64, OPTIONAL)
+    - [ ] `cpus` (string, OPTIONAL)
+    - [ ] `mems` (string, OPTIONAL)
+  - `blockIO` (object OPTIONAL) confiugre `blkio` subsystem
+    - [ ] `weight` (uint16, OPTIONAL)
+    - [ ] `leafWeight` (uint16, OPTIONAL)
+    - [ ] `weightDevice` (array of objects, OPTIONAL)
+      - [ ] `major, minor` (int64, REQUIRED)
+      - [ ] `weight` (uint16, OPTIONAL)
+      - [ ] `leafWeight` (uint16, OPTIONAL)
+      - [ ] at least one of `weight` or `leafWeight` MUST be given.
+    - [ ] `throttleReadBpsDevice`, `throttleWriteBpsDevice` (array of objects, OPTIONAL)
+      - [ ] `major, minor` (int64, REQUIRED)
+      - [ ] `rate` (uint64, REQUIRED)
+    - [ ] `throttleReadIOPSDevice`, `throttleWriteIOPSDevice` (array of objects, OPTIONAL)
+      - [ ] `major, minor` (uint64, REQUIRED)
+      - [ ] `rate` (uint64, REQUIRED)
+  - [ ] `hugepagelimits` (array of objects, OPTIONAL)
+    - [ ] `pageSize` (string, REQUIRED)
+    - [ ] `limit` (uint64, REQUIRED)
+  - [ ] `network` (object, OPTIONAL) represent `net_cls` and `net_prio` subsystems
+    - [ ] `name` (string, REQUIRED)
+    - [ ] `priority` (uint32, REQUIRED)
+  - [ ] `pids` (object, OPTIONAL) represents `pids` subsystem
+    - [ ] `limit` (int64, REQUIRED)
+  - [ ] `rdma` (object, OPTIONAL)
+    - [ ] `hcaHandles` (uint32, OPTIONAL)
+    - [ ] `hcaObjects` (uint32, OPTIONAL)
+    - [ ] At least one of the `hcaHandles` or `hcaObjects` MUST be selected
+- [ ] `intelRdt` (object, OPTIONAL) represents the [Intel Resource Director Technology](https://www.kernel.org/doc/Documentation/x86/intel_rdt_ui.txt).
+  - [ ] if `intelRdt` is set, the runtime MUST write the containe id to the `<container-id>/tasks` file in a mounted `resctrl` pseudo-filesystem, if no `resctrl` filesystem is available, the runtime MUST generate an error.
+  - [ ] `l3CacheSchema` (string, OPTIONAL)
+  - [ ] if `l3CacheSchema` is set, runtime MUST write the value to the `schemata` file in the <container-id> directory discussed in `intelRdt`
+  - [ ] Otherwise, runtime MUST NOT write to `schemata` files in any `resctrl` pseudo-filesystems
+- [ ] `sysctl` (object, OPTIONAL) allows kernel parameters to be modified at runtime.
+- [ ] `seccomp` (object, OPTIONAL)
+  - [ ] `defaultAction` (string, REQUIRED)
+  - [ ] `architectures` (array of strings, OPTIONAL)
+  - [ ] `syscalls` (array of objects, OPTIONAL)
+    - [ ] `names` (array of strings, REQUIRED)
+    - [ ] `action` (string, REQUIRED)
+    - [ ] `args` (array of objects, OPTIONAL)
+      - [ ] `index` (uint, REQUIRED)
+      - [ ] `value` (uint64, REQUIRED)
+      - [ ] `valueTwo` (uint64, OPTIONAL)
+      - [ ] `op` (string, REQUIRED)
+- [ ] `rootfsPropagation` (string, OPTIONAL) sets the rootfs's mount propagation, value is either "slave", "private", "shared" or "unbindable".
+- [ ] `maskedPaths` (array of strings, OPTIONAL) will mask over the provided paths inside the container so that they cannot be read.
+  - [ ] The value MUST be absolute path in the container namespace.
+- [ ] `readonlyPaths` (array of strings, OPTIONAL) set the provided paths as readonly inside the container.
+  - [ ] The value MUST be absolute path in the container namespace.
+- `mountLabel` (string, OOPTIONAL) will set the SELinux context for the mounts in the container.
 
 ### POSIX-platform Hooks
 - [ ] `hooks` (object, OPTIONAL) MAY contain any of the following properties:
