@@ -24,3 +24,11 @@ However, this approach also means that as an opserator, if I refer to an artifac
 	4. The filesystem layers are extracted to form the rootfs of the container
 2. The orchestrator will populate the runtime spec with more information w.r.t. the deploying node.
 3. Container will be deployed on the node.
+
+# Minimal components
+- [ ] Architect language design
+- [ ] Artifact -> OCI Image translation
+- [ ] Image registry (API for push and pull)
+- [ ] Image config -> runtime config translation
+- [ ] Filesystem layers -> rootfs translation
+- [ ] Deploy node
