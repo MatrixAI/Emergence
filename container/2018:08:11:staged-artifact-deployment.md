@@ -10,4 +10,8 @@ After looking at the [image config spec](https://github.com/opencontainers/image
 
 However, this approach also means that as an operator, if I refer to an artifact A with a content address @(A), and it works the first time, it does not mean that another artifact B with a content address identical to @(A) will work the same way, especially when the most critical attribute `ENTRYPOINT` is also an optional property,
 
+# Staged Deployment process
+## Stage 1: Artifact writing phase
+1. Operator writes Artifact expressions (which may include Dockerfile/Nix sources).
+2. Artifact expressions gets translated into OCI image manifest, index, and 
 
