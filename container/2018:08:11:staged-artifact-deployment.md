@@ -11,7 +11,17 @@ After looking at the [image config spec](https://github.com/opencontainers/image
 However, this approach also means that as an operator, if I refer to an artifact A with a content address @(A), and it works the first time, it does not mean that another artifact B with a content address identical to @(A) will work the same way, especially when the most critical attribute `ENTRYPOINT` is also an optional property,
 
 # Staged Deployment process
-## Stage 1: Artifact writing phase
+## Stage 1: Artifact to OCI Image
 1. Operator writes Artifact expressions (which may include Dockerfile/Nix sources).
-2. Artifact expressions gets translated into OCI image manifest, index, and 
+2. Artifact expressions gets translated into OCI image manifest, a set of filesystem layers, and configuration. The image manifest is hashed and the digest will be the image ID.
+3. The image is shared among a distribution of orchestrators, where it will be referenced by image ID by operators.
+
+## Stage 2: OCI Image to Runtime spec
+1. When an image is ready to be deployed:
+	1. The orchestrator will decide which node to deploy this automaton on.
+	2. The assigned node will pull the image from the closest peer, or a central registry.
+	3. The Image config is translated to OCI Runtime config.
+	4. The filesystem layers are extracted to form the rootfs of the container
+2. The orchestrator will populate the runtime spec with more information w.r.t. the deploying node.
+3. Container will be deployed on the node.
 
