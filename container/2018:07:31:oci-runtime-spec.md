@@ -225,4 +225,5 @@ The following are under the `linux` (object, OPTIONAL) property.
   |`/proc/self/fd/0`|`/dev/stdin`|
   |`/proc/self/fd/1`|`/dev/stdout`|
   |`/proc/self/fd/2`|`/dev/stderr`|
+
 - [ ]
