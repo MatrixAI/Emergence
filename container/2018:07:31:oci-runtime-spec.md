@@ -1,4 +1,4 @@
-# OCI Runtime Spec in relation to Matrix's Artifact Spec
+# OCI Runtime Spec
 
 OCI specification for stand container defines:
 1. Configuration file formats
@@ -9,11 +9,10 @@ The goal is to create a container that is portable, content-agnostic, infrastruc
 
 ## Filesystem Bundle
 
-A filesystem bundle MUST consists of:
-
-- [ ] a `config.json` file
-- [ ] a container's root filesystem, as specified in `config.json`'s `root.path` property.
-- [ ] The above artifacts MUST be presented in a single directory on the local filesystem. The directory which contains the bundle is not part of the bundle.
+- [ ] A filesystem bundle MUST consists of:
+  - a `config.json` file
+  - a container's root filesystem, as specified in `config.json`'s `root.path` property.
+  - [ ] The above artifacts MUST be presented in a single directory on the local filesystem. The directory which contains the bundle is not part of the bundle.
 
 ## Lifecycle
 - [ ] OCI compliant runtime's create command is invoked with a reference to the location of the bundle and a unique identifier.
@@ -120,11 +119,11 @@ The configuration file contains metadata necessary to implement standard operati
     - [ ] `apparmorProfile` (string, OPTIONAL) name of the AppArmor profile for the process.
     - [ ] `capabilities` (object, OPTIONAL) as defined in `capabilities(7)`.
       - [ ] Any value which cannot be mapped to a relevant kernel interface MUST cause an error.
-      - [ ] `effective` (array of strings, OPTIONAL)
-      - [ ] `bounding` (array of strings, OPTIONAL)
-      - [ ] `inheritable` (array of strings, OPTIONAL)
-      - [ ] `permitted` (array of strings, OPTIONAL)
-      - [ ] `ambient` (array of strings, OPTIONAL)
+      - `effective` (array of strings, OPTIONAL)
+      - `bounding` (array of strings, OPTIONAL)
+      - `inheritable` (array of strings, OPTIONAL)
+      - `permitted` (array of strings, OPTIONAL)
+      - `ambient` (array of strings, OPTIONAL)
     - [ ] `noNewPrivileges` (bool, OPTIONAL)
     - [ ] `oomScoreAdj` (int, OPTIONAL)
       - [ ] If `oomScoreAdj` is set, the runtime MUST set `oom_score_adj` to the given value.
@@ -135,13 +134,15 @@ The configuration file contains metadata necessary to implement standard operati
 - [ ] `hostname` (string, OPTIONAL) specifies the container's hostname as seen by processes running inside the container.
 
 ### Linux Specific Configuration
+[Source](https://github.com/opencontainers/runtime-spec/blob/master/config-linux.md#memory)
+
 The following are under the `linux` (object, OPTIONAL) property.
 
 - [ ] The following filesystems SHOULD be made available in each container's filesystem:
-  - [ ] `/proc` (type proc)
-  - [ ] `/sys` (type sysfs)
-  - [ ] `/dev/pts` (type devpts)
-  - [ ] `/dev/shm` (type tmpfs)
+  - `/proc` (type proc)
+  - `/sys` (type sysfs)
+  - `/dev/pts` (type devpts)
+  - `/dev/shm` (type tmpfs)
 - [ ] `namespaces` (array of objects)
   - [ ] `type` (string, REQUIRED)
     - can be either of `pid`, `network`, `mount`, `ipc`, `uts`, `user`, `cgroup`.
@@ -153,22 +154,22 @@ The following are under the `linux` (object, OPTIONAL) property.
   - [ ] If a namespace type is not specified, the container MUST inherit the runtme namespace of that type.
   - [ ] Duplicated namespace MUST generate an error.
 - [ ] `uidMapping` (array of objects, OPTIONAL) describes the user namespace uid mapping from host to the container.
-  - [ ] `containerID` (uint32, REQUIRED) the starting uid of the container
-  - [ ] `hostID` (uint32, REQUIRED) starting uid on the host to be mapped
-  - [ ] `size` (uint32, REQUIRED) number of ids to be mapped.
-- `gidMapping` (array of objects, OPTIONAL) describes the user namespace gid mappings from host to the container.
-  - [ ] `containerID` (uint32, REQUIRED) the starting gid of the container
-  - [ ] `hostID` (uint32, REQUIRED) starting gid on the host to be mapped
-  - [ ] `size` (uint32, REQUIRED) number of ids to be mapped.
+  - `containerID` (uint32, REQUIRED) the starting uid of the container
+  - `hostID` (uint32, REQUIRED) starting uid on the host to be mapped
+  - `size` (uint32, REQUIRED) number of ids to be mapped.
+- [ ] `gidMapping` (array of objects, OPTIONAL) describes the user namespace gid mappings from host to the container.
+  - `containerID` (uint32, REQUIRED) the starting gid of the container
+  - `hostID` (uint32, REQUIRED) starting gid on the host to be mapped
+  - `size` (uint32, REQUIRED) number of ids to be mapped.
 - [ ] The runtime SHOULD NOT modify the ownership of referenced filesystems to realise the mapping. Note the number of mapping entries MAY be limited by the kernel.
 - [ ] `devices` (array of objects, OPTIONAL) lists devices that MUST be available in the container. THe runtime MAY supply them however it likes.
-  - [ ] `type` (string, REQUIRED) - `c`, `b`, `u` or `p` (see [`mknod(1)`](http://man7.org/linux/man-pages/man1/mknod.1.html))
-  - [ ] `path` (string, REQUIRED) full path to device inside container.
+  - `type` (string, REQUIRED) - `c`, `b`, `u` or `p` (see [`mknod(1)`](http://man7.org/linux/man-pages/man1/mknod.1.html))
+  - `path` (string, REQUIRED) full path to device inside container.
     - [ ] If a file already exists at `path` that does not match the requested device, the runtime MUST generate an error.
-  - [ ] `major, minor` (int64, REQUIRED unless `type` is `p`) [major/minor number of devices](https://www.kernel.org/doc/Documentation/admin-guide/devices.txt)
-  - [ ] `fileMode` (uint32, OPTIONAL) file mode for the device
-  - [ ] `uid` (uint32, OPTIONAL) id of device owner in the container ns.
-  - [ ] `gid` (uint32, OPTIONAL) id of device group in the container ns.
+  - `major, minor` (int64, REQUIRED unless `type` is `p`) [major/minor number of devices](https://www.kernel.org/doc/Documentation/admin-guide/devices.txt)
+  - `fileMode` (uint32, OPTIONAL) file mode for the device
+  - `uid` (uint32, OPTIONAL) id of device owner in the container ns.
+  - `gid` (uint32, OPTIONAL) id of device group in the container ns.
   - [ ] The same `type`, `major` and `minor` SHOULD NOT be used for multiple devices.
   - [ ] In addition to device settings, runtime MUST also supply:
     - `/dev/null`, `/dev/zero`, `/dev/full`, `/dev/random`, `/dev/urandom`, `/dev/tty`, `/dev/console` if `terminal` is enabled in the config by bind mounting the pseudoterminal slave to `/dev/console`. `/dev/ptmx` (A bind-mount or symlink of the container's `/dev/pts/ptmx`)
@@ -182,10 +183,75 @@ The following are under the `linux` (object, OPTIONAL) property.
   - [ ] Runtimes MAY attach the container process to additional cgroup controllers beyond those necessary to fullfill the `resources` settings.
   - [ ] `devices` (array of objects, OPTIONAL) configures the device whitelist
     - [ ] runtime MUST apply entries in the listed order.
-    - [ ] `alllow` (boolean, REQUIRED) whether the entry is allowed or denied.
-    - [ ] `type` (string, OPTIONAL) type of device `a` (all), `c` (char), `b` (block). Unset means `a`.
-    - [ ] `major, minor` (int64, OPTIONAL)
-    - [ ] `access` (string, OPTIONAL) cgroup permissions for device. A composition of `r` (read), `w` (write), `m` (mknod)
+    - `alllow` (boolean, REQUIRED)
+    - `type` (string, OPTIONAL)
+    - `major, minor` (int64, OPTIONAL)
+    - `access` (string, OPTIONAL)
+  - [ ] `memory` (object, OPTIONAL) cgroup subsystem `memory`
+    - `limit` (int64, OPTIONAL)
+    - `reservation` (int64, OPTIONAL)
+    - `swap` (int64, OPTIONAL)
+    - `kernel` (int64, OPTIONAL)
+    - `kernelTCP` (int64, OPTIONAL)
+    - `swappiness` (uint64, OPTIONAL)
+    - `disableOOMKiller` (bool, OPTIONAL)
+  - [ ] `cpu` (object, OPTIONAL) configure `cpu` and `cpusets` subsystems.
+    - `shares` (uint64, OPTIONAL)
+    - `quota` (int64, OPTIOANL)
+    - `period` (uint64, OPTIONAL)
+    - `realtimeRuntime` (int64, OPTIONAL)
+    - `realtimePeriod` (uint64, OPTIONAL)
+    - `cpus` (string, OPTIONAL)
+    - `mems` (string, OPTIONAL)
+  - [ ] `blockIO` (object OPTIONAL) confiugre `blkio` subsystem
+    - `weight` (uint16, OPTIONAL)
+    - `leafWeight` (uint16, OPTIONAL)
+    - `weightDevice` (array of objects, OPTIONAL)
+      - `major, minor` (int64, REQUIRED)
+      - `weight` (uint16, OPTIONAL)
+      - `leafWeight` (uint16, OPTIONAL)
+      - [ ] at least one of `weight` or `leafWeight` MUST be given.
+    - [ ] `throttleReadBpsDevice`, `throttleWriteBpsDevice` (array of objects, OPTIONAL)
+      - `major, minor` (int64, REQUIRED)
+      - `rate` (uint64, REQUIRED)
+    - [ ] `throttleReadIOPSDevice`, `throttleWriteIOPSDevice` (array of objects, OPTIONAL)
+      - `major, minor` (uint64, REQUIRED)
+      - `rate` (uint64, REQUIRED)
+  - [ ] `hugepagelimits` (array of objects, OPTIONAL)
+    - `pageSize` (string, REQUIRED)
+    - `limit` (uint64, REQUIRED)
+  - [ ] `network` (object, OPTIONAL) represent `net_cls` and `net_prio` subsystems
+    - `name` (string, REQUIRED)
+    - `priority` (uint32, REQUIRED)
+  - [ ] `pids` (object, OPTIONAL) represents `pids` subsystem
+    - `limit` (int64, REQUIRED)
+  - [ ] `rdma` (object, OPTIONAL)
+    - `hcaHandles` (uint32, OPTIONAL)
+    - `hcaObjects` (uint32, OPTIONAL)
+    - [ ] At least one of the `hcaHandles` or `hcaObjects` MUST be selected
+- [ ] `intelRdt` (object, OPTIONAL) represents the [Intel Resource Director Technology](https://www.kernel.org/doc/Documentation/x86/intel_rdt_ui.txt).
+  - [ ] if `intelRdt` is set, the runtime MUST write the containe id to the `<container-id>/tasks` file in a mounted `resctrl` pseudo-filesystem, if no `resctrl` filesystem is available, the runtime MUST generate an error.
+  - `l3CacheSchema` (string, OPTIONAL)
+  - [ ] if `l3CacheSchema` is set, runtime MUST write the value to the `schemata` file in the <container-id> directory discussed in `intelRdt`
+  - [ ] Otherwise, runtime MUST NOT write to `schemata` files in any `resctrl` pseudo-filesystems
+- [ ] `sysctl` (object, OPTIONAL) allows kernel parameters to be modified at runtime.
+- [ ] `seccomp` (object, OPTIONAL)
+  - `defaultAction` (string, REQUIRED)
+  - `architectures` (array of strings, OPTIONAL)
+  - `syscalls` (array of objects, OPTIONAL)
+    - `names` (array of strings, REQUIRED)
+    - `action` (string, REQUIRED)
+    - `args` (array of objects, OPTIONAL)
+      - `index` (uint, REQUIRED)
+      - `value` (uint64, REQUIRED)
+      - `valueTwo` (uint64, OPTIONAL)
+      - `op` (string, REQUIRED)
+- [ ] `rootfsPropagation` (string, OPTIONAL) sets the rootfs's mount propagation, value is either "slave", "private", "shared" or "unbindable".
+- [ ] `maskedPaths` (array of strings, OPTIONAL) will mask over the provided paths inside the container so that they cannot be read.
+  - [ ] The value MUST be absolute path in the container namespace.
+- [ ] `readonlyPaths` (array of strings, OPTIONAL) set the provided paths as readonly inside the container.
+  - [ ] The value MUST be absolute path in the container namespace.
+- [ ] `mountLabel` (string, OOPTIONAL) will set the SELinux context for the mounts in the container.
 
 ### POSIX-platform Hooks
 - [ ] `hooks` (object, OPTIONAL) MAY contain any of the following properties:
@@ -225,5 +291,3 @@ The following are under the `linux` (object, OPTIONAL) property.
   |`/proc/self/fd/0`|`/dev/stdin`|
   |`/proc/self/fd/1`|`/dev/stdout`|
   |`/proc/self/fd/2`|`/dev/stderr`|
-
-- [ ]

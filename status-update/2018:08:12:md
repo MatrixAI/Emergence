@@ -1,0 +1,25 @@
+1. Artifact registry #17
+	- Nix store derivation
+	- Reference artifacts
+2. Translation OCI image format to runtime format
+	- image config -> runtime config
+	- unpack image layers -> actual fs
+
+
+Research:
+	- nix docker tools and derivation, how we can utilise that for image registry
+	- put things on project dashboard (github)
+	- close issues with a conclusion (why it's closed
+
+
+
+Prototype
+	- HTTP based session type
+	- at least 1 network combinator
+	- spawn container
+	- create nodes on aws infrastructrue
+	- write architect
+	- deploy docker (runc) containers
+	- TUI
+	- time: 1 and a half year
+)
