@@ -1,0 +1,5 @@
+Source: [10 most common reasons kubernetes deployments fail (part 1)](https://kukulinski.com/10-most-common-reasons-kubernetes-deployments-fail-part-1/)
+
+Kubernetes provides liveness and readiness probes, which means it sens http requests to a pod periodically, if the pod is not running (e.g. in a deadlock), it will kill the pod and start a new one. If the pod is not ready, the pod will not be available as a service endpoint, and no traffic will be sent to the pod.
+
+
