@@ -1,0 +1,28 @@
+{
+  "architecture": "amd64",
+  "config": {
+    "Cmd": [
+      "redis-server"
+    ],
+    "Entrypoint": [
+      "/nix/store/gfhwkdm4yh7rbd2ckxs72wgv4p0994g0-entrypoint.sh"
+    ],
+    "Volumes": {
+      "/data": {}
+    },
+    "WorkingDir": "/data"
+  },
+  "created": "1970-01-01T00:00:01Z",
+  "os": "linux",
+  "rootfs": {
+    "diff_ids": [
+      "sha256:fb9906e8f71b6ef92d4e4c720095a7286154cfba59125037f699f902b3406f29"
+    ],
+    "type": "layers"
+  },
+  "history": [
+    {
+      "created": "1970-01-01T00:00:01Z"
+    }
+  ]
+}
