@@ -16,6 +16,9 @@ dependencies:
 - base >= 4.7 && < 5
 - typed-process >= 0.2.3 && < 0.3
 
+build-tools:
+- runc
+
 library:
   source-dirs: src
   exposed-modules:
