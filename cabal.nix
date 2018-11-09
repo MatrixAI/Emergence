@@ -1,6 +1,6 @@
 { mkDerivation, base, hpack, stdenv }:
 mkDerivation {
-  pname = "haskell-demo";
+  pname = "emergence";
   version = "0.1.0.0";
   src = ./.;
   isLibrary = true;
@@ -10,6 +10,6 @@ mkDerivation {
   executableHaskellDepends = [ base ];
   testHaskellDepends = [ base ];
   preConfigure = "hpack";
-  homepage = "https://github.com/MatrixAI/Haskell-Demo#readme";
+  homepage = "https://github.com/MatrixAI/Emergence#readme";
   license = stdenv.lib.licenses.asl20;
 }
