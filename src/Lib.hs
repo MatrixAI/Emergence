@@ -24,14 +24,14 @@ runcCreate a = do
 
 runcStart :: Container -> IO ()
 runcStart a = do 
-  runProcess (shell $ "runc start " ++ (show $ cId a)) >>= print
+  runProcess (shell $ "sudo runc start " ++ (show $ cId a)) >>= print
 
 runcKill :: Container -> Maybe String -> IO ()
 runcKill a (Just b) = do
-  runProcess (shell $ "runc kill " ++ (show $ cId a) ++ " " ++ b) >>= print
+  runProcess (shell $ "sudo runc kill " ++ (show $ cId a) ++ " " ++ b) >>= print
 runcKill a Nothing = do
-  runProcess (shell $ "runc kill " ++ (show $ cId a)) >>= print
+  runProcess (shell $ "sudo runc kill " ++ (show $ cId a)) >>= print
 
 runcDelete :: Container -> IO ()
 runcDelete a = do
-  runProcess (shell $ "runc delete " ++ (show $ cId a)) >>= print
+  runProcess (shell $ "sudo runc delete " ++ (show $ cId a)) >>= print
