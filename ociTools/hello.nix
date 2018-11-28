@@ -1,6 +1,6 @@
 with import <nixpkgs> {};
 let 
-  ociTools = import ./ociTools.nix { inherit moreutils  gzip jq nix rsync runCommand writeText; };
+  ociTools = import ./ociTools.nix { inherit pkgs; };
 in 
   ociTools.buildSingleLayerImage {
     name = "hello-demo";

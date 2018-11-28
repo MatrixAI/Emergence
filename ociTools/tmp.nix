@@ -1,6 +1,6 @@
 with import <nixpkgs> {};
 let 
-  ociTools = import ./ociTools.nix { inherit gzip jq moreutils nix rsync runCommand writeText; };
+  ociTools = import ./ociTools.nix { inherit pkgs; };
 in 
   ociTools.buildLayeredImage {
     name = "layered-hello-demo";

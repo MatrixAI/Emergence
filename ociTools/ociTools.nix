@@ -1,13 +1,7 @@
 {
-  gzip,
-  jq,
-  moreutils,
-  nix,
-  rsync,
-  runCommand,
-  writeText,
+  pkgs ? import <nixpkgs> {}
 }:
-
+with pkgs;
 rec {
   baseLayout = builtins.toJSON {
     imageLayoutVersion = "1.0.0";
@@ -123,7 +117,7 @@ rec {
     else
       MEDIA_TYPE="application/vnd.oci.image.layer.v1.tar"
     fi 
-    echo '${baseManifest}' | jq --arg CONF_DIGEST "sha256:$CONF_DIGEST" --arg CONF_SIZE $CONF_SIZE --arg DIGEST "sha256:$DIGEST" --arg SIZE $SIZE --arg MEDIA_TYPE "$MEDIA_TYPE" '
+    echo '${baseManifest}' | jq --arg CONF_DIGEST "sha256:$CONF_DIGEST" --argjson CONF_SIZE "$CONF_SIZE" --arg DIGEST "sha256:$DIGEST" --argjson SIZE "$SIZE" --arg MEDIA_TYPE "$MEDIA_TYPE" '
         .config.digest |= $CONF_DIGEST
         | .config.size |= $CONF_SIZE 
         | .layers += [{mediaType: $MEDIA_TYPE, digest: $DIGEST, size: $SIZE}]' > $out/manifest.json
@@ -134,7 +128,7 @@ rec {
     
     # Add manifest to the index file
     MANIFEST_SIZE=$(du -b $out/blobs/sha256/$MANIFEST_DIGEST | cut -f1)
-    echo '${baseIndex}' | jq --arg MANIFEST_DIGEST "sha256:$MANIFEST_DIGEST" --arg MANIFEST_SIZE $MANIFEST_SIZE '
+    echo '${baseIndex}' | jq --arg MANIFEST_DIGEST "sha256:$MANIFEST_DIGEST" --argjson MANIFEST_SIZE "$MANIFEST_SIZE" '
       .manifests += [{
         mediaType: "application/vnd.oci.image.manifest.v1+json",
         size: $MANIFEST_SIZE,
@@ -213,7 +207,7 @@ rec {
 
     # Add config file descriptor to manifest
     CONF_SIZE=$(du -b $out/blobs/sha256/$CONF_DIGEST | cut -f1)
-    echo "$MANIFEST_JSON" | jq --arg CONF_DIGEST "sha256:$CONF_DIGEST" --arg CONF_SIZE $CONF_SIZE '
+    echo "$MANIFEST_JSON" | jq --arg CONF_DIGEST "sha256:$CONF_DIGEST" --argjson CONF_SIZE "$CONF_SIZE" '
       .config.digest |= $CONF_DIGEST
       | .config.size |= $CONF_SIZE' > $out/manifest.json
 
@@ -223,7 +217,7 @@ rec {
     
     # Add manifest to the index file
     MANIFEST_SIZE=$(du -b $out/blobs/sha256/$MANIFEST_DIGEST | cut -f1)
-    echo '${baseIndex}' | jq --arg MANIFEST_DIGEST "sha256:$MANIFEST_DIGEST" --arg MANIFEST_SIZE $MANIFEST_SIZE '
+    echo '${baseIndex}' | jq --arg MANIFEST_DIGEST "sha256:$MANIFEST_DIGEST" --argjson MANIFEST_SIZE "$MANIFEST_SIZE" '
       .manifests += [{
         mediaType: "application/vnd.oci.image.manifest.v1+json",
         size: $MANIFEST_SIZE,
