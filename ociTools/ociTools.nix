@@ -42,10 +42,12 @@ rec {
     # When copying the contents into the image, preserve symlinks to
     # directories (see `rsync -K`).  Otherwise, transform those symlinks
     # into directories.
-    keepContentsDirlinks ? false,
-    # Additional commands to run on the layer before it is tar'd up.
-    extraCommands ? "", uid ? 0, gid ? 0
+    keepContentsDirlinks ? false
   }:
+    let 
+      uid = 0;
+      gid = 0;
+    in
     runCommand "oci-image-${name}" {
       inherit contents compress;
       buildInputs = [ rsync nix gzip jq ];
@@ -155,10 +157,12 @@ rec {
     # When copying the contents into the image, preserve symlinks to
     # directories (see `rsync -K`).  Otherwise, transform those symlinks
     # into directories.
-    keepContentsDirlinks ? false,
-    # Additional commands to run on the layer before it is tar'd up.
-    extraCommands ? "", uid ? 0, gid ? 0
+    keepContentsDirlinks ? false
   }:
+    let 
+      uid = 0;
+      gid = 0;
+    in
     runCommand "oci-image-${name}" {
       inherit layers;
       buildInputs = [ rsync nix gzip jq moreutils ];
@@ -232,5 +236,79 @@ rec {
     echo '${baseLayout}' > $out/oci-layout
 
     echo "Finished building layered image '${name}'"
+    '';
+
+  oci-image-tool = buildGoPackage rec {
+    name = "oci-image-tools-${version}";
+    version = "1.0.0-rc1";
+
+    goPackagePath = "github.com/opencontainers/image-tools";
+    subPackages = [ "cmd/oci-image-tool" ];
+
+    src = fetchFromGitHub {
+      owner = "opencontainers";
+      repo = "image-tools";
+      rev = "v${version}";
+      sha256 = "0c4n69smqlkf0r6khy9gbg5f810qh9g8jqsl9kibb0dyswizr14r";
+    };
+  };
+
+  buildRuntimeBundle = {
+    name,
+    image,
+    cwd ? "/",
+    entrypoint ? ["sh"],
+    terminal ? false, 
+    # When copying the contents into the image, preserve symlinks to
+    # directories (see `rsync -K`).  Otherwise, transform those symlinks
+    # into directories.
+    keepContentsDirlinks ? false
+  }:
+    runCommand "oci-bundle-${name}" {
+      inherit image cwd;
+      entrypoint = builtins.toJSON entrypoint;
+      terminal = builtins.toJSON terminal;
+      buildInputs = [ jq rsync runc ];
+    } 
+    ''
+    mkdir $out
+    
+    indexJson=$(cat $image/index.json)
+
+    manifestFn=$(echo "$indexJson" | jq -r '
+      .manifests[] | 
+      select(.platform == {"architecture": "amd64", "os": "linux"}) | 
+      .digest
+    ' | cut -d: -f2)
+    manifestJson=$(cat $image/blobs/sha256/$manifestFn)
+    
+    configFn=$(echo "$manifestJson" | jq -r '.config.digest' | cut -d: -f2)
+    configJson=$(cat $image/blobs/sha256/$configFn)
+
+    layers=$(echo "$manifestJson" | jq -r '.layers[] | .digest + if .mediaType == "application/vnd.oci.image.layer.v1.tar+gzip" then ":1" else ":0" end')
+    
+    for layer in $layers; do
+      compress=$(echo "$layer" | cut -d: -f3)
+      layerFn=$(echo "$layer" | cut -d: -f2)
+
+      mkdir layer-$layerFn
+
+      if [[ 1 == $compress ]]; then
+        tar -C layer-$layerFn -xzvf $image/blobs/sha256/$layerFn
+      else
+        tar -C layer-$layerFn -xvf $image/blobs/sha256/$layerFn      
+      fi
+
+      # TODO: if there is a whiteout file, remove original 
+
+      rsync -a${if keepContentsDirlinks then "K" else "k"} --chown=0:0 layer-$layerFn/ $out/rootfs
+    done
+
+    # TODO: Properly generate runtime spec
+    cd $out
+    runc spec
+    
+    specJson=$(cat config.json | jq -r --argjson term $terminal --arg cwd $cwd --argjson args "$entrypoint" '.process.terminal |= $term | .process.cwd |= $cwd | .process.args |= $args')
+    echo $specJson > config.json
     '';
 } 

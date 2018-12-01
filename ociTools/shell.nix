@@ -3,9 +3,9 @@
 }:
   with pkgs;
   let
-    image-tools = import ./image-tools.nix {};
+    ociTools = callPackage ./ociTools.nix {};
   in
-    stdenv.mkDerivation {
-      name = "image-tools-demo";
-      buildInputs = [ image-tools ];
+    stdenvNoCC.mkDerivation {
+      name = "ociTools-demo";
+      buildInputs = [ ociTools.oci-image-tool jq runc ];
     }
