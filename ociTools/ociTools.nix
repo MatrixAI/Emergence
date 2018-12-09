@@ -42,14 +42,13 @@ rec {
     # When copying the contents into the image, preserve symlinks to
     # directories (see `rsync -K`).  Otherwise, transform those symlinks
     # into directories.
-    keepContentsDirlinks ? false
+    keepContentsDirlinks ? false,
+    gid ? 0,
+    uid ? 0
   }:
-    let 
-      uid = 0;
-      gid = 0;
-    in
     runCommand "oci-image-${name}" {
       inherit contents compress;
+      imageClosure = writeImageReferencesToFile { inherit name contents; };
       buildInputs = [ rsync nix gzip jq ];
     }
     ''
@@ -58,13 +57,26 @@ rec {
       echo "Adding contents..."
       for item in $contents; do
         echo "Adding $item"
-        rsync -a${if keepContentsDirlinks then "K" else "k"} --chown=0:0 $item/ layer/
+        rsync -a${if keepContentsDirlinks then "K" else "k"} --chown=${toString uid}:${toString gid} $item/ layer/
       done
     else
       echo "No contents to add to layer."
     fi
 
     chmod ug+w layer
+
+    ls -l
+
+    deps=$(cat $imageClosure)
+    if [[ -n "$deps" ]]; then
+      echo "Adding runtime dependencies..."
+      mkdir layer/nix
+      mkdir layer/nix/store
+      for dep in $deps; do
+        echo "Adding $dep"
+        rsync -a${if keepContentsDirlinks then "K" else "k"} --chown=${toString uid}:${toString gid} $dep/ layer/$dep
+      done
+    fi
 
     if [[ -n $extraCommands ]]; then
       (cd layer; eval "$extraCommands")
@@ -238,21 +250,6 @@ rec {
     echo "Finished building layered image '${name}'"
     '';
 
-  oci-image-tool = buildGoPackage rec {
-    name = "oci-image-tools-${version}";
-    version = "1.0.0-rc1";
-
-    goPackagePath = "github.com/opencontainers/image-tools";
-    subPackages = [ "cmd/oci-image-tool" ];
-
-    src = fetchFromGitHub {
-      owner = "opencontainers";
-      repo = "image-tools";
-      rev = "v${version}";
-      sha256 = "0c4n69smqlkf0r6khy9gbg5f810qh9g8jqsl9kibb0dyswizr14r";
-    };
-  };
-
   buildRuntimeBundle = {
     name,
     image,
@@ -310,5 +307,64 @@ rec {
     
     specJson=$(cat config.json | jq -r --argjson term $terminal --arg cwd $cwd --argjson args "$entrypoint" '.process.terminal |= $term | .process.cwd |= $cwd | .process.args |= $args')
     echo $specJson > config.json
+    '';
+
+  oci-image-tool = buildGoPackage rec {
+    name = "oci-image-tools-${version}";
+    version = "1.0.0-rc1";
+
+    goPackagePath = "github.com/opencontainers/image-tools";
+    subPackages = [ "cmd/oci-image-tool" ];
+
+    src = fetchFromGitHub {
+      owner = "opencontainers";
+      repo = "image-tools";
+      rev = "v${version}";
+      sha256 = "0c4n69smqlkf0r6khy9gbg5f810qh9g8jqsl9kibb0dyswizr14r";
+    };
+  };
+
+  # vmBuildRuntimeBundle = {
+  #   name,
+  #   image,
+  #   cwd ? "/",
+  #   entrypoint ? ["sh"],
+  #   terminal ? false
+  # }:
+  #   vmTools.runInLinuxVM (
+  #     runCommand "oci-bundle-${name}" {
+  #       inherit image cwd;
+  #       entrypoint = builtins.toJSON entrypoint;
+  #       terminal = builtins.toJSON terminal;
+  #       buildInputs = [ oci-image-tool runc ];
+  #     } 
+  #     ''
+  #     sudo oci-image-tool create --ref platform.os=linux $image/ $out/    
+  #     '');
+
+  # Write the references (i.e. the runtime dependencies in the Nix store) of all paths in `contents' 
+  # to a file.
+  writeImageReferencesToFile = {
+    name,
+    contents,
+  }: 
+    runCommand "runtime-deps-${name}"
+    {
+      drvs = map (x: x.name) contents;
+      exportReferencesGraph = builtins.concatMap (x: [x.name x]) contents;
+      buildInputs = [rsync];
+    }
+    ''
+    touch $out
+    for graph in $drvs; do
+      echo $graph
+      while read path; do
+        echo $path
+        echo $path >> $out
+        read dummy
+        read nrRefs
+        for ((i = 0; i < nrRefs; i++)); do read ref; done
+      done < $graph
+    done    
     '';
 } 
