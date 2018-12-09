@@ -3,12 +3,6 @@ let
   ociTools = callPackage ./ociTools.nix {};
 in 
 rec {
-  hello-static = (hello.override { 
-      stdenv = makeStaticBinaries stdenv; 
-    }).overrideAttrs (oldAttrs: rec {
-      buildInputs = [ glibc.static ];
-    });
-
   hello-image = ociTools.buildSingleLayerImage {
     name = "hello-image"; 
     contents = [ hello ];
