@@ -201,8 +201,12 @@ rec {
         DIFF_ID=$(jq -r '.rootfs.diff_ids[0]' $item/blobs/sha256/$CONFIG_DIGEST | cut -d: -f2)
 
         # Copy layers
-        echo "Copying $item"
-        cp -r $item/blobs/sha256/$DIGEST $out/blobs/sha256/
+        # echo "Copying $item"
+        # cp -r $item/blobs/sha256/$DIGEST $out/blobs/sha256/
+
+        # Link layers
+        echo "Linking $item"
+        ln -s $item/blobs/sha256/$DIGEST $out/blobs/sha256/
 
         # Add metadata to JSONs
         echo "Copying metadata"
