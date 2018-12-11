@@ -1,37 +1,9 @@
-{-# LANGUAGE OverloadedStrings #-}
-
 module Lib
     ( someFunc
     ) where
 
-import System.Process.Typed
+import Runtime
 
 someFunc :: IO ()
-someFunc = putStrLn "someFunc"
-
-someProc :: IO ()
-someProc = do
-  runProcess "true" >>= print
-  runProcess "false" >>= print
-
-data Container = Container { cId :: Int
-                           , cPath :: String
-                           } deriving (Show)
-
-runcCreate :: Container -> IO ()
-runcCreate a = do
-  runProcess (shell $ "cd " ++ (cPath a) ++ " && sudo runc create " ++ (show $ cId a)) >>= print 
-
-runcStart :: Container -> IO ()
-runcStart a = do 
-  runProcess (shell $ "sudo runc start " ++ (show $ cId a)) >>= print
-
-runcKill :: Container -> Maybe String -> IO ()
-runcKill a (Just b) = do
-  runProcess (shell $ "sudo runc kill " ++ (show $ cId a) ++ " " ++ b) >>= print
-runcKill a Nothing = do
-  runProcess (shell $ "sudo runc kill " ++ (show $ cId a)) >>= print
-
-runcDelete :: Container -> IO ()
-runcDelete a = do
-  runProcess (shell $ "sudo runc delete " ++ (show $ cId a)) >>= print
+someFunc = do 
+    deployAndRun "/nix/store/c0yss9m9iszhb3xp4b5hqd7np9i1n0z1-oci-bundle-hello-bundle" "my-hello"
