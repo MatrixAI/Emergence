@@ -70,7 +70,7 @@ rec {
   bash-artefact = artefactTools.buildNixArtefact {
     name = "bash-artefact";
     contents = [ bash coreutils ];
-    entrypoint = "/bin/bash";
+    entrypoint = [ "/bin/bash" ];
     terminal = true;
   };
 }
