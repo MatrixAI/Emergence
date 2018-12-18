@@ -1,5 +1,5 @@
-{ mkDerivation, aeson, base, containers, hpack, runc, stdenv
-, typed-process
+{ mkDerivation, aeson, aeson-casing, base, containers, hpack, runc
+, stdenv, typed-process
 }:
 mkDerivation {
   pname = "emergence";
@@ -7,11 +7,17 @@ mkDerivation {
   src = ./.;
   isLibrary = true;
   isExecutable = true;
-  libraryHaskellDepends = [ aeson base containers typed-process ];
+  libraryHaskellDepends = [
+    aeson aeson-casing base containers typed-process
+  ];
   libraryToolDepends = [ hpack runc ];
-  executableHaskellDepends = [ aeson base containers typed-process ];
+  executableHaskellDepends = [
+    aeson aeson-casing base containers typed-process
+  ];
   executableToolDepends = [ runc ];
-  testHaskellDepends = [ aeson base containers typed-process ];
+  testHaskellDepends = [
+    aeson aeson-casing base containers typed-process
+  ];
   testToolDepends = [ runc ];
   preConfigure = "hpack";
   homepage = "https://github.com/MatrixAI/Emergence#readme";
