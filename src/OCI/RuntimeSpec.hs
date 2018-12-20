@@ -25,7 +25,7 @@ data RuntimeSpec = RuntimeSpec {
   -- Root configures the container's root filesystem.
   root :: Maybe Root,
   -- Hostname configures the container's hostname.
-  hostName :: Maybe String,
+  hostname :: Maybe String,
   -- Mounts configures additional mounts (on top of Root).
   mounts :: Maybe [Mount],
   -- Hooks configures callbacks for container lifecycle events.
@@ -42,10 +42,10 @@ instance FromJSON RuntimeSpec where
   parseJSON = genericParseJSON defaultOptions { omitNothingFields = True }
 
 defaultRuntimeSpec = RuntimeSpec {
-  ociVersion = "1.0.1-dev",
+  ociVersion = "1.0.0",
   process = Just defaultProcess,
   root = Just defaultRoot,
-  hostName = Just "emergence",
+  hostname = Just "emergence",
   mounts = Just defaultMounts,
   hooks = Nothing,
   annotations = Nothing,
