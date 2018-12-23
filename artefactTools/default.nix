@@ -6,7 +6,7 @@
   fetchFromGitHub,
 }:
 rec {  
-  pullOCIArtefact = { 
+  pullOCIArtifact = { 
     imageName,
     imageDigest,
     sha256,
@@ -16,7 +16,7 @@ rec {
     tag ? null
   }:
   let
-    outName = builtins.replaceStrings ["/" ":"] ["-" "-"] "oci-artefact-${name}${if tag == null then "" else "-" + tag}";
+    outName = builtins.replaceStrings ["/" ":"] ["-" "-"] "oci-artifact-${name}${if tag == null then "" else "-" + tag}";
     oci-image-tool = pkgs.buildGoPackage rec {
       name = "oci-image-tools-${version}";
       version = "1.0.0-rc1";
@@ -48,23 +48,18 @@ rec {
 
       mkdir $out
       mkdir $out/rootfs
-      oci-image-tool unpack --ref platform.os=${os} image/ $out/rootfs/
+      oci-image-tool create --ref platform.os=${os} image/ $out/
     '';
 
-  buildNixArtefact = {
-    # Name of the layer
+  buildNixArtifact = {
+    # Name of the artifact
     name,
-    # Packages to add to the layer
-    contents,
-    cwd ? "/",
-    entrypoint ? ["sh"],
-    terminal ? false, 
+    # Packages to add to the artifact
+    contents
   }:
-    runCommand "nix-artefact-${name}" { 
-      inherit contents cwd;
-      entrypoint = builtins.toJSON entrypoint;
-      terminal = builtins.toJSON terminal;
-      nativeBuildInputs = [ pkgs.jq pkgs.runc ];
+    runCommand "nix-artifect-${name}" { 
+      inherit contents;
+      nativeBuildInputs = [ pkgs.jq ];
     }
     ''
     mkdir $out
@@ -81,13 +76,6 @@ rec {
       echo "No contents to add to layer."
     fi
 
-    echo "Generating runtime configuration"
-    cd $out
-    runc spec
-    
-    specJson=$(cat config.json | jq -r --argjson term $terminal --arg cwd $cwd --argjson args "$entrypoint" '.process.terminal |= $term | .process.cwd |= $cwd | .process.args |= $args')
-    echo $specJson > config.json
-
-    echo "Finished building nix artefact '${name}'"
+    echo "Finished building nix artifact '${name}'"
     '';
 }

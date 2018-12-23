@@ -1,36 +1,39 @@
 {-# LANGUAGE OverloadedStrings #-}
 
 module Runtime.StorageDriver 
-  ( StorageDriver
-  , mount
+  ( mount
   , umount
-  , OverlayFS(..)
-  , ZFS(..) ) where
+  , StorageDriver(..)) where
     
-import System.Process.Typed
+import Data.Aeson (encodeFile)
+import Data.ByteString.Char8 (unpack)
 import Runtime.Types
+import System.Directory
+import System.FilePath
+import System.Process.Typed
 
-class StorageDriver a where 
-  mount :: a -> Overlay -> IO String
-  umount :: a -> IO ()
+data StorageDriver = OverlayFS | ZFS deriving (Show)
 
-data OverlayFS = OverlayFS String deriving (Show)
+mount :: Automaton -> StorageDriver -> IO FilePath
+mount a@(Automaton artifact spec) OverlayFS = do
+  createDirectoryIfMissing True mountdir
+  createDirectoryIfMissing False confdir
+  createDirectoryIfMissing False upperdir
+  createDirectoryIfMissing False workdir
+  createDirectoryIfMissing False mergedir
+  encodeFile (confdir ++ "/config.json") spec
+  runProcess (shell $ "sudo mount -t overlay overlay -o lowerdir=" ++ lowerdirs ++ ",upperdir=" ++ upperdir 
+    ++ ",workdir=" ++ workdir ++ " " ++ mergedir) >>= print
+  return mergedir
+  where mountdir = "/tmp/" ++ unpack (addr a)
+        confdir = mountdir ++ "/conf"
+        lowerdirs = path artifact ++ ":" ++ confdir
+        upperdir = mountdir ++ "/upper"
+        workdir = mountdir ++ "/work"
+        mergedir = mountdir ++ "/merged"
+mount _ _ = error "Not implemented yet"
 
-instance StorageDriver OverlayFS where 
-  mount (OverlayFS mountdir) (OCIOverlay path) = do
-    runProcess (shell $ "mkdir " ++ mountdir) >>= print
-    runProcess (shell $ "mkdir " ++ upperdir) >>= print
-    runProcess (shell $ "mkdir " ++ workdir) >>= print
-    runProcess (shell $ "mkdir " ++ mergedir) >>= print
-    runProcess (shell $ "sudo mount -t overlay overlay -o lowerdir=" ++ path ++ ",upperdir=" ++ upperdir 
-      ++ ",workdir=" ++ workdir ++ " " ++ mergedir) >>= print
-    return mergedir
-    where upperdir = mountdir ++ "/upper"
-          workdir = mountdir ++ "/work"
-          mergedir = mountdir ++ "/merged"
-  mount _ _ = error "Not implemented yet"
-
-  umount (OverlayFS mountdir) = do 
-    runProcess (shell $ "sudo umount " ++ mountdir ++ "/merged") >>= print
-
-data ZFS = ZFS deriving (Show)
+umount :: FilePath -> StorageDriver -> IO ()
+umount path OverlayFS = do
+  runProcess (shell $ "sudo umount " ++ path) >>= print
+umount _ _ = error "Not implemented yet"

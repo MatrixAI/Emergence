@@ -253,6 +253,11 @@ defaultMounts = [ Mount { destination = "/proc"
                         , source = Just "cgroup"
                         , options = Just ["nosuid", "noexec", "nodev", "relatime", "ro"] } ]
 
+defaultMountsWithNixStore = Mount { destination = "/nix/store"
+                                  , m_type = Just "none"
+                                  , source = Just "/nix/store"
+                                  , options = Just ["bind", "ro"] } : defaultMounts
+
 -- Hook specifies a command that is run at a particular event in the lifecycle of a container
 data Hook = Hook {
   h_path :: String,

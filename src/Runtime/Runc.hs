@@ -3,26 +3,26 @@
 module Runtime.Runc where
     
 import System.Process.Typed
-import Runtime.Types
+import Runtime.Types hiding (path)
 
 runcCreate :: Container -> IO ()
-runcCreate a = do
-  runProcess (shell $ "cd " ++ (path a) ++ " && sudo runc create " ++ (show $ uid a)) >>= print 
+runcCreate (Container cid path) = do
+  runProcess (shell $ "cd " ++ path ++ " && sudo runc create " ++ cid) >>= print 
 
 runcStart :: Container -> IO ()
-runcStart a = do 
-  runProcess (shell $ "sudo runc start " ++ (show $ uid a)) >>= print
+runcStart (Container cid _) = do 
+  runProcess (shell $ "sudo runc start " ++ cid) >>= print
 
 runcKill :: Container -> Maybe String -> IO ()
-runcKill a (Just b) = do
-  runProcess (shell $ "sudo runc kill " ++ (show $ uid a) ++ " " ++ b) >>= print
-runcKill a Nothing = do
-  runProcess (shell $ "sudo runc kill " ++ (show $ uid a)) >>= print
+runcKill (Container cid _) (Just sig) = do
+  runProcess (shell $ "sudo runc kill " ++ cid ++ " " ++ sig) >>= print
+runcKill (Container cid _) Nothing = do
+  runProcess (shell $ "sudo runc kill " ++ cid) >>= print
 
 runcDelete :: Container -> IO ()
-runcDelete a = do
-  runProcess (shell $ "sudo runc delete " ++ (show $ uid a)) >>= print
+runcDelete (Container cid _) = do
+  runProcess (shell $ "sudo runc delete " ++ cid) >>= print
 
 runcRun :: Container -> IO ()
-runcRun a = do 
-  runProcess (shell $ "cd " ++ (path a) ++ " && sudo runc run " ++ (show $ uid a)) >>= print 
+runcRun (Container cid path) = do 
+  runProcess (shell $ "cd " ++ path ++ " && sudo runc run " ++ cid) >>= print 
