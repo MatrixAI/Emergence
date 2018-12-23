@@ -2,8 +2,10 @@
   pkgs,
   lib,
   runCommand,
+  dockerTools,
+  fetchFromGitHub,
 }:
-{  
+rec {  
   pullOCIArtefact = { 
     imageName,
     imageDigest,
@@ -14,21 +16,39 @@
     tag ? null
   }:
   let
-    outName = name: tag: builtins.replaceStrings ["/" ":"] ["-" "-"] "oci-artefact-${name}${if tag == null then "" else "-" + tag}";
+    outName = builtins.replaceStrings ["/" ":"] ["-" "-"] "oci-artefact-${name}${if tag == null then "" else "-" + tag}";
+    oci-image-tool = pkgs.buildGoPackage rec {
+      name = "oci-image-tools-${version}";
+      version = "1.0.0-rc1";
+
+      goPackagePath = "github.com/opencontainers/image-tools";
+      subPackages = [ "cmd/oci-image-tool" ];
+
+      src = fetchFromGitHub {
+        owner = "opencontainers";
+        repo = "image-tools";
+        rev = "v${version}";
+        sha256 = "0c4n69smqlkf0r6khy9gbg5f810qh9g8jqsl9kibb0dyswizr14r";
+      };
+    };
   in
-    runCommand (outName name tag) {
-      inherit imageName imageDigest;
+    runCommand outName {
       impureEnvVars = pkgs.stdenv.lib.fetchers.proxyImpureEnvVars;
       outputHashMode = "recursive";
       outputHashAlgo = "sha256";
       outputHash = sha256;
 
-      nativeBuildInputs = lib.singleton (pkgs.skopeo);
+      nativeBuildInputs = [ pkgs.skopeo oci-image-tool ];
       SSL_CERT_FILE = "${pkgs.cacert.out}/etc/ssl/certs/ca-bundle.crt";
 
       sourceURL = "docker://${imageName}@${imageDigest}";
     } ''
-      skopeo --override-os ${os} --override-arch ${arch} copy "$sourceURL" "oci:$out:${builtins.toString tag}"
+      mkdir image
+      skopeo --override-os ${os} --override-arch ${arch} copy "$sourceURL" "oci:image:${builtins.toString tag}"
+
+      mkdir $out
+      mkdir $out/rootfs
+      oci-image-tool unpack --ref platform.os=${os} image/ $out/rootfs/
     '';
 
   buildNixArtefact = {
@@ -70,21 +90,4 @@
 
     echo "Finished building nix artefact '${name}'"
     '';
-
-  # buildClosure = artefact: writeReferencesToFile
-  # ''
-
-  #   deps=$(cat $imageClosure)
-  #   if [[ -n "$deps" ]]; then
-  #     echo "Adding runtime dependencies..."
-  #     mkdir layer/nix
-  #     mkdir layer/nix/store
-  #     for dep in $deps; do
-  #       echo "Adding $dep"
-  #       rsync -a${if keepContentsDirlinks then "K" else "k"} --chown=${toString uid}:${toString gid} $dep/ layer/$dep
-  #     done
-  #   fi
-
-  # ''
-  # ;
 }
