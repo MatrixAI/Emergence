@@ -20,7 +20,7 @@
 
         cabal2nix --hpack . >./cabal.nix
         hpack
-        cabal configure
+        cabal v1-configure
 
         set +v
       '';
