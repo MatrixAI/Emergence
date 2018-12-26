@@ -1,6 +1,6 @@
 { mkDerivation, aeson, aeson-casing, base, bytestring, containers
 , crypto-multihash, cryptohash-sha256, directory, filepath, hpack
-, runc, stdenv, typed-process
+, libnix, runc, stdenv, typed-process
 }:
 mkDerivation {
   pname = "emergence";
@@ -10,17 +10,17 @@ mkDerivation {
   isExecutable = true;
   libraryHaskellDepends = [
     aeson aeson-casing base bytestring containers crypto-multihash
-    cryptohash-sha256 directory filepath typed-process
+    cryptohash-sha256 directory filepath libnix typed-process
   ];
   libraryToolDepends = [ hpack runc ];
   executableHaskellDepends = [
     aeson aeson-casing base bytestring containers crypto-multihash
-    cryptohash-sha256 directory filepath typed-process
+    cryptohash-sha256 directory filepath libnix typed-process
   ];
   executableToolDepends = [ runc ];
   testHaskellDepends = [
     aeson aeson-casing base bytestring containers crypto-multihash
-    cryptohash-sha256 directory filepath typed-process
+    cryptohash-sha256 directory filepath libnix typed-process
   ];
   testToolDepends = [ runc ];
   preConfigure = "hpack";
