@@ -23,7 +23,8 @@ dependencies:
 - filepath
 - directory
 - crypto-multihash >= 0.4.2.0 && < 0.5
-- libnix
+- libnix >= 0.2.0.1 && < 0.3
+- text
 
 build-tools:
 - runc
