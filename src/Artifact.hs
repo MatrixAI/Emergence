@@ -3,19 +3,14 @@
 module Artifact where
 
 import Data.Aeson
-import Data.Text
+import qualified Data.Text as T
 import Foreign.Nix.Shellout
 import Foreign.Nix.Shellout.Types
 import OCI.RuntimeSpec
 import Runtime.Types
 
-data OCIImage = OCIImage { imageName :: Text 
-                        , imageDigest :: Text
-                        , sha256 :: Text }
-                deriving (Show)
-
-ociArtifactExpr :: OCIImage -> Text
-ociArtifactExpr (OCIImage imageName imageDigest sha256) = "\
+artifactNixExpr :: FSConfig -> T.Text
+artifactNixExpr (OCIFSConfig imageName imageDigest sha256) = "\
 \  with import <nixpkgs> {};\
 \  let\
 \    name = builtins.replaceStrings [\"/\" \":\"] [\"-\" \"-\"] \"oci-artifact-" <> imageName <> "\";\
@@ -53,10 +48,44 @@ ociArtifactExpr (OCIImage imageName imageDigest sha256) = "\
 \    oci-image-tool create --ref platform.os=linux image/ $out/\n\
 \  ''"
 
-pullOCIImage :: OCIImage -> IO (Either (Text, NixError) (StorePath Realized))
-pullOCIImage = runNixAction . parseInstRealize . ociArtifactExpr
+artifactNixExpr (NixFSConfig name contents) = "\
+\  with import <nixpkgs> {};\n\
+\  let\n\
+\    name = builtins.replaceStrings [\"/\" \":\"] [\"-\" \"-\"] \"nix-artifact-" <> name <> "\";\n\
+\    contents = [" <> (T.unwords contents) <> "];\n\
+\  in\n\
+\    runCommand name { \n\
+\      inherit contents;\n\
+\      nativeBuildInputs = [ pkgs.jq ];\n\
+\    }\n\
+\    ''\n\
+\    mkdir $out\n\
+\    mkdir $out/rootfs\n\
 
-parseConfig :: StorePath Realized -> IO (Maybe RuntimeSpec)
-parseConfig (StorePath path) = do 
-  decodeFileStrict' $ path ++ "/config.json"
+\    if [[ -n \"$contents\" ]]; then\n\
+\      echo \"Adding contents...\"\n\
+\      for item in $contents; do\n\
+\        echo \"Linking $item\"\n\
+\        find $item -mindepth 1 -type d | cut -d/ -f5- | while read dir; do mkdir -p \"$out/rootfs/$dir\"; done\n\
+\        find $item -not -type d | cut -d/ -f5- | while read file; do ln -s \"$item/$file\" \"$out/rootfs/$file\"; done\n\
+\      done\n\
+\    else\n\
+\      echo \"No contents to add to layer.\"\n\
+\    fi\n\
 
+\    echo \"Finished building nix artifact '${name}'\"\n\
+\    ''"
+
+
+buildArtifact :: FSConfig -> IO (Either (T.Text, NixError) Artifact)
+buildArtifact fs = 
+  let 
+    buildFS = runNixAction . parseInstRealize . artifactNixExpr
+    parseConfig = decodeFileStrict' . (++ "/config.json") . fromStorePath
+  in do 
+    res <- buildFS fs
+    conf <- case fs of 
+      (OCIFSConfig _ _ _) -> either (\_ -> return Nothing) parseConfig res
+      (NixFSConfig _ _) -> return Nothing
+    return $ fmap (\(StorePath path) -> Artifact path conf) res
+  
