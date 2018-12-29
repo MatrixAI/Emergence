@@ -89,3 +89,7 @@ buildArtifact fs =
       (NixFSConfig _ _) -> return Nothing
     return $ fmap (\(StorePath path) -> Artifact path conf) res
   
+buildArtifact' :: FSConfig -> IO Artifact
+buildArtifact' fs = do 
+  res <- buildArtifact fs
+  return $ either (error . T.unpack . fst) id res

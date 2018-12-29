@@ -27,7 +27,7 @@ mount a@(Automaton artifact spec) OverlayFS = do
   return mergedir
   where mountdir = "/tmp/" ++ unpack (addr a)
         confdir = mountdir ++ "/conf"
-        lowerdirs = path artifact ++ ":" ++ confdir
+        lowerdirs = confdir ++ ":" ++ path artifact
         upperdir = mountdir ++ "/upper"
         workdir = mountdir ++ "/work"
         mergedir = mountdir ++ "/merged"
