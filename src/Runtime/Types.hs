@@ -32,7 +32,8 @@ data Automaton = Automaton Artifact RuntimeSpec
                  deriving (Show)
 
 -- A container is a running instance of an automaton
-data Container = Container String FilePath
+data Container = Container { cid :: String
+                           , pid :: String }
                  deriving (Show)
 
 class Addressable a where
