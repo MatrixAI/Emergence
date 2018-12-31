@@ -9,5 +9,8 @@ deployAndRun :: String -> RuntimeSpec -> Artifact -> IO ()
 deployAndRun name spec artifact = do
     let a = Automaton artifact spec
     b <- mount a OverlayFS
-    runcRun (Container name b)
+    runcRun name b
     umount b OverlayFS
+
+deploy :: RuntimeSpec -> Artifact -> IO FilePath
+deploy spec artifact = mount (Automaton artifact spec) OverlayFS
