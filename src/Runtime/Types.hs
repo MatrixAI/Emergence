@@ -15,7 +15,8 @@ data FSConfig = OCIFSConfig { imageName :: T.Text
                             , imageDigest :: T.Text
                             , sha256 :: T.Text }
               | NixFSConfig { name :: T.Text 
-                            , contents :: [T.Text] }
+                            , contents :: [T.Text]
+                            , extraContents :: [(T.Text, T.Text)] }
                 deriving (Show)
 
 -- A config contains all necessary input to deploy and execute an artifact.

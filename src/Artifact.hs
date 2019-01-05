@@ -48,11 +48,12 @@ artifactNixExpr (OCIFSConfig imageName imageDigest sha256) = "\
 \    oci-image-tool create --ref platform.os=linux image/ $out/\n\
 \  ''"
 
-artifactNixExpr (NixFSConfig name contents) = "\
+artifactNixExpr (NixFSConfig name contents extras) = "\
 \  with import <nixpkgs> {};\n\
 \  let\n\
 \    name = builtins.replaceStrings [\"/\" \":\"] [\"-\" \"-\"] \"nix-artifact-" <> name <> "\";\n\
-\    contents = [" <> (T.unwords contents) <> "];\n\
+\    contents = [" <> (T.unwords $ contents ++ (fmap fst extras)) <> "];\n\
+\    " <>  T.intercalate ";\n" (fmap (\(a,b) -> a <> " = " <> b) extras) <> ";\n\
 \  in\n\
 \    runCommand name { \n\
 \      inherit contents;\n\
@@ -86,7 +87,7 @@ buildArtifact fs =
     res <- buildFS fs
     conf <- case fs of 
       (OCIFSConfig _ _ _) -> either (\_ -> return Nothing) parseConfig res
-      (NixFSConfig _ _) -> return Nothing
+      (NixFSConfig _ _ _) -> return Nothing
     return $ fmap (\(StorePath path) -> Artifact path conf) res
   
 buildArtifact' :: FSConfig -> IO Artifact
