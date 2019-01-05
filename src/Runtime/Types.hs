@@ -10,25 +10,34 @@ import Foreign.Nix.Shellout.Types
 import OCI.RuntimeSpec
 import System.FilePath
 
--- A filesystem specification contains all necessary input to build the root filesystem of an artifact.
+-- A filesystem config contains all necessary input to build the root filesystem of an artifact.
 data FSConfig = OCIFSConfig { imageName :: T.Text 
                             , imageDigest :: T.Text
                             , sha256 :: T.Text }
               | NixFSConfig { name :: T.Text 
                             , contents :: [T.Text]
-                            , extraContents :: [(T.Text, T.Text)] }
+                            , extraContents :: [(T.Text, T.Text)]  
+                            , mutableLocalNixStore :: Bool }
                 deriving (Show)
 
--- A config contains all necessary input to deploy and execute an artifact.
+-- A runtime config contains all necessary input to deploy and execute an artifact.
 data RuntimeConfig = RuntimeConfig deriving (Show)
 
--- An artifact is a nix store path containing the root file system for a container and 
--- also a runtime configuration in the case of OCI artifacts
+-- An artifact is a nix store path containing the root file system for an automaton and
+-- configurations for network manager, storage manager and (partially) automaton runtime
 data Artifact = Artifact { path :: FilePath 
-                         , spec :: Maybe RuntimeSpec }
+                         , storageSpec :: Maybe [StorageLayer]
+                         , networkSpec :: Maybe [String]
+                         , runtimeSpec :: RuntimeSpec }
                 deriving (Show)
 
--- An automaton is a pair of configuration and root file system for a container
+-- data StorageSpec = StorageSpec { layers :: [StorageLayer] } deriving (Show)
+
+data StorageLayer = StorageLayer { path :: FilePath, readOnly :: Bool } deriving (Show)
+
+-- data NetworkSpec = NetworkSpec { exposedPorts :: [String] } deriving (Show)
+
+-- An automaton is a pair of configuration and root file system that can be executed by the automaton runtime
 data Automaton = Automaton Artifact RuntimeSpec
                  deriving (Show)
 
