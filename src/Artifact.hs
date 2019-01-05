@@ -53,7 +53,7 @@ artifactNixExpr (NixFSConfig name contents extras) = "\
 \  let\n\
 \    name = builtins.replaceStrings [\"/\" \":\"] [\"-\" \"-\"] \"nix-artifact-" <> name <> "\";\n\
 \    contents = [" <> (T.unwords $ contents ++ (fmap fst extras)) <> "];\n\
-\    " <>  T.intercalate ";\n" (fmap (\(a,b) -> a <> " = " <> b) extras) <> ";\n\
+\    " <> foldr (\a b -> a <> ";\n" <> b) "" (fmap (\(a,b) -> a <> " = " <> b) extras) <> "\
 \  in\n\
 \    runCommand name { \n\
 \      inherit contents;\n\
