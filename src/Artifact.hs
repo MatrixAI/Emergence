@@ -35,7 +35,7 @@ artifactNixExpr (OCIFSConfig imageName imageDigest sha256) = "\
 \    outputHashAlgo = \"sha256\";\
 \    outputHash = \"" <> sha256 <> "\";\
 
-\    nativeBuildInputs = [ pkgs.skopeo oci-image-tool ];\
+\    nativeBuildInputs = [ pkgs.skopeo oci-image-tool jq moreutils ];\
 \    SSL_CERT_FILE = \"${pkgs.cacert.out}/etc/ssl/certs/ca-bundle.crt\";\
 
 \    sourceURL = \"docker://" <> imageName <> "@" <> imageDigest <> "\";\
@@ -46,6 +46,11 @@ artifactNixExpr (OCIFSConfig imageName imageDigest sha256) = "\
 \    mkdir $out\n\
 \    mkdir $out/rootfs\n\
 \    oci-image-tool create --ref platform.os=linux image/ $out/\n\
+
+\    manifestJson=image/blobs/$(jq -r '.manifests[].digest' image/index.json | sed 's/:/\//')\n\
+\    configJson=image/blobs/$(jq -r '.config.digest' $manifestJson | sed 's/:/\//')\n\
+\    exposedPorts=$(jq '.config.ExposedPorts | keys | join(\",\")' $configJson)\n\
+\    jq --arg exposedPorts $exposedPorts'.annotations.\"org.opencontainers.image.exposedPorts\" = $exposedPorts' $out/config.json | sponge config.json\n\
 \  ''"
 
 artifactNixExpr (NixFSConfig name contents extras) = "\
