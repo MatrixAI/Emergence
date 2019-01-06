@@ -51,3 +51,8 @@ nixNginx = buildArtifact' $ NixFSConfig "nginx" ["nginx", "bash", "coreutils"] [
 \      destination = \"/etc/nginx.conf\";\n\
 \   }"
 
+ociNginx :: IO Artifact
+ociNginx = buildArtifact' $ OCIFSConfig "nginx" digest sha256
+  where digest = "sha256:b543f6d0983fbc25b9874e22f4fe257a567111da96fd1d8f1b44315f1236398c" 
+        sha256 = "13jm5qvspxjcb30k5bq0xm8b2slh11axb1l5gh3qkjdyl00win7d"
+
