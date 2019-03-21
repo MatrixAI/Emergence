@@ -1,3 +1,3 @@
 # Emergence
 
-Distributed Infrastructure Orchestration
+This project is now closed source until further notice.
